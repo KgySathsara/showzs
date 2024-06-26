@@ -63,7 +63,7 @@
 .footer-links_logo{
     display: flex;
     flex-direction: column;
-}
+    }
 
 .footer-links_logo img{
     width: 118px;
