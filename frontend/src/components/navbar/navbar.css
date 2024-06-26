@@ -1,0 +1,143 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 6rem;
+}
+
+.navbar-links{
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.navbar-links-logo {
+    margin-left: 2rem;
+}
+
+.navbar-links-logo img{
+    width: 62.56px;
+    height: 16.02px;
+}
+
+.navbar-links-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.navbar-sign{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.navbar-links-container p,
+.navbar-sign p,
+.navbar-menu-p{
+    color: white;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    text-transform: capitalize;
+    margin: 0 1rem;
+    cursor: pointer;
+}
+
+.navbar-sign button,
+.navbar-menu-container button{
+    padding: 1rem 2rem;
+    color: white;
+    font-family: var(--font-family);
+    font-weight: 500;
+    font-size: 18px;
+    line-height: 25px;
+    left: 1153px;
+    top: 55px;
+    background: #c02603;
+    border-radius: 5px;
+    border: 0;
+    outline: none;
+    cursor: pointer;
+}
+
+.navbar-menu {
+    margin-left: 1rem;
+    display: none;
+    position: relative;
+}
+
+.navbar-menu svg {
+    cursor: pointer;
+}
+
+.navbar-menu_container{
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    flex-direction: column;
+    text-align: end;
+    background: var(--color-footer);
+    padding: 2rem;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    margin-top: 1rem;
+    min-width: 210px;
+    border-radius: 5px;
+    box-shadow: 0 0 5 rgb(0, 0, 0, 0.2);
+}
+
+.navbar-menu_container p{
+    margin: 1rem 0;
+}
+
+.navbar-menu-container_container-links-sign{
+    display: none;
+}
+
+@media screen and (max-width: 1050px) {
+    .navbar-links-container{
+        display: none;
+    }
+
+    .navbar-menu{
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 700px) {
+    .navbar {
+        padding: 2rem 4rem;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .navbar {
+        padding: 2rem;
+    }
+
+    .navbar-sign{
+        display: none;
+    }
+
+    .navbar-menu_container{
+        top: 20px;
+        background-color: rgb(36, 36, 36);
+        color: aliceblue;
+    }
+
+    .navbar-menu_container-links-sign{
+        display: block;
+    }
+
+    .navbar-menu_container-links-sign button{
+        font-size: 16px;
+    }
+
+    .navbar-menu_container-links-sign button:hover{
+        background-color: #c02603;
+        color: aliceblue;
+    }
+}

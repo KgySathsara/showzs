@@ -1,0 +1,28 @@
+.brand{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.brand div{
+    flex: 1;
+    max-width: 160px;
+    min-width: 120px;
+    margin: 0.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.title{
+    margin-top: 50px;
+    font-size: 28px;
+    color: #b0b0b0;
+}
+
+.title h1{
+    font-size: 55px;
+    color: #b0b0b0;
+    margin-bottom: 3vh;
+}
