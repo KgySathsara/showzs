@@ -1,5 +1,10 @@
 {
   "devDependencies": {
     "gh-pages": "^6.0.0"
+  },
+  "dependencies": {
+    "antd": "^5.18.3",
+    "bootstrap": "^5.3.3",
+    "react-bootstrap": "^2.10.3"
   }
 }
