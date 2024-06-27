@@ -1,143 +1,114 @@
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem 6rem;
+ @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+
+ .navbar {
+  font-family: 'DM Sans', sans-serif;
+  width: 100%; 
+  background-color: #20448A;
+  padding: 1px; 
+  position: relative;
+  top: 0;
+  z-index: 1000;
 }
 
-.navbar-links{
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+.navbar-links {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  margin: 0 auto;
+  color: #ffffff;
 }
 
-.navbar-links-logo {
-    margin-left: 2rem;
+.navbar-links_logo img {
+  display: flex;
+  width: 200px; 
 }
 
-.navbar-links-logo img{
-    width: 62.56px;
-    height: 16.02px;
+.navbar-links-container {
+  display: flex;
+  justify-content: center; 
+  flex-grow: 1;
 }
 
-.navbar-links-container{
-    display: flex;
-    flex-direction: row;
+.navLists {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  justify-content: center; 
 }
 
-.navbar-sign{
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+.navItem {
+  margin-top: 10px;  
+  font-family: 'DM Sans', sans-serif;
+  margin-left: 50px; 
+  font-size: 20px; 
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.navbar-links-container p,
-.navbar-sign p,
-.navbar-menu-p{
-    color: white;
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    text-transform: capitalize;
-    margin: 0 1rem;
-    cursor: pointer;
+.navItem:hover,
+.navItem.active {
+  color: #D8FB05; 
 }
 
-.navbar-sign button,
-.navbar-menu-container button{
-    padding: 1rem 2rem;
-    color: white;
-    font-family: var(--font-family);
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 25px;
-    left: 1153px;
-    top: 55px;
-    background: #c02603;
-    border-radius: 5px;
-    border: 0;
-    outline: none;
-    cursor: pointer;
+.navItem:first-child {
+  margin-left: 0;
 }
 
-.navbar-menu {
-    margin-left: 1rem;
-    display: none;
-    position: relative;
+.signin-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-grow: 0; 
 }
 
-.navbar-menu svg {
-    cursor: pointer;
+.signin {
+  margin-right: 20px;
+  font-family: 'DM Sans', sans-serif;
+  margin-top: 10px; 
+  display: flex;
+  align-items: center;
+  color: white;
+  text-decoration: none;
+  font-size: 20px; 
+  transition: color 0.3s ease-in-out;
 }
 
-.navbar-menu_container{
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+.signin p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  margin-right: 25px; 
+  font-size: 40px;
+}
+
+/* Responsive Design */
+
+
+@media screen and (max-width: 768px) {
+  .navbar-links {
     flex-direction: column;
-    text-align: end;
-    background: var(--color-footer);
-    padding: 2rem;
-    position: absolute;
-    top: 40px;
-    right: 0;
-    margin-top: 1rem;
-    min-width: 210px;
-    border-radius: 5px;
-    box-shadow: 0 0 5 rgb(0, 0, 0, 0.2);
-}
+  }
 
-.navbar-menu_container p{
-    margin: 1rem 0;
-}
+  .navbar-links_logo img {
+    margin-bottom: 10px;
+  }
 
-.navbar-menu-container_container-links-sign{
-    display: none;
-}
+  .navLists {
+    flex-direction: column;
+  }
 
-@media screen and (max-width: 1050px) {
-    .navbar-links-container{
-        display: none;
-    }
+  .navItem {
+    margin-left: 0;
+    margin-bottom: 10px;
+  }
 
-    .navbar-menu{
-        display: flex;
-    }
-}
-
-@media screen and (max-width: 700px) {
-    .navbar {
-        padding: 2rem 4rem;
-    }
-}
-
-@media screen and (max-width: 550px) {
-    .navbar {
-        padding: 2rem;
-    }
-
-    .navbar-sign{
-        display: none;
-    }
-
-    .navbar-menu_container{
-        top: 20px;
-        background-color: rgb(36, 36, 36);
-        color: aliceblue;
-    }
-
-    .navbar-menu_container-links-sign{
-        display: block;
-    }
-
-    .navbar-menu_container-links-sign button{
-        font-size: 16px;
-    }
-
-    .navbar-menu_container-links-sign button:hover{
-        background-color: #c02603;
-        color: aliceblue;
-    }
-}
+  .signin-container {
+    justify-content: center; 
+    padding-bottom: 20px;
+  }
+} 
