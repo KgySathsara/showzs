@@ -7,6 +7,7 @@ import SeatBooking from './pages/seatBooking';
 import LiveEvents from './pages/LiveEvents/LiveEvents';
 import Movies from './pages/Movies/Movies';
 import News from './pages/News/News';
+import Contactus from './pages/Contactus/Contactus';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -16,6 +17,7 @@ ReactDOM.render(
             <Route path='/LiveEvents' element={<LiveEvents />}/>
             <Route path='/Movies' element={<Movies />}/>
             <Route path='/News' element={<News />}/>
+            <Route path='/Contactus' element={<Contactus />}/>
 
         </Routes>
     </BrowserRouter>,
