@@ -1,5 +1,4 @@
 import React from 'react';
-import 'animate.css';
 import event1 from '../../assest/youth.jpg'; 
 import event2 from '../../assest/youth.jpg'; 
 import event3 from '../../assest/youth.jpg'; 

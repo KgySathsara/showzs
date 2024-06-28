@@ -1,5 +1,4 @@
 import React from 'react';
-import 'animate.css';
 import './nowShowing.css';
 import visalAdarePoster from '../../assest/visaladarenews.jpg';
 import sinhabahuPoster from '../../assest/sinhabahu.jpg';

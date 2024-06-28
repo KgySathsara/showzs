@@ -1,5 +1,4 @@
 import React from 'react';
-import 'animate.css';
 import './UpCommingMovies.css';
 import upcomming from '../../assest/upcommingmovies.jpg';
 
