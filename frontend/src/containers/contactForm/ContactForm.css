@@ -1,16 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
 .contact-form {
-  padding: 20px;
+  padding: 40px 20px;
   background-color: #003366;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
   text-align: center;
+  
 }
 
 .contact-form h2 {
-  margin-bottom: 20px;
-  font-size: 24px;
+  margin-bottom: 30px;
+  font-size: 28px;
 }
 
 .contact-form .ant-form {
@@ -20,8 +21,9 @@
 }
 
 .contact-form .ant-form-item {
-  width: 80%;
+  width: 100%;
   max-width: 600px;
+  margin-bottom: 20px;
 }
 
 .contact-form .ant-form-item-textarea {
@@ -31,7 +33,15 @@
 .contact-form .ant-input,
 .contact-form .ant-input-textarea {
   border-radius: 5px;
-  background-color: #d9d9d9;
+  background-color: #f0f0f0;
+  border: 1px solid #cccccc;
+  padding: 10px;
+}
+
+.contact-form .ant-input:focus,
+.contact-form .ant-input-textarea:focus {
+  border-color: #00cfff;
+  box-shadow: 0 0 5px rgba(0, 207, 255, 0.5);
 }
 
 .contact-form .ant-btn {
@@ -42,9 +52,10 @@
   font-size: 16px;
   padding: 10px 20px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
 .contact-form .ant-btn:hover {
   background-color: #00a3cc;
+  transform: scale(1.05);
 }
