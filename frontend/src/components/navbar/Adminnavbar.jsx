@@ -1,12 +1,13 @@
-import React from 'react';
-import { Layout, Menu } from 'antd';
-import { 
+import React, { useState } from 'react';
+import { Layout, Menu, Modal, Button, Form, Input } from 'antd';
+import {
   DashboardOutlined,
   VideoCameraOutlined,
   CalendarOutlined,
   NotificationOutlined,
   MailOutlined,
-} from '@ant-design/icons';
+} 
+from '@ant-design/icons';
 import logo from '../../assest/logo.png';
 import './AdminNavBar.css';
 
@@ -14,14 +15,40 @@ const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const AdminNavBar = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [formData, setFormData] = useState({});
+
+  const showModal = (title) => {
+    setModalTitle(title);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    console.log('Form data:', formData);
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Sider collapsible>
         <div className="logo">
-        <img src={logo} alt='logo'/>
+          <img src={logo} alt="logo" />
         </div>
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-        <SubMenu key="sub1" icon={<DashboardOutlined />} title="Dashboard">
+          <SubMenu key="sub1" icon={<DashboardOutlined />} title="Dashboard">
             <SubMenu key="sub2" title="Overview">
               <Menu.Item key="1">View Ongoing Movies</Menu.Item>
               <Menu.Item key="2">Total Live Events</Menu.Item>
@@ -38,8 +65,8 @@ const AdminNavBar = () => {
           <SubMenu key="sub3" icon={<VideoCameraOutlined />} title="Movie Management">
             <SubMenu key="sub4" title="Movies List">
               <Menu.Item key="10">View Movies</Menu.Item>
-              <Menu.Item key="11">Add New Movie</Menu.Item>
-              <Menu.Item key="12">Edit Movie Details</Menu.Item>
+              <Menu.Item key="11" onClick={() => showModal('Add New Movie')}>Add New Movie</Menu.Item>
+              <Menu.Item key="12" onClick={() => showModal('Edit Movie Details')}>Edit Movie Details</Menu.Item>
               <Menu.Item key="13">Delete Movie</Menu.Item>
             </SubMenu>
           </SubMenu>
@@ -90,13 +117,25 @@ const AdminNavBar = () => {
               <Menu.Item key="39">Delete FAQ</Menu.Item>
             </SubMenu>
           </SubMenu>
-        </Menu>
+          </Menu>
       </Sider>
       <Layout className="site-layout">
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
           Content goes here
         </div>
       </Layout>
+
+      <Modal title={modalTitle} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Form>
+          <Form.Item label="Title">
+            <Input name="title" onChange={handleInputChange} />
+          </Form.Item>
+          <Form.Item label="Description">
+            <Input name="description" onChange={handleInputChange} />
+          </Form.Item>
+          {/* Add other form items as needed */}
+        </Form>
+      </Modal>
     </Layout>
   );
 };
