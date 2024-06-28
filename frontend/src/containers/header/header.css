@@ -10,7 +10,7 @@
 
 .header {
   width: 100%;
-  height: 100vh; /* Ensures the header takes up the full viewport height */
+  height: 100vh;
   position: relative;
   overflow: hidden;
 }
@@ -43,11 +43,13 @@
 }
 
 .card {
+  position: relative;
   width: 470px; 
   height: 290px; 
   border-radius: 10px;
   overflow: hidden; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
 .card img {
@@ -55,6 +57,32 @@
   height: 100%;
   object-fit: cover;
   border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+.card:hover img {
+  filter: blur(5px);
+}
+
+.card .book-now {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #66191a;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 18px;
+  font-weight: bold;
+  display: none;
+  align-items: center;
+  gap: 10px;
+}
+
+.card:hover .book-now {
+  display: flex;
 }
 
 .additional-content {

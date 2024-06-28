@@ -1,5 +1,6 @@
 import React from 'react';
 import './header.css';
+import { FaBook } from 'react-icons/fa'; 
 import banner from '../../assest/banner.jpg';
 import card1 from '../../assest/wisal.jpg';
 import card2 from '../../assest/youth.jpg';
@@ -14,9 +15,15 @@ const Header = () => {
         <div className="card-overlay">
           <div className="card">
             <img src={card1} alt="Wisal Card" />
+            <div className="book-now">
+              <FaBook /> Book Now
+            </div>
           </div>
           <div className="card">
             <img src={card2} alt="Youth Card" />
+            <div className="book-now">
+              <FaBook /> Book Now
+            </div>
           </div>
         </div>
         <div className='additional-content'>
