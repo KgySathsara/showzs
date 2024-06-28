@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import logo from '../../assest/logo.png';
 import './navbar.css';
 import { FaUserCircle } from "react-icons/fa";
@@ -25,17 +24,15 @@ const Navbar = () => {
                 className={`navItem ${activeIndex === index ? 'active' : ''}`} 
                 onClick={() => handleClick(index)}
               >
-                <Link to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`} className="navLink">
-                  {item}
-                </Link>
+                <a href="/" className="navLink">{item}</a>
               </li>
             ))}
           </ul>
         </div>
         <div className='signin-container'>
-          <Link to="/signin" className="signin flex">
+          <a href="Login" className="signin flex">
             <p><FaUserCircle className="icon" /> Sign in </p>
-          </Link>
+          </a>
         </div>
       </header>
     </section>

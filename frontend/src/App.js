@@ -1,18 +1,12 @@
 import React from 'react';
-import { Footer, Stream, Header , Events } from './containers';
-import { Navbar } from './components';
+// import {Routes, Route} from 'react-router-dom';
 import './App.css';
+import Home from "./pages/home/Home";
 
 const App = () => {
   return (
-    <div className='App'>
-        <div className='gradient_bg'>
-          <Navbar/>
-          <Header/>
-        </div>
-        <Stream/>
-        <Events/>
-        <Footer/>
+    <div>
+      <Home/>
     </div>
   )
 }
