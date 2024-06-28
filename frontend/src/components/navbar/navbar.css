@@ -1,77 +1,142 @@
- @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
- .navbar {
-  font-family: 'DM Sans', sans-serif;
-  width: 100%; 
-  background-color: #20448A;
-  padding: 1px; 
-  position: relative;
-  top: 0;
-  z-index: 1000;
+.navbar {
+    font-family: 'DM Sans', sans-serif;
+    width: 100%; 
+    background-color: #20448A;
+    padding: 1px; 
+    position: relative;
+    top: 0;
+    z-index: 1000;
 }
 
 .navbar-links {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 90%;
-  margin: 0 auto;
-  color: #ffffff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: 0 auto;
+    color: #ffffff;
 }
 
 .navbar-links_logo img {
-  display: flex;
-  width: 200px; 
+    display: flex;
+    width: 200px; 
 }
 
 .navbar-links-container {
-  display: flex;
-  justify-content: center; 
-  flex-grow: 1;
+    display: flex;
+    justify-content: center; 
+    flex-grow: 1;
 }
 
 .navLists {
-  display: flex;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  justify-content: center; 
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    justify-content: center; 
 }
 
 .navItem {
-  margin-top: 10px;  
-  font-family: 'DM Sans', sans-serif;
-  margin-left: 50px; 
-  font-size: 20px; 
-  font-weight: bold;
-  cursor: pointer;
+    position: relative;
+    margin-top: 10px;  
+    font-family: 'DM Sans', sans-serif;
+    margin-left: 50px; 
+    font-size: 20px; 
+    font-weight: bold;
+    cursor: pointer;
 }
 
-.navItem:hover,
+.navItem:hover{
+  color: #D8FB05;
+}
 .navItem.active {
-  color: #D8FB05; 
+    color: #ffffff
 }
 
 .navItem:first-child {
-  margin-left: 0;
+    margin-left: 0;
+}
+
+.subNavLists {
+  position: absolute;
+  left: 0;
+  top: 100%;
+  background-color: #305496;
+  display: none;
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+  z-index: 1000;
+  border-radius: 10px;
+
+}
+
+.navItem.active .subNavLists {
+  display: block;
+}
+
+.subNavItem {
+  padding: 8px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.subNavItem:hover {
+  color: #D8FB05;
+}
+
+.subNavItem.active {
+  color: #ffffff;
+}
+
+.subSubNavLists {
+  position: absolute;
+  left: 100%;
+  top: 0;
+  background-color: #4070B0;
+  display: none;
+  list-style: none;
+  padding: 10px 15px;
+  margin: 0;
+  border-radius: 10px;
+  z-index: 1000;
+}
+
+.subNavItem.active .subSubNavLists {
+  display: block;
+}
+
+.subSubNavItem {
+  padding: 8px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: color 0.3s ease-in-out;
+}
+
+.subSubNavItem:hover,
+.subSubNavItem.active {
+  color: #D8FB05;
 }
 
 .signin-container {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  flex-grow: 0; 
+  flex-grow: 0;
 }
 
 .signin {
   margin-right: 20px;
   font-family: 'DM Sans', sans-serif;
-  margin-top: 10px; 
+  margin-top: 10px;
   display: flex;
   align-items: center;
   color: white;
   text-decoration: none;
-  font-size: 20px; 
+  font-size: 18px;
   transition: color 0.3s ease-in-out;
 }
 
@@ -82,33 +147,42 @@
 }
 
 .icon {
-  margin-right: 25px; 
-  font-size: 40px;
+  margin-right: 10px;
+  font-size: 24px;
 }
 
 /* Responsive Design */
-
-
 @media screen and (max-width: 768px) {
   .navbar-links {
-    flex-direction: column;
+      flex-direction: column;
   }
 
   .navbar-links_logo img {
-    margin-bottom: 10px;
+      margin-bottom: 10px;
   }
 
   .navLists {
-    flex-direction: column;
+      flex-direction: column;
+      align-items: center;
   }
 
   .navItem {
-    margin-left: 0;
-    margin-bottom: 10px;
+      margin-left: 0;
+      margin-bottom: 10px;
+  }
+
+  .subNavLists {
+      position: static;
+      background-color: transparent;
+  }
+
+  .subSubNavLists {
+      position: static;
+      background-color: transparent;
   }
 
   .signin-container {
-    justify-content: center; 
-    padding-bottom: 20px;
+      justify-content: center;
+      padding-bottom: 10px;
   }
-} 
+}
