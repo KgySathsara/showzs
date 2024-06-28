@@ -1,165 +1,96 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Layout, Menu } from 'antd';
+import { 
+  VideoCameraOutlined,
+  CalendarOutlined,
+  NotificationOutlined,
+  MailOutlined,
+} from '@ant-design/icons';
 import logo from '../../assest/logo.png';
-import './navbar.css';
-// import { FaUserCircle } from "react-icons/fa";
+import './AdminNavBar.css';
 
-const Adminnavbar = () => {
-    const [activeIndex, setActiveIndex] = useState(null);
-    const [activeSubIndex, setActiveSubIndex] = useState(null);
-    const [activeSubSubIndex, setActiveSubSubIndex] = useState(null);
+const { Sider } = Layout;
+const { SubMenu } = Menu;
 
-    const handleMainClick = (index) => {
-        if (activeIndex === index) {
-            setActiveIndex(null);
-            setActiveSubIndex(null);
-            setActiveSubSubIndex(null);
-        } else {
-            setActiveIndex(index);
-            setActiveSubIndex(null);
-            setActiveSubSubIndex(null);
-        }
-    };
+const AdminNavBar = () => {
+  return (
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider collapsible>
+        <div className="logo">
+        <img src={logo} alt='logo'/>
+        </div>
+        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
+          <SubMenu key="sub1" icon={<VideoCameraOutlined />} title="Movie Management">
+            <SubMenu key="sub2" title="Movies List">
+              <Menu.Item key="1">View Movies</Menu.Item>
+              <Menu.Item key="2">Search/Filter Movies</Menu.Item>
+              <Menu.Item key="3">Add New Movie</Menu.Item>
+              <Menu.Item key="4">Edit Movie Details</Menu.Item>
+              <Menu.Item key="5">Delete Movie</Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub3" title="Categories">
+              <Menu.Item key="6">View All Categories</Menu.Item>
+              <Menu.Item key="7">Add New Category</Menu.Item>
+              <Menu.Item key="8">Edit Category</Menu.Item>
+              <Menu.Item key="9">Delete Category</Menu.Item>
+            </SubMenu>
+          </SubMenu>
 
-    const handleSubClick = (subIndex) => {
-        if (activeSubIndex === subIndex) {
-            setActiveSubIndex(null);
-            setActiveSubSubIndex(null);
-        } else {
-            setActiveSubIndex(subIndex);
-            setActiveSubSubIndex(null);
-        }
-    };
+          <SubMenu key="sub4" icon={<CalendarOutlined />} title="Live Events Management">
+            <SubMenu key="sub5" title="Events List">
+              <Menu.Item key="10">View Event</Menu.Item>
+              <Menu.Item key="11">Search/Filter Events</Menu.Item>
+              <Menu.Item key="12">Add New Event</Menu.Item>
+              <Menu.Item key="13">Edit Event Details</Menu.Item>
+              <Menu.Item key="14">Delete Event</Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub6" title="Categories">
+              <Menu.Item key="15">View All Categories</Menu.Item>
+              <Menu.Item key="16">Add New Category</Menu.Item>
+              <Menu.Item key="17">Edit Category</Menu.Item>
+              <Menu.Item key="18">Delete Category</Menu.Item>
+            </SubMenu>
+          </SubMenu>
 
-    const handleSubSubClick = (subSubIndex) => {
-        setActiveSubSubIndex(subSubIndex);
-    };
+          <SubMenu key="sub7" icon={<NotificationOutlined />} title="News Management">
+            <SubMenu key="sub8" title="Movie News List">
+              <Menu.Item key="19">View All Articles</Menu.Item>
+              <Menu.Item key="20">Search/Filter Articles</Menu.Item>
+              <Menu.Item key="21">Add New Article</Menu.Item>
+              <Menu.Item key="22">Edit Article</Menu.Item>
+              <Menu.Item key="23">Delete Article</Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub9" title="Categories">
+              <Menu.Item key="24">View All Categories</Menu.Item>
+              <Menu.Item key="25">Add New Category</Menu.Item>
+              <Menu.Item key="26">Edit Category</Menu.Item>
+              <Menu.Item key="27">Delete Category</Menu.Item>
+            </SubMenu>
+          </SubMenu>
 
-    const handleMouseLeave = () => {
-        setActiveIndex(null);
-        setActiveSubIndex(null);
-        setActiveSubSubIndex(null);
-    };
-
-    const handleMainHover = (index) => {
-        if (activeIndex !== index) {
-            setActiveIndex(index);
-        }
-    };
-
-    const handleSubHover = (subIndex) => {
-        if (activeSubIndex !== subIndex) {
-            setActiveSubIndex(subIndex);
-        }
-    };
-
-    const handleSubSubHover = (subSubIndex) => {
-        if (activeSubSubIndex !== subSubIndex) {
-            setActiveSubSubIndex(subSubIndex);
-        }
-    };
-
-    const navItems = [
-        { 
-            title: 'Home', 
-            subtitles: [
-                { title: 'Dashboard', subSubtitles: ['Overview', 'Analytics', 'Notifications'] }
-            ]
-        },
-        { 
-            title: 'Movie Management', 
-            subtitles: [
-                { title: 'Movies List', subSubtitles: ['View Movies', 'Search/Filter Movies', 'Add New Movie'] },
-                { title: 'Categories', subSubtitles: ['View All Categories', 'Add New Category', 'Edit Category', 'Delete Category'] }
-            ]
-        },
-        { 
-            title: 'Live Events Management', 
-            subtitles: [
-                { title: 'Events List', subSubtitles: ['View Event', 'Search/Filter Events', 'Add New Event'] },
-                { title: 'Categories', subSubtitles: ['View All Categories', 'Add New Category', 'Edit Category', 'Delete Category'] }
-            ]
-        },
-        { 
-            title: 'News Management', 
-            subtitles: [
-                { title: 'Movie News List', subSubtitles: ['View All Articles', 'Search/Filter Articles', 'Add New Article'] },
-                { title: 'Categories', subSubtitles: ['View All Categories', 'Add New Category', 'Edit Category', 'Delete Category'] }
-            ]
-        },
-        { 
-            title: 'Contact Us', 
-            subtitles: [
-                { title: 'Messages', subSubtitles: ['View All Messages', 'Search/Filter Messages', 'Respond to Message', 'Delete Message'] },
-                { title: 'FAQs', subSubtitles: ['View All FAQs', 'Add New FAQ', 'Edit FAQ', 'Delete FAQ'] }
-            ]
-        }
-    ];
-
-    return (
-        <section className='navbar'>
-            <header className='navbar-links'>
-                <div className='navbar-links_logo'>
-                    <img src={logo} alt='logo'/>
-                </div>
-                <div className='navbar-links-container'>
-                    <ul className="navLists flex">
-                        {navItems.map((item, index) => (
-                            <li 
-                                key={index} 
-                                className={`navItem ${activeIndex === index ? 'active' : ''}`} 
-                                onMouseEnter={() => handleMainHover(index)}
-                                onClick={() => handleMainClick(index)}
-                                onMouseLeave={handleMouseLeave}
-                            >
-                                <span className="navLink">
-                                    {item.title}
-                                </span>
-                                {activeIndex === index && (
-                                    <ul className="subNavLists">
-                                        {item.subtitles.map((subtitle, subIndex) => (
-                                            <li 
-                                                key={subIndex} 
-                                                className={`subNavItem ${activeSubIndex === subIndex ? 'active' : ''}`}
-                                                onMouseEnter={() => handleSubHover(subIndex)}
-                                                onClick={() => handleSubClick(subIndex)}
-                                                onMouseLeave={handleMouseLeave}
-                                            >
-                                                <span className="subNavLink">
-                                                    {subtitle.title}
-                                                </span>
-                                                {activeSubIndex === subIndex && (
-                                                    <ul className="subSubNavLists">
-                                                        {subtitle.subSubtitles.map((subSubtitle, subSubIndex) => (
-                                                            <li 
-                                                                key={subSubIndex} 
-                                                                className={`subSubNavItem ${activeSubSubIndex === subSubIndex ? 'active' : ''}`}
-                                                                onMouseEnter={() => handleSubSubHover(subSubIndex)}
-                                                                onClick={() => handleSubSubClick(subSubIndex)}
-                                                            >
-                                                                <Link to={`/${item.title.replace(/ /g, '')}/${subtitle.title.replace(/ /g, '')}/${subSubtitle.replace(/ /g, '')}`} className="subSubNavLink">
-                                                                    {subSubtitle}
-                                                                </Link>
-                                                            </li>
-                                                        ))}
-                                                    </ul>
-                                                )}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                {/* <div className='signin-container'>
-                    <Link to="/Register" className="signin flex">
-                        <p><FaUserCircle className="icon" /> Sign in </p>
-                    </Link>
-                </div> */}
-            </header>
-        </section>
-    );
+          <SubMenu key="sub10" icon={<MailOutlined />} title="Contact Us">
+            <SubMenu key="sub11" title="Messages">
+              <Menu.Item key="28">View All Messages</Menu.Item>
+              <Menu.Item key="29">Search/Filter Messages</Menu.Item>
+              <Menu.Item key="30">Respond to Message</Menu.Item>
+              <Menu.Item key="31">Delete Message</Menu.Item>
+            </SubMenu>
+            <SubMenu key="sub12" title="FAQs">
+              <Menu.Item key="32">View All FAQs</Menu.Item>
+              <Menu.Item key="33">Add New FAQ</Menu.Item>
+              <Menu.Item key="34">Edit FAQ</Menu.Item>
+              <Menu.Item key="35">Delete FAQ</Menu.Item>
+            </SubMenu>
+          </SubMenu>
+        </Menu>
+      </Sider>
+      <Layout className="site-layout">
+        <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
+          Content goes here
+        </div>
+      </Layout>
+    </Layout>
+  );
 };
 
-export default Adminnavbar;
+export default AdminNavBar;
