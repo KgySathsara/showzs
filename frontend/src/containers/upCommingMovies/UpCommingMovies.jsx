@@ -1,4 +1,5 @@
 import React from 'react';
+import 'animate.css';
 import './UpCommingMovies.css';
 import upcomming from '../../assest/upcommingmovies.jpg';
 
@@ -7,7 +8,7 @@ const UpCommingMovies = () => {
     <section className='now-showing'>
       <h2>Upcomming Movies</h2>
       <div className='now-showing-container'>
-        <div className='movie-card'>
+        <div className='movie-card animate__animated animate__fadeInUp'>
           <img src={upcomming} alt="Visal Adare Poster" />
           <div className='movie-info'>
             <h3>Visal Adare - The Movie</h3>
@@ -15,7 +16,7 @@ const UpCommingMovies = () => {
             <p>Embark on an emotional rollercoaster of friendship, love, heartbreak, laughter, and joy...</p>
           </div>
         </div>
-        <div className='movie-card'>
+        <div className='movie-card animate__animated animate__fadeInUp'>
           <img src={upcomming} alt="Sinhabahu Poster" />
           <div className='movie-info'>
             <h3>Sinhabahu</h3>
