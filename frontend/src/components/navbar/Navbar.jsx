@@ -33,7 +33,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className='signin-container'>
-          <Link to="/signin" className="signin flex">
+          <Link to="/Register" className="signin flex">
             <p><FaUserCircle className="icon" /> Sign in </p>
           </Link>
         </div>

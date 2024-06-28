@@ -1,7 +1,7 @@
 import React from 'react';
 import { Footer, NowShowing, UpCommingMovies} from '../../containers';
 import { Navbar } from '../../components';
-// import './LiveEvents.css';
+// import './LiveEvents.css';``
 
 const News = () => {
   return (

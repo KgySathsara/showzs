@@ -8,6 +8,8 @@ import LiveEvents from './pages/LiveEvents/LiveEvents';
 import Movies from './pages/Movies/Movies';
 import News from './pages/News/News';
 import Contactus from './pages/Contactus/Contactus';
+import Login from './pages/login/Login';
+import Register from './pages/register/Register';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -18,6 +20,8 @@ ReactDOM.render(
             <Route path='/Movies' element={<Movies />}/>
             <Route path='/News' element={<News />}/>
             <Route path='/Contactus' element={<Contactus />}/>
+            <Route path='/Login' element={<Login />}/>
+            <Route path='/Register' element={<Register />}/>
 
         </Routes>
     </BrowserRouter>,
