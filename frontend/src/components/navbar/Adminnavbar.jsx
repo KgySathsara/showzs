@@ -37,10 +37,10 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub3" icon={<VideoCameraOutlined />} title="Movie Management">
-          <Menu.Item key="10">View Movies</Menu.Item>
-          <Menu.Item key="11">Add New Movie</Menu.Item>
-          <Menu.Item key="12">Edit Movie Details</Menu.Item>
-          <Menu.Item key="13">Delete Movie</Menu.Item>
+          <Menu.Item key="10"><Link to="/AdminMovieManagement">View Movies</Link></Menu.Item>
+          <Menu.Item key="11"><Link to="/AdminMovieManagement">Add New Movie</Link></Menu.Item>
+          <Menu.Item key="12"><Link to="/AdminMovieManagement">Edit Movie Details</Link></Menu.Item>
+          <Menu.Item key="13"><Link to="/AdminMovieManagement">Delete Movie</Link></Menu.Item>
         </SubMenu>
 
         <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">

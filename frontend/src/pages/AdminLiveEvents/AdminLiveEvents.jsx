@@ -1,7 +1,6 @@
 import React from 'react';
 import { Layout } from 'antd';
 import { Adminnavbar } from '../../components';
-import './AdminLiveEvents.css';
 
 const { Content } = Layout;
 
