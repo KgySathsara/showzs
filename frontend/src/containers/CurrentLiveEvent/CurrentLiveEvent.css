@@ -1,0 +1,15 @@
+.cover-image {
+    width: 20%;
+    height: 20%;
+    border-radius: 10px;
+    object-fit: cover;
+  }
+  
+  @media (max-width: 768px) {
+    .cover-image {
+      max-width: 20%;
+      height: auto;
+      max-height: 300px;
+    }
+  }
+  

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { 
+import {
   VideoCameraOutlined,
   CalendarOutlined,
   NotificationOutlined,
@@ -17,7 +17,7 @@ const AdminNavBar = () => {
   return (
     <Sider collapsible>
       <div className="logo">
-        <img src={logo} alt='logo'/>
+        <img src={logo} alt='logo' />
       </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <SubMenu key="sub1" icon={<VideoCameraOutlined />} title="Dashboard">
@@ -45,19 +45,21 @@ const AdminNavBar = () => {
 
         <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">
           <SubMenu key="sub6" title="Events List">
-          <Menu.Item key="14">
-              <Link to="/ViewLiveEvent">View Event</Link>
-            </Menu.Item>            
-            <Menu.Item key="15">Add New Event</Menu.Item>
+            <Menu.Item key="14">
+              <Link to="/AdminAddLiveEvents">Add Event</Link>
+            </Menu.Item>
+            <Menu.Item key="15">
+              <Link to="/AdminViewLiveEvents"> View Event</Link>
+            </Menu.Item>
             <Menu.Item key="16">Edit Event Details</Menu.Item>
             <Menu.Item key="17">Delete Event</Menu.Item>
           </SubMenu>
-          <SubMenu key="sub7" title="Categories">
+          {/* <SubMenu key="sub7" title="Categories">
             <Menu.Item key="18">View All Categories</Menu.Item>
             <Menu.Item key="19">Add New Category</Menu.Item>
             <Menu.Item key="20">Edit Category</Menu.Item>
             <Menu.Item key="21">Delete Category</Menu.Item>
-          </SubMenu>
+          </SubMenu> */}
         </SubMenu>
 
         <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
@@ -122,7 +124,7 @@ const AdminNavBar = () => {
               <Menu.Item key="54">Add New Page</Menu.Item>
               <Menu.Item key="55">Edit Page</Menu.Item>
               <Menu.Item key="56">Delete Page</Menu.Item>
-            </SubMenu>  
+            </SubMenu>
           </SubMenu>
         </SubMenu>
       </Menu>
