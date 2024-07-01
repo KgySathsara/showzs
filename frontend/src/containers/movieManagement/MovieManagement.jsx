@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import './movieManagement.css';
 
 const MovieManagement = () => {
@@ -10,8 +9,9 @@ const MovieManagement = () => {
 
   useEffect(() => {
     // Fetch movies from the server
-    axios.get('/api/movies')
-      .then(response => setMovies(response.data))
+    fetch('/api/movies')
+      .then(response => response.json())
+      .then(data => setMovies(data))
       .catch(error => console.error('Error fetching movies:', error));
   }, []);
 
@@ -39,9 +39,13 @@ const MovieManagement = () => {
       formData.append(key, newMovie[key]);
     }
 
-    axios.post('/api/movies', formData)
-      .then(response => {
-        setMovies([...movies, response.data]);
+    fetch('/api/movies', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        setMovies([...movies, data]);
         setNewMovie({ title: '', genre: '', director: '', duration: '', picture: null }); // Clear form after submission
       })
       .catch(error => console.error('Error adding movie:', error));
@@ -53,16 +57,22 @@ const MovieManagement = () => {
       formData.append(key, editingMovie[key]);
     }
 
-    axios.put(`/api/movies/${id}`, formData)
-      .then(response => {
-        setMovies(movies.map(movie => movie.id === id ? response.data : movie));
+    fetch(`/api/movies/${id}`, {
+      method: 'PUT',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        setMovies(movies.map(movie => movie.id === id ? data : movie));
         setEditingMovie(null);
       })
       .catch(error => console.error('Error updating movie:', error));
   };
 
   const deleteMovie = () => {
-    axios.delete(`/api/movies/${parseInt(movieToDelete)}`)
+    fetch(`/api/movies/${parseInt(movieToDelete)}`, {
+      method: 'DELETE'
+    })
       .then(() => setMovies(movies.filter(movie => movie.id !== parseInt(movieToDelete))))
       .catch(error => console.error('Error deleting movie:', error));
     setMovieToDelete('');
@@ -172,7 +182,7 @@ const MovieManagement = () => {
           type="text"
           name="title"
           placeholder="Title"
-          value={newMovie.addtitle}
+          value={newMovie.title}
           onChange={handleInputChange}
           className="admin-movie-input"
         />
@@ -180,7 +190,7 @@ const MovieManagement = () => {
           type="text"
           name="genre"
           placeholder="Genre"
-          value={newMovie.addgenre}
+          value={newMovie.genre}
           onChange={handleInputChange}
           className="admin-movie-input"
         />
@@ -188,7 +198,7 @@ const MovieManagement = () => {
           type="text"
           name="director"
           placeholder="Director"
-          value={newMovie.adddirector}
+          value={newMovie.director}
           onChange={handleInputChange}
           className="admin-movie-input"
         />
@@ -210,47 +220,49 @@ const MovieManagement = () => {
       </form>
 
       <h2>Update Movie</h2>
-      <form className="admin-movie-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          value={updateMovie.uptitle}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="text"
-          name="genre"
-          placeholder="Genre"
-          value={updateMovie.upgenre}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="text"
-          name="director"
-          placeholder="Director"
-          value={updateMovie.updirector}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="text"
-          name="duration"
-          placeholder="Duration (in minutes)"
-          value={updateMovie.upduration}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="file"
-          name="picture"
-          onChange={handleFileChange}
-          className="admin-movie-input"
-        />
-        <button type="button" onClick={updateMovie} className="admin-movie-button">Update Movie</button>
-      </form>
+      {editingMovie && (
+        <form className="admin-movie-form">
+          <input
+            type="text"
+            name="title"
+            placeholder="Title"
+            value={editingMovie.title}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="text"
+            name="genre"
+            placeholder="Genre"
+            value={editingMovie.genre}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="text"
+            name="director"
+            placeholder="Director"
+            value={editingMovie.director}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="text"
+            name="duration"
+            placeholder="Duration (in minutes)"
+            value={editingMovie.duration}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="file"
+            name="picture"
+            onChange={handleEditFileChange}
+            className="admin-movie-input"
+          />
+          <button type="button" onClick={() => updateMovie(editingMovie.id)} className="admin-movie-button">Update Movie</button>
+        </form>
+      )}
 
       <h2>Delete Movie</h2>
       <form className="admin-movie-form">
