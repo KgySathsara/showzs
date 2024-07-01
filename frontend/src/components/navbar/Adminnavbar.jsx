@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Layout, Menu, Modal, Button, Form, Input } from 'antd';
+import { Layout, Menu, Modal, Button, Form, Input, DatePicker } from 'antd';
 import {
   DashboardOutlined,
   VideoCameraOutlined,
   CalendarOutlined,
   NotificationOutlined,
   MailOutlined,
-} 
-from '@ant-design/icons';
+} from '@ant-design/icons';
 import logo from '../../assest/logo.png';
-import './AdminNavBar.css';
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -39,6 +37,88 @@ const AdminNavBar = () => {
       ...formData,
       [name]: value,
     });
+  };
+
+  const renderFormItems = () => {
+    switch (modalTitle) {
+      case 'Add New Movie':
+      case 'Edit Movie Details':
+        return (
+          <>
+            <Form.Item label="Title">
+              <Input name="title" onChange={handleInputChange} />
+            </Form.Item>
+            <Form.Item label="Description">
+              <Input name="description" onChange={handleInputChange} />
+            </Form.Item>
+            <Form.Item label="Release Date">
+              <DatePicker name="releaseDate" onChange={(date, dateString) => handleInputChange({ target: { name: 'releaseDate', value: dateString } })} />
+            </Form.Item>
+          </>
+        );
+      case 'Add New Event':
+      case 'Edit Event Details':
+        return (
+          <>
+            <Form.Item label="Event Name">
+              <Input name="eventName" onChange={handleInputChange} />
+            </Form.Item>
+            <Form.Item label="Date">
+              <DatePicker name="date" onChange={(date, dateString) => handleInputChange({ target: { name: 'date', value: dateString } })} />
+            </Form.Item>
+            <Form.Item label="Location">
+              <Input name="location" onChange={handleInputChange} />
+            </Form.Item>
+          </>
+        );
+      case 'Add New Article':
+      case 'Edit Article':
+        return (
+          <>
+            <Form.Item label="Title">
+              <Input name="title" onChange={handleInputChange} />
+            </Form.Item>
+            <Form.Item label="Content">
+              <Input.TextArea name="content" onChange={handleInputChange} />
+            </Form.Item>
+          </>
+        );
+      case 'Add New Category':
+      case 'Edit Category':
+        return (
+          <>
+            <Form.Item label="Category Name">
+              <Input name="categoryName" onChange={handleInputChange} />
+            </Form.Item>
+          </>
+        );
+      case 'Add New FAQ':
+      case 'Edit FAQ':
+        return (
+          <>
+            <Form.Item label="Question">
+              <Input name="question" onChange={handleInputChange} />
+            </Form.Item>
+            <Form.Item label="Answer">
+              <Input.TextArea name="answer" onChange={handleInputChange} />
+            </Form.Item>
+          </>
+        );
+        case 'Delete Event':
+        case 'Delete Category':
+          return(
+            <>
+              <Form.Item label="">
+                <Input name="" onChange={handleInputChange} />
+              </Form.Item>
+              <Form.Item label="">
+                <Input name="" onChange={handleInputChange} />
+              </Form.Item>
+            </>
+          );
+        default:
+        return null;
+    }
   };
 
   return (
@@ -75,15 +155,15 @@ const AdminNavBar = () => {
             <SubMenu key="sub6" title="Events List">
               <Menu.Item key="14">View Event</Menu.Item>
               <Menu.Item key="15">Search/Filter Events</Menu.Item>
-              <Menu.Item key="16">Add New Event</Menu.Item>
-              <Menu.Item key="17">Edit Event Details</Menu.Item>
-              <Menu.Item key="18">Delete Event</Menu.Item>
+              <Menu.Item key="16" onClick={() => showModal('Add New Event')}>Add New Event</Menu.Item>
+              <Menu.Item key="17" onClick={() => showModal('Edit Event Details')}>Edit Event Details</Menu.Item>
+              <Menu.Item key="18" onClick={() => showModal('Delete Event')}>Delete Event</Menu.Item>
             </SubMenu>
             <SubMenu key="sub7" title="Categories">
               <Menu.Item key="19">View All Categories</Menu.Item>
-              <Menu.Item key="20">Add New Category</Menu.Item>
-              <Menu.Item key="21">Edit Category</Menu.Item>
-              <Menu.Item key="22">Delete Category</Menu.Item>
+              <Menu.Item key="20" onClick={() => showModal('Add New Category')}>Add New Category</Menu.Item>
+              <Menu.Item key="21" onClick={() => showModal('Edit Category')}>Edit Category</Menu.Item>
+              <Menu.Item key="22" onClick={() => showModal('Delete Category')}>Delete Category</Menu.Item>
             </SubMenu>
           </SubMenu>
 
@@ -91,14 +171,14 @@ const AdminNavBar = () => {
             <SubMenu key="sub9" title="Movie News List">
               <Menu.Item key="23">View All Articles</Menu.Item>
               <Menu.Item key="24">Search/Filter Articles</Menu.Item>
-              <Menu.Item key="25">Add New Article</Menu.Item>
-              <Menu.Item key="26">Edit Article</Menu.Item>
+              <Menu.Item key="25" onClick={() => showModal('Add New Article')}>Add New Article</Menu.Item>
+              <Menu.Item key="26" onClick={() => showModal('Edit Article')}>Edit Article</Menu.Item>
               <Menu.Item key="27">Delete Article</Menu.Item>
             </SubMenu>
             <SubMenu key="sub10" title="Categories">
               <Menu.Item key="28">View All Categories</Menu.Item>
-              <Menu.Item key="29">Add New Category</Menu.Item>
-              <Menu.Item key="30">Edit Category</Menu.Item>
+              <Menu.Item key="29" onClick={() => showModal('Add New Category')}>Add New Category</Menu.Item>
+              <Menu.Item key="30" onClick={() => showModal('Edit Category')}>Edit Category</Menu.Item>
               <Menu.Item key="31">Delete Category</Menu.Item>
             </SubMenu>
           </SubMenu>
@@ -112,12 +192,12 @@ const AdminNavBar = () => {
             </SubMenu>
             <SubMenu key="sub13" title="FAQs">
               <Menu.Item key="36">View All FAQs</Menu.Item>
-              <Menu.Item key="37">Add New FAQ</Menu.Item>
-              <Menu.Item key="38">Edit FAQ</Menu.Item>
+              <Menu.Item key="37" onClick={() => showModal('Add New FAQ')}>Add New FAQ</Menu.Item>
+              <Menu.Item key="38" onClick={() => showModal('Edit FAQ')}>Edit FAQ</Menu.Item>
               <Menu.Item key="39">Delete FAQ</Menu.Item>
             </SubMenu>
           </SubMenu>
-          </Menu>
+        </Menu>
       </Sider>
       <Layout className="site-layout">
         <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
@@ -127,13 +207,7 @@ const AdminNavBar = () => {
 
       <Modal title={modalTitle} visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
         <Form>
-          <Form.Item label="Title">
-            <Input name="title" onChange={handleInputChange} />
-          </Form.Item>
-          <Form.Item label="Description">
-            <Input name="description" onChange={handleInputChange} />
-          </Form.Item>
-          {/* Add other form items as needed */}
+          {renderFormItems()}
         </Form>
       </Modal>
     </Layout>

@@ -11,7 +11,7 @@ import Contactus from './pages/Contactus/Contactus';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Admin from './pages/admin/Admin';
-import AdminMoviesList from './pages/adminmovieslist/Adminmovieslist';
+// import AdminMoviesList from './pages/adminmovieslist/Adminmovieslist';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -25,7 +25,7 @@ ReactDOM.render(
             <Route path='/Login' element={<Login />}/>
             <Route path='/Register' element={<Register />}/>
             <Route path='/Admin' element={<Admin />}/>
-            <Route path='/AdminMoviesList' element={<AdminMoviesList />}/>
+            {/* <Route path='/AdminMoviesList' element={<AdminMoviesList />}/> */}
         </Routes>
     </BrowserRouter>,
     document.getElementById('root')
