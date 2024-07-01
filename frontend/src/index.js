@@ -13,6 +13,7 @@ import Admin from './pages/admin/Admin';
 import ViewLiveEvent from './pages/AdminLiveEvents/AdminLiveEvents';
 import AdminAddLiveEvents from './pages/AdminLiveEvents/AdminAddLiveEvents';
 import AdminViewLiveEvents from './pages/AdminViewLiveEvents/AdminViewLiveEvents';
+import AdminMovieManagement from './pages/AdminMovieManagement/AdminMovieManagement';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -28,6 +29,7 @@ ReactDOM.render(
             <Route path='/ViewLiveEvent' element={<ViewLiveEvent />}/>
             <Route path='/AdminAddLiveEvents' element={<AdminAddLiveEvents />}/>
             <Route path='/AdminViewLiveEvents' element={<AdminViewLiveEvents />}/>
+            <Route path='/AdminMovieManagement' element={<AdminMovieManagement />}/>
 
             {/* <Route path='/AdminMoviesList' element={<AdminMoviesList />}/> */}
         </Routes>
