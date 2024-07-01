@@ -6,6 +6,7 @@ import {
   NotificationOutlined,
   MailOutlined,
 } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import logo from '../../assest/logo.png';
 import './AdminNavBar.css';
 
@@ -44,7 +45,9 @@ const AdminNavBar = () => {
 
         <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">
           <SubMenu key="sub6" title="Events List">
-            <Menu.Item key="14">View Event</Menu.Item>
+          <Menu.Item key="14">
+              <Link to="/ViewLiveEvent">View Event</Link>
+            </Menu.Item>            
             <Menu.Item key="15">Add New Event</Menu.Item>
             <Menu.Item key="16">Edit Event Details</Menu.Item>
             <Menu.Item key="17">Delete Event</Menu.Item>
