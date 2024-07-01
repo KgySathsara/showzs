@@ -7,14 +7,21 @@
   .admin-movie-container h1{
     color: #000000;
     text-align: center;
+    padding-bottom: 30px;
+    padding-top: 30px;
   }
   
   .admin-movie-table {
     width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
+    border-collapse: separate;
+    margin-bottom: 50px;
   }
   
+  .admin-movie-container h2{
+      font-size: 30px;
+      font-weight: 500;
+  }
+
   .admin-movie-table-header {
     background-color: #f2f2f2;
   }
@@ -27,12 +34,16 @@
   
   .admin-movie-table-row-even {
     background-color: #f9f9f9;
+    padding: 30px;
   }
   
   .admin-movie-form {
+    margin-top: 30px;
+    margin-bottom: 30px;
     display: flex;
+    align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 40px;
   }
   
   .admin-movie-input {

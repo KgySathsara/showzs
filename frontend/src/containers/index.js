@@ -9,3 +9,5 @@ export { default as UpCommingMovies } from './upCommingMovies/UpCommingMovies';
 export { default as ContactForm } from './contactForm/ContactForm';
 export { default as CurrentLiveEvent } from './CurrentLiveEvent/CurrentLiveEvent';
 export { default as LiveEventForm } from './LiveEventForm/LiveEventForm';
+export { default as MovieManagement } from './movieManagement/MovieManagement';
+

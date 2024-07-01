@@ -1,20 +1,25 @@
+<<<<<<< HEAD
+import React, { useState } from 'react';
+=======
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+>>>>>>> 9701b5a11a82f17d40b7f5e6e1a3f95ea57f9f45
 import './movieManagement.css';
 
 const MovieManagement = () => {
-  const [movies, setMovies] = useState([]);
   const [newMovie, setNewMovie] = useState({ title: '', genre: '', director: '', duration: '', picture: null });
-  const [editingMovie, setEditingMovie] = useState(null);
   const [movieToDelete, setMovieToDelete] = useState('');
 
+<<<<<<< HEAD
+=======
   useEffect(() => {
     // Fetch movies from the server
-    axios.get('/api/movies')
-      .then(response => setMovies(response.data))
+    fetch('/api/movies')
+      .then(response => response.json())
+      .then(data => setMovies(data))
       .catch(error => console.error('Error fetching movies:', error));
   }, []);
 
+>>>>>>> 9701b5a11a82f17d40b7f5e6e1a3f95ea57f9f45
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setNewMovie({ ...newMovie, [name]: value });
@@ -24,6 +29,8 @@ const MovieManagement = () => {
     setNewMovie({ ...newMovie, picture: e.target.files[0] });
   };
 
+<<<<<<< HEAD
+=======
   const handleEditInputChange = (e) => {
     const { name, value } = e.target;
     setEditingMovie({ ...editingMovie, [name]: value });
@@ -39,9 +46,13 @@ const MovieManagement = () => {
       formData.append(key, newMovie[key]);
     }
 
-    axios.post('/api/movies', formData)
-      .then(response => {
-        setMovies([...movies, response.data]);
+    fetch('/api/movies', {
+      method: 'POST',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        setMovies([...movies, data]);
         setNewMovie({ title: '', genre: '', director: '', duration: '', picture: null }); // Clear form after submission
       })
       .catch(error => console.error('Error adding movie:', error));
@@ -53,16 +64,22 @@ const MovieManagement = () => {
       formData.append(key, editingMovie[key]);
     }
 
-    axios.put(`/api/movies/${id}`, formData)
-      .then(response => {
-        setMovies(movies.map(movie => movie.id === id ? response.data : movie));
+    fetch(`/api/movies/${id}`, {
+      method: 'PUT',
+      body: formData
+    })
+      .then(response => response.json())
+      .then(data => {
+        setMovies(movies.map(movie => movie.id === id ? data : movie));
         setEditingMovie(null);
       })
       .catch(error => console.error('Error updating movie:', error));
   };
 
   const deleteMovie = () => {
-    axios.delete(`/api/movies/${parseInt(movieToDelete)}`)
+    fetch(`/api/movies/${parseInt(movieToDelete)}`, {
+      method: 'DELETE'
+    })
       .then(() => setMovies(movies.filter(movie => movie.id !== parseInt(movieToDelete))))
       .catch(error => console.error('Error deleting movie:', error));
     setMovieToDelete('');
@@ -72,6 +89,7 @@ const MovieManagement = () => {
     setEditingMovie(movie);
   };
 
+>>>>>>> 9701b5a11a82f17d40b7f5e6e1a3f95ea57f9f45
   return (
     <div className="admin-movie-container">
       <h1>Movie Management</h1>
@@ -83,96 +101,36 @@ const MovieManagement = () => {
             <th className="admin-movie-table-header">Director</th>
             <th className="admin-movie-table-header">Duration</th>
             <th className="admin-movie-table-header">Picture</th>
-            <th className="admin-movie-table-header">Actions</th>
           </tr>
         </thead>
-        <tbody>
-          {movies.map(movie => (
-            <tr key={movie.id} className={movies.indexOf(movie) % 2 === 0 ? 'admin-movie-table-row-even' : ''}>
-              <td className="admin-movie-table-cell">
-                {editingMovie?.id === movie.id ? (
-                  <input
-                    type="text"
-                    name="title"
-                    value={editingMovie.title}
-                    onChange={handleEditInputChange}
-                    className="admin-movie-input"
-                  />
-                ) : (
-                  movie.title
-                )}
-              </td>
-              <td className="admin-movie-table-cell">
-                {editingMovie?.id === movie.id ? (
-                  <input
-                    type="text"
-                    name="genre"
-                    value={editingMovie.genre}
-                    onChange={handleEditInputChange}
-                    className="admin-movie-input"
-                  />
-                ) : (
-                  movie.genre
-                )}
-              </td>
-              <td className="admin-movie-table-cell">
-                {editingMovie?.id === movie.id ? (
-                  <input
-                    type="text"
-                    name="director"
-                    value={editingMovie.director}
-                    onChange={handleEditInputChange}
-                    className="admin-movie-input"
-                  />
-                ) : (
-                  movie.director
-                )}
-              </td>
-              <td className="admin-movie-table-cell">
-                {editingMovie?.id === movie.id ? (
-                  <input
-                    type="text"
-                    name="duration"
-                    value={editingMovie.duration}
-                    onChange={handleEditInputChange}
-                    className="admin-movie-input"
-                  />
-                ) : (
-                  movie.duration
-                )}
-              </td>
-              <td className="admin-movie-table-cell">
-                {editingMovie?.id === movie.id ? (
-                  <input
-                    type="file"
-                    name="picture"
-                    onChange={handleEditFileChange}
-                    className="admin-movie-input"
-                  />
-                ) : (
-                  <img src={movie.pictureUrl} alt={movie.title} className="admin-movie-picture" />
-                )}
-              </td>
-              <td className="admin-movie-table-cell">
-                {editingMovie?.id === movie.id ? (
-                  <button onClick={() => updateMovie(movie.id)} className="admin-movie-button">Save</button>
-                ) : (
-                  <button onClick={() => startEditing(movie)} className="admin-movie-button">Edit</button>
-                )}
-                <button onClick={() => setMovieToDelete(movie.id)} className="admin-movie-button">Delete</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
       </table>
 
       <h2>Add New Movie</h2>
       <form className="admin-movie-form">
+<<<<<<< HEAD
+        <input type="text" name="title" placeholder="Title" onChange={handleInputChange} className="admin-movie-input" />
+        <input type="text" name="genre" placeholder="Genre" onChange={handleInputChange} className="admin-movie-input" />
+        <input type="text" name="director" placeholder="Director" onChange={handleInputChange} className="admin-movie-input" />
+        <input type="text" name="duration" placeholder="Duration (in minutes)" onChange={handleInputChange} className="admin-movie-input"/>
+        <input type="file" name="picture" onChange={handleFileChange} className="admin-movie-input" />
+        <button type="button" className="admin-movie-button">Add Movie</button>
+      </form>
+
+      <h2>Update Movie</h2>
+      <form className="admin-movie-form">
+        <input type="text" name="title" placeholder="Title" onChange={handleInputChange} className="admin-movie-input" />
+        <input type="text" name="genre" placeholder="Genre" onChange={handleInputChange} className="admin-movie-input" />
+        <input type="text" name="director" placeholder="Director" onChange={handleInputChange} className="admin-movie-input" />
+        <input type="text" name="duration" placeholder="Duration (in minutes)" onChange={handleInputChange} className="admin-movie-input" />
+        <input type="file" name="picture" onChange={handleFileChange} className="admin-movie-input" />
+        <button type="button" className="admin-movie-button">Update Movie</button>
+      </form>
+=======
         <input
           type="text"
           name="title"
           placeholder="Title"
-          value={newMovie.addtitle}
+          value={newMovie.title}
           onChange={handleInputChange}
           className="admin-movie-input"
         />
@@ -180,7 +138,7 @@ const MovieManagement = () => {
           type="text"
           name="genre"
           placeholder="Genre"
-          value={newMovie.addgenre}
+          value={newMovie.genre}
           onChange={handleInputChange}
           className="admin-movie-input"
         />
@@ -188,7 +146,7 @@ const MovieManagement = () => {
           type="text"
           name="director"
           placeholder="Director"
-          value={newMovie.adddirector}
+          value={newMovie.director}
           onChange={handleInputChange}
           className="admin-movie-input"
         />
@@ -210,59 +168,55 @@ const MovieManagement = () => {
       </form>
 
       <h2>Update Movie</h2>
-      <form className="admin-movie-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          value={updateMovie.uptitle}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="text"
-          name="genre"
-          placeholder="Genre"
-          value={updateMovie.upgenre}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="text"
-          name="director"
-          placeholder="Director"
-          value={updateMovie.updirector}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="text"
-          name="duration"
-          placeholder="Duration (in minutes)"
-          value={updateMovie.upduration}
-          onChange={handleInputChange}
-          className="admin-movie-input"
-        />
-        <input
-          type="file"
-          name="picture"
-          onChange={handleFileChange}
-          className="admin-movie-input"
-        />
-        <button type="button" onClick={updateMovie} className="admin-movie-button">Update Movie</button>
-      </form>
+      {editingMovie && (
+        <form className="admin-movie-form">
+          <input
+            type="text"
+            name="title"
+            placeholder="Title"
+            value={editingMovie.title}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="text"
+            name="genre"
+            placeholder="Genre"
+            value={editingMovie.genre}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="text"
+            name="director"
+            placeholder="Director"
+            value={editingMovie.director}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="text"
+            name="duration"
+            placeholder="Duration (in minutes)"
+            value={editingMovie.duration}
+            onChange={handleEditInputChange}
+            className="admin-movie-input"
+          />
+          <input
+            type="file"
+            name="picture"
+            onChange={handleEditFileChange}
+            className="admin-movie-input"
+          />
+          <button type="button" onClick={() => updateMovie(editingMovie.id)} className="admin-movie-button">Update Movie</button>
+        </form>
+      )}
+>>>>>>> 9701b5a11a82f17d40b7f5e6e1a3f95ea57f9f45
 
       <h2>Delete Movie</h2>
       <form className="admin-movie-form">
-        <input
-          type="text"
-          name="title"
-          placeholder="Title"
-          value={movieToDelete}
-          onChange={(e) => setMovieToDelete(e.target.value)}
-          className="admin-movie-input"
-        />
-        <button type="button" onClick={deleteMovie} className="admin-movie-button">Delete Movie</button>
+        <input type="text" name="title" placeholder="Title" onChange={(e) => setMovieToDelete(e.target.value)} className="admin-movie-input" />
+        <button type="button"  className="admin-movie-button">Delete Movie</button>
       </form>
     </div>
   );
