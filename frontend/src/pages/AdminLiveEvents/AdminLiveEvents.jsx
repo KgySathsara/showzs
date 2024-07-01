@@ -4,14 +4,14 @@ import { Adminnavbar } from '../../components';
 
 const { Content } = Layout;
 
-const Admin = () => {
+const AdminLiveEvents = () => {
   return (
-    <Layout style={{ minHeight: '100vh'}}>
+    <Layout style={{ minHeight: '100vh' }}>
       <Adminnavbar />
       <Layout className="site-layout">
         <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            Admin
+            sssssssssssssssss
           </div>
         </Content>
       </Layout>
@@ -19,4 +19,4 @@ const Admin = () => {
   );
 };
 
-export default Admin;
+export default AdminLiveEvents;

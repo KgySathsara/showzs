@@ -1,5 +1,5 @@
 import React from 'react';
-import { Footer, Header, Events } from '../../containers';
+import { Footer, Events } from '../../containers';
 import { Navbar } from '../../components';
 // import './LiveEvents.css';
 

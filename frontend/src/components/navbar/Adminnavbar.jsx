@@ -1,10 +1,11 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import {
+import { 
   VideoCameraOutlined,
   CalendarOutlined,
   NotificationOutlined,
   MailOutlined,
+  AppstoreOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import logo from '../../assest/logo.png';
@@ -20,7 +21,7 @@ const AdminNavBar = () => {
         <img src={logo} alt='logo' />
       </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-        <SubMenu key="sub1" icon={<VideoCameraOutlined />} title="Dashboard">
+        <SubMenu key="sub1" icon={<DashboardOutlined />} title="Dashboard">
           <SubMenu key="sub2" title="Overview">
             <Menu.Item key="1">View Ongoing Movies</Menu.Item>
             <Menu.Item key="2">Total Live Events</Menu.Item>
@@ -35,12 +36,10 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub3" icon={<VideoCameraOutlined />} title="Movie Management">
-          <SubMenu key="sub4" title="Movies List">
-            <Menu.Item key="10">View Movies</Menu.Item>
-            <Menu.Item key="11">Add New Movie</Menu.Item>
-            <Menu.Item key="12">Edit Movie Details</Menu.Item>
-            <Menu.Item key="13">Delete Movie</Menu.Item>
-          </SubMenu>
+          <Menu.Item key="10"><Link to="/AdminMovieManagement">View Movies</Link></Menu.Item>
+          <Menu.Item key="11"><Link to="/AdminMovieManagement">Add New Movie</Link></Menu.Item>
+          <Menu.Item key="12"><Link to="/AdminMovieManagement">Edit Movie Details</Link></Menu.Item>
+          <Menu.Item key="13"><Link to="/AdminMovieManagement">Delete Movie</Link></Menu.Item>
         </SubMenu>
 
         <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">
@@ -93,7 +92,7 @@ const AdminNavBar = () => {
           </SubMenu>
         </SubMenu>
 
-        <SubMenu key="sub14" icon={<MailOutlined />} title="Additional Section">
+        <SubMenu key="sub14" icon={<AppstoreOutlined />} title="Additional Section">
           <SubMenu key="sub15" title="Users Management">
             <Menu.Item key="39">View All Users</Menu.Item>
             <Menu.Item key="40">Search/Filter Users</Menu.Item>
