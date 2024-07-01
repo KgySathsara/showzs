@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layout } from 'antd';
 import { Adminnavbar } from '../../components';
 import { LiveEventForm, CurrentLiveEvent } from '../../containers';
-import './AdminLiveEvents.css';
+// import './AdminLiveEvents.css';
 
 const { Content } = Layout;
 

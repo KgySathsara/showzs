@@ -11,7 +11,8 @@ import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Admin from './pages/admin/Admin';
 import ViewLiveEvent from './pages/AdminLiveEvents/AdminLiveEvents';
-// import AdminMoviesList from './pages/adminmovieslist/Adminmovieslist';
+import AdminAddLiveEvents from './pages/AdminLiveEvents/AdminAddLiveEvents';
+import AdminViewLiveEvents from './pages/AdminViewLiveEvents/AdminViewLiveEvents';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -25,6 +26,9 @@ ReactDOM.render(
             <Route path='/Register' element={<Register />}/>
             <Route path='/Admin' element={<Admin />}/>
             <Route path='/ViewLiveEvent' element={<ViewLiveEvent />}/>
+            <Route path='/AdminAddLiveEvents' element={<AdminAddLiveEvents />}/>
+            <Route path='/AdminViewLiveEvents' element={<AdminViewLiveEvents />}/>
+
             {/* <Route path='/AdminMoviesList' element={<AdminMoviesList />}/> */}
         </Routes>
     </BrowserRouter>,

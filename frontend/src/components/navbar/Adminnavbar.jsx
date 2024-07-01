@@ -6,6 +6,7 @@ import {
   NotificationOutlined,
   MailOutlined,
   AppstoreOutlined,
+  DashboardOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import logo from '../../assest/logo.png';
