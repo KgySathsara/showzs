@@ -1,0 +1,19 @@
+ .admin-upcoming-movies {
+    padding: 20px;
+    background: #f0f2f5;
+  }
+  
+  .admin-upcoming-movies h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .ant-form-item {
+    margin-bottom: 16px;
+  }
+  
+  .ant-btn-primary {
+    display: block;
+    width: 100%;
+  }
+  

@@ -12,5 +12,6 @@ export { default as LiveEventForm } from './LiveEventForm/LiveEventForm';
 export { default as AddMovieManagement } from './movieManagement/AddMovieManagement';
 export { default as ViewMovieManagement } from './movieManagement/ViewMovieManagement';
 export { default as AdminContact } from './adminContactView/adminContactView';
+export { default as AdminUpcomingMovies } from './AdminUpcomingMovies/AdminUpcomingMovies';
 
 

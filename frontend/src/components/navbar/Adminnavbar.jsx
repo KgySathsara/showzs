@@ -61,20 +61,10 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
-          <SubMenu key="sub9" title="Movie News List">
-            <Menu.Item key="22">View All Articles</Menu.Item>
-            <Menu.Item key="23">Search/Filter Articles</Menu.Item>
-            <Menu.Item key="24">Add New Article</Menu.Item>
-            <Menu.Item key="25">Edit Article</Menu.Item>
-            <Menu.Item key="26">Delete Article</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub10" title="Categories">
-            <Menu.Item key="27">View All Categories</Menu.Item>
-            <Menu.Item key="28">Add New Category</Menu.Item>
-            <Menu.Item key="29">Edit Category</Menu.Item>
-            <Menu.Item key="30">Delete Category</Menu.Item>
-          </SubMenu>
-        </SubMenu>
+        <Menu.Item key="24">
+          <Link to="/AdminAddNews">Add New Article</Link>
+        </Menu.Item>
+      </SubMenu>
         
         <SubMenu key="sub11" icon={<MailOutlined />} title="User Messages">
         <Menu.Item key="31">
