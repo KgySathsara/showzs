@@ -9,7 +9,10 @@ export { default as UpCommingMovies } from './upCommingMovies/UpCommingMovies';
 export { default as ContactForm } from './contactForm/ContactForm';
 export { default as CurrentLiveEvent } from './CurrentLiveEvent/CurrentLiveEvent';
 export { default as LiveEventForm } from './LiveEventForm/LiveEventForm';
-export { default as MovieManagement } from './movieManagement/MovieManagement';
+export { default as AddMovieManagement } from './movieManagement/AddMovieManagement';
+export { default as UpdateMovieManagement } from './movieManagement/UpdateMovieManagement';
+export { default as ViewMovieManagement } from './movieManagement/ViewMovieManagement';
+export { default as DeleteMovieManagement } from './movieManagement/DeleteMovieManagement';
 export { default as AdminContact } from './adminContactView/adminContactView';
 
 
