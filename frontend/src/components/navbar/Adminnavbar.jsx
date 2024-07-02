@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
-import { 
+import {
   VideoCameraOutlined,
   CalendarOutlined,
   NotificationOutlined,
@@ -22,19 +22,11 @@ const AdminNavBar = () => {
         <img src={logo} alt='logo' />
       </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-        <SubMenu key="sub1" icon={<DashboardOutlined />} title="Dashboard">
-          <SubMenu key="sub2" title="Overview">
-            <Menu.Item key="1">View Ongoing Movies</Menu.Item>
-            <Menu.Item key="2">Total Live Events</Menu.Item>
-            <Menu.Item key="3">Total News Articles</Menu.Item>
-            <Menu.Item key="4">Total Users</Menu.Item>
-            <Menu.Item key="5">Recent Activity</Menu.Item>
-            <Menu.Item key="6">User Engagement</Menu.Item>
-            <Menu.Item key="7">Movie Views</Menu.Item>
-            <Menu.Item key="8">Event Participation</Menu.Item>
-            <Menu.Item key="9">News Readership</Menu.Item>
-          </SubMenu>
-        </SubMenu>
+
+        <Menu.Item key="sub1" icon={<DashboardOutlined />} title="Dashboard">
+          <Link to="/Admin">Dashboard</Link>
+        </Menu.Item>
+
 
         <SubMenu key="sub3" icon={<VideoCameraOutlined />} title="Movie Management">
           <Menu.Item key="10"><Link to="/MovieProfile">Movie Profile</Link></Menu.Item>
@@ -62,16 +54,16 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
-        <Menu.Item key="24">
-          <Link to="/AdminAddNews">Add News</Link>
-        </Menu.Item>
-      </SubMenu>
-        
+          <Menu.Item key="24">
+            <Link to="/AdminAddNews">Add News</Link>
+          </Menu.Item>
+        </SubMenu>
+
         <SubMenu key="sub11" icon={<MailOutlined />} title="User Messages">
-        <Menu.Item key="31">
-          <Link to="/AdminContactUs">View Messages</Link>
-        </Menu.Item>
-      </SubMenu>
+          <Menu.Item key="31">
+            <Link to="/AdminContactUs">View Messages</Link>
+          </Menu.Item>
+        </SubMenu>
 
         <SubMenu key="sub14" icon={<AppstoreOutlined />} title="Additional Section">
           <SubMenu key="sub15" title="Users Management">
