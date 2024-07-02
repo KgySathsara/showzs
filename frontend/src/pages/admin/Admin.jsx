@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout } from 'antd';
 import { Adminnavbar } from '../../components';
+import { DashboardContainer } from '../../containers';
 
 const { Content } = Layout;
 
@@ -11,7 +12,7 @@ const Admin = () => {
       <Layout className="site-layout">
         <Content style={{ margin: '0 16px' }}>
           <div className="site-layout-background" style={{ padding: 24, minHeight: 360 }}>
-            Admin
+          <DashboardContainer />
           </div>
         </Content>
       </Layout>
