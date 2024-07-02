@@ -77,21 +77,12 @@ const AdminNavBar = () => {
             <Menu.Item key="30">Delete Category</Menu.Item>
           </SubMenu>
         </SubMenu>
-
-        <SubMenu key="sub11" icon={<MailOutlined />} title="Contact Us">
-          <SubMenu key="sub12" title="Messages">
-            <Menu.Item key="31"><Link to="/AdminContactUs">View Movies</Link></Menu.Item>
-            {/* <Menu.Item key="32">Search/Filter Messages</Menu.Item>
-            <Menu.Item key="33">Respond to Message</Menu.Item>
-            <Menu.Item key="34">Delete Message</Menu.Item> */}
-          </SubMenu>
-          {/* <SubMenu key="sub13" title="FAQs">
-            <Menu.Item key="35">View All FAQs</Menu.Item>
-            <Menu.Item key="36">Add New FAQ</Menu.Item>
-            <Menu.Item key="37">Edit FAQ</Menu.Item>
-            <Menu.Item key="38">Delete FAQ</Menu.Item>
-          </SubMenu> */}
-        </SubMenu>
+        
+        <SubMenu key="sub11" icon={<MailOutlined />} title="User Messages">
+        <Menu.Item key="31">
+          <Link to="/AdminContactUs">View Messages</Link>
+        </Menu.Item>
+      </SubMenu>
 
         <SubMenu key="sub14" icon={<AppstoreOutlined />} title="Additional Section">
           <SubMenu key="sub15" title="Users Management">
