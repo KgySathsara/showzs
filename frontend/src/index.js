@@ -18,6 +18,7 @@ import ViewMovie from './pages/AdminMovieManagement/ViewMovie';
 import UpdateMovie from './pages/AdminMovieManagement/UpdateMovie';
 import DeleteMovie from './pages/AdminMovieManagement/DeleteMovie';
 import AdminContactUs from './pages/AdminContactUs/AdminContactUs';
+import AdminAddNews from './pages/AdminAddNews/AdminAddNews';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -38,6 +39,7 @@ ReactDOM.render(
             <Route path='/UpdateMovie' element={<UpdateMovie />}/>
             <Route path='/DeleteMovie' element={<DeleteMovie />}/>
             <Route path='/AdminContactUs' element={<AdminContactUs />}/>
+            <Route path='/AdminAddNews' element={<AdminAddNews />}/>
 
             {/* <Route path='/AdminMoviesList' element={<AdminMoviesList />}/> */}
         </Routes>
