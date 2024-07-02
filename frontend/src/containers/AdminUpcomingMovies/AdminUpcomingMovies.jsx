@@ -1,7 +1,7 @@
 import React from 'react';
 import './AdminUpcomingMovies.css';
-import { Form, Input, Button, DatePicker, Select, InputNumber } from 'antd';
-// import upcomming from '../../assest/upcommingmovies.jpg';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Upload } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -34,13 +34,19 @@ const AdminUpcomingMovies = () => {
           name="image"
           rules={[{ required: true, message: 'Please upload the movie image!' }]}
         >
-          <Input placeholder='Image URL' />
+          <Upload
+            name="image"
+            listType="picture"
+            beforeUpload={() => false} 
+          >
+            <Button icon={<UploadOutlined />}>Upload Movie Image</Button>
+          </Upload>
         </Form.Item>
         <Form.Item
-          name="time"
-          rules={[{ required: true, message: 'Please select the show time!' }]}
+          name="date"
+          rules={[{ required: true, message: 'Please select the release date!' }]}
         >
-          <DatePicker showTime placeholder='Select Show Time' />
+          <DatePicker placeholder='Select Release Date' />
         </Form.Item>
         <Form.Item
           name="duration"
