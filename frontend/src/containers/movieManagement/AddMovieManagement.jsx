@@ -31,6 +31,12 @@ const AddMovieManagement = () => {
                 <Form.Item name="duration" label="Duration (in minutes)" rules={[{ required: true, message: 'Please enter the movie duration' }]} >
                     <Input type="number" />
                 </Form.Item>
+                <Form.Item name="price" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]} >
+                    <Input />
+                </Form.Item>
+                <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
+                    <Input />
+                </Form.Item>
                 <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload} >
                     <Upload name="picture" listType="picture" beforeUpload={() => false}>
                         <Button icon={<UploadOutlined />}>Click to upload</Button>
