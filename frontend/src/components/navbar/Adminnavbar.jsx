@@ -62,7 +62,7 @@ const AdminNavBar = () => {
 
         <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
         <Menu.Item key="24">
-          <Link to="/AdminAddNews">Add New Article</Link>
+          <Link to="/AdminAddNews">Add News</Link>
         </Menu.Item>
       </SubMenu>
         
