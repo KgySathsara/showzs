@@ -13,7 +13,10 @@ import Admin from './pages/admin/Admin';
 import ViewLiveEvent from './pages/AdminLiveEvents/AdminLiveEvents';
 import AdminAddLiveEvents from './pages/AdminLiveEvents/AdminAddLiveEvents';
 import AdminViewLiveEvents from './pages/AdminViewLiveEvents/AdminViewLiveEvents';
-import AdminMovieManagement from './pages/AdminMovieManagement/AdminMovieManagement';
+import AddMovie from './pages/AdminMovieManagement/AddMovie';
+import ViewMovie from './pages/AdminMovieManagement/ViewMovie';
+import UpdateMovie from './pages/AdminMovieManagement/UpdateMovie';
+import DeleteMovie from './pages/AdminMovieManagement/DeleteMovie';
 import AdminContactUs from './pages/AdminContactUs/AdminContactUs';
 
 ReactDOM.render(
@@ -30,7 +33,10 @@ ReactDOM.render(
             <Route path='/ViewLiveEvent' element={<ViewLiveEvent />}/>
             <Route path='/AdminAddLiveEvents' element={<AdminAddLiveEvents />}/>
             <Route path='/AdminViewLiveEvents' element={<AdminViewLiveEvents />}/>
-            <Route path='/AdminMovieManagement' element={<AdminMovieManagement />}/>
+            <Route path='/AddMovie' element={<AddMovie />}/>
+            <Route path='/ViewMovie' element={<ViewMovie />}/>
+            <Route path='/UpdateMovie' element={<UpdateMovie />}/>
+            <Route path='/DeleteMovie' element={<DeleteMovie />}/>
             <Route path='/AdminContactUs' element={<AdminContactUs />}/>
 
             {/* <Route path='/AdminMoviesList' element={<AdminMoviesList />}/> */}
