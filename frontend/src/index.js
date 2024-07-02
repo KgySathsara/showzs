@@ -14,6 +14,7 @@ import ViewLiveEvent from './pages/AdminLiveEvents/AdminLiveEvents';
 import AdminAddLiveEvents from './pages/AdminLiveEvents/AdminAddLiveEvents';
 import AdminViewLiveEvents from './pages/AdminViewLiveEvents/AdminViewLiveEvents';
 import AdminMovieManagement from './pages/AdminMovieManagement/AdminMovieManagement';
+import AdminContactUs from './pages/AdminContactUs/AdminContactUs';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -30,6 +31,7 @@ ReactDOM.render(
             <Route path='/AdminAddLiveEvents' element={<AdminAddLiveEvents />}/>
             <Route path='/AdminViewLiveEvents' element={<AdminViewLiveEvents />}/>
             <Route path='/AdminMovieManagement' element={<AdminMovieManagement />}/>
+            <Route path='/AdminContactUs' element={<AdminContactUs />}/>
 
             {/* <Route path='/AdminMoviesList' element={<AdminMoviesList />}/> */}
         </Routes>
