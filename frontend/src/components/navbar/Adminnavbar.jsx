@@ -37,8 +37,9 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub3" icon={<VideoCameraOutlined />} title="Movie Management">
-          <Menu.Item key="10"><Link to="/ViewMovie">View Movies</Link></Menu.Item>
-          <Menu.Item key="11"><Link to="/AddMovie">Add New Movie</Link></Menu.Item>
+          <Menu.Item key="10"><Link to="/MovieProfile">Movie Profile</Link></Menu.Item>
+          <Menu.Item key="11"><Link to="/ViewMovie">View/Update/Delete Movies</Link></Menu.Item>
+          <Menu.Item key="12"><Link to="/AddMovie">Add New Movie</Link></Menu.Item>
         </SubMenu>
 
         <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">

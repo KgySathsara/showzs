@@ -5,6 +5,13 @@
   color: #20448A;
 }
 
+.admin-movie-container h2{
+  font-size: 30px;
+  margin-top: 20px;
+  text-align: center;
+  color: #20448A;
+}
+
 .movie-management-container {
   display: flex;
   justify-content: left;
@@ -54,4 +61,20 @@
 .btn-movie-management {
   width: 100%;
   margin-top: 10px;
+}
+
+.movie-profile-management{
+  width: 600px;
+  background-color: #fff;
+  padding:20px;
+  margin-top: 4rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.movie-profile-card{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 150px;
 }

@@ -13,5 +13,6 @@ export { default as AddMovieManagement } from './movieManagement/AddMovieManagem
 export { default as ViewMovieManagement } from './movieManagement/ViewMovieManagement';
 export { default as AdminContact } from './adminContactView/adminContactView';
 export { default as AdminUpcomingMovies } from './AdminUpcomingMovies/AdminUpcomingMovies';
+export { default as MovieProfileManagement } from './movieManagement/MovieProfileManagement';
 
 

@@ -19,7 +19,7 @@ const ViewMovieManagement = () => {
 
   return (
     <section className='admin-movie-management'>
-      <h2>View Movie</h2>
+      <h2>View/Update/Delete Movie</h2>
       <div className="movie-management-container">
         <div className="movie-card">
           <img src={Movie} alt='movie' />
