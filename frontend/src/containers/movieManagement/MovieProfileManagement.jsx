@@ -15,6 +15,14 @@ const MovieProfileManagement = () => {
   return (
     <section className='admin-movie-management'>
       <h2>Movie Profile</h2>
+      <div className='movie-profile-card'>
+        <Card title="Monthly Revenue" className='profile-card' style={{ width: 300 }}>
+            <p>Monthly Revenue Content</p>
+        </Card>
+        <Card title="Profile Views" className='profile-card' style={{ width: 300 }}>
+          <p>Profile Views Content</p>
+        </Card>
+      </div>
       <div className="movie-management-container">
         <div className="movie-card">
           <img src={Movie} alt='movie' />
@@ -41,14 +49,6 @@ const MovieProfileManagement = () => {
             </Form.Item>
           </Form>
         </div>
-      </div>
-      <div className='movie-profile-card'>
-      <Card title="Monthly Revenue" style={{ width: 300 }}>
-          <p>Monthly Revenue Content</p>
-      </Card>
-      <Card title="Profile Views" style={{ width: 300 }}>
-        <p>Profile Views Content</p>
-      </Card>
       </div>
     </section>
   );

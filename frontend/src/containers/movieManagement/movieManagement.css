@@ -17,7 +17,7 @@
   justify-content: left;
   align-items: flex-start;
   gap: 60px;
-  margin: 80px 100px;
+  margin: 30px 100px;
 }
 
 .movie-management-details {
@@ -69,7 +69,7 @@
   padding:20px;
   margin-top: 4rem;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .movie-profile-card{
@@ -77,4 +77,9 @@
   justify-content: center;
   align-items: center;
   gap: 150px;
+  margin-top: 3rem;
+}
+
+.movie-profile-card .profile-card{
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
