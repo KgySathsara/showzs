@@ -1,7 +1,6 @@
 import React from 'react';
-import { Footer, NowShowing, UpCommingMovies} from '../../containers';
+import { Footer, NowShowing, UpCommingMovies , Trailers} from '../../containers';
 import { Navbar } from '../../components';
-// import './LiveEvents.css';``
 
 const News = () => {
   return (
@@ -10,6 +9,8 @@ const News = () => {
         <Navbar />
       </div>
       <div className='live-events-content'>
+        <Trailers/>
+        <hr />
         <NowShowing />
         <hr />
         <UpCommingMovies />

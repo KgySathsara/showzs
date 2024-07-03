@@ -24,7 +24,7 @@
   border-radius: 10px;
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  flex: 1 1 calc(50% - 20px); /* Two items per row with 20px gap */
+  flex: 1 1 calc(50% - 20px); 
   display: flex;
   flex-direction: column;
 }

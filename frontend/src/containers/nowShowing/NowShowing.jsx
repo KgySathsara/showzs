@@ -30,6 +30,3 @@ const NowShowing = () => {
 }
 
 export default NowShowing;
-
-
-
