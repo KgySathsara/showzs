@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Movie from '../../assest/wisal.jpg';
 import { Form, Input, Button, Upload } from 'antd';
 import { UploadOutlined, PlayCircleOutlined, StopOutlined } from '@ant-design/icons';
-import './LiveStreamManagement.css';
+// import './LiveStreamManagement.css';
 
 const LiveStreamManagement = () => {
   const [form] = Form.useForm();
