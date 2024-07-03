@@ -39,6 +39,9 @@ const AdminNavBar = () => {
             <Menu.Item key="14">
               <Link to="/AdminAddLiveEvents">Add Event</Link>
             </Menu.Item>
+            <Menu.Item key="22">
+              <Link to="/AdminStreamLiveEvents">Stream Management</Link>
+            </Menu.Item>
             <Menu.Item key="15">
               <Link to="/AdminViewLiveEvents"> View Event</Link>
             </Menu.Item>

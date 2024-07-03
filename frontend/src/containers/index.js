@@ -15,10 +15,10 @@ export { default as AdminContact } from './adminContactView/adminContactView';
 export { default as AdminUpcomingMovies } from './AdminUpcomingMovies/AdminUpcomingMovies';
 export { default as MovieProfileManagement } from './movieManagement/MovieProfileManagement';
 export { default as DashboardContainer } from './DashboardContainer/DashboardContainer';
-
+export { default as LiveStreamManagement } from './LiveStreamManagement/LiveStreamManagement';
 export { default as LiveEventPayment } from './payment/LiveEventPayment';
 export { default as MoviePayment } from './payment/MoviePayment';
-
 export { default as AdminUsersManagement } from './usersManagement/AdminUsersManagement';
 export { default as AdminAddNewsManagement } from './adminAddNews/AdminAddNewsManagement';
+
 

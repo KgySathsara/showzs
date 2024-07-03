@@ -18,6 +18,7 @@ import ViewMovie from './pages/AdminMovieManagement/ViewMovie';
 import AdminContactUs from './pages/AdminContactUs/AdminContactUs';
 import AdminAddNews from './pages/AdminNewsManagement/AdminAddNews';
 import MovieProfile from './pages/AdminMovieManagement/MovieProfile';
+import AdminStreamLiveEvents from  './pages/AdminStreamLiveEvents/AdminStreamLiveEvents';
 
 import LiveEventPay from './pages/Payments/LiveEventPay';
 import MoviePay from './pages/Payments/MoviePay';
@@ -45,6 +46,7 @@ ReactDOM.render(
             <Route path='/AdminContactUs' element={<AdminContactUs />}/>
             <Route path='/AdminAddNews' element={<AdminAddNews />}/>
             <Route path='/MovieProfile' element={<MovieProfile/>}/>
+            <Route path='/AdminStreamLiveEvents' element={<AdminStreamLiveEvents/>}/>
 
             <Route path='/LiveEventPay' element={<LiveEventPay/>}/>
             <Route path='/MoviePay' element={<MoviePay/>}/>
