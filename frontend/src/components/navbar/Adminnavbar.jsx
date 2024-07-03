@@ -51,6 +51,9 @@ const AdminNavBar = () => {
           <Menu.Item key="24">
             <Link to="/AdminAddNews">Add News</Link>
           </Menu.Item>
+          <Menu.Item key="25">
+            <Link to="/AdminAddUpcomingMovie">Add Up-Comming Movies</Link>
+          </Menu.Item>
         </SubMenu>
 
         <SubMenu key="sub11" icon={<MailOutlined />} title="User Messages">
@@ -60,7 +63,10 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub14" icon={<AppstoreOutlined />} title="Additional Section">
-            <Menu.Item key="39">Users Management</Menu.Item>
+
+            <Menu.Item key="39">
+            <Link to="/UsersManagement">Users Management</Link>
+            </Menu.Item>
               <SubMenu key="sub15" title="Payment Details">
                 <Menu.Item key="40">
                   <Link to="/LiveEventPay">Live Events Payment</Link>
@@ -69,6 +75,11 @@ const AdminNavBar = () => {
                   <Link to="/MoviePay">Movie Payment</Link>
                 </Menu.Item>
               </SubMenu>
+//             <Menu.Item key="39">
+//             <Link to="/UsersManagement">Users Management</Link>
+//             </Menu.Item>
+//             <Menu.Item key="45">Payment Details</Menu.Item>
+
         </SubMenu>
       </Menu>
     </Sider>
