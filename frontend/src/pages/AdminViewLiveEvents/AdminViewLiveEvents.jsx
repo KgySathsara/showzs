@@ -11,10 +11,6 @@ const AdminLiveEvents = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [liveViews, setLiveViews] = useState(0);
 
-  const handleCreateEvent = (event) => {
-    setCurrentEvent({ ...event, isStreaming: false });
-  };
-
   const handleStartStream = () => {
     setCurrentEvent((prevEvent) => ({ ...prevEvent, isStreaming: true }));
     setLiveViews((prevViews) => prevViews + 1); 

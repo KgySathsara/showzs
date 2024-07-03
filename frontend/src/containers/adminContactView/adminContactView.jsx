@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Col, Row, Space } from 'antd';
+import { Card, Col, Row } from 'antd';
 import './AdminContact.css';
 
 // Dummy data

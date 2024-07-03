@@ -16,5 +16,6 @@ export { default as AdminUpcomingMovies } from './AdminUpcomingMovies/AdminUpcom
 export { default as MovieProfileManagement } from './movieManagement/MovieProfileManagement';
 export { default as DashboardContainer } from './DashboardContainer/DashboardContainer';
 export { default as AdminUsersManagement } from './usersManagement/AdminUsersManagement';
+export { default as AdminAddNewsManagement } from './adminAddNews/AdminAddNewsManagement';
 
 

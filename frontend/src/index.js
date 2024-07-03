@@ -16,9 +16,10 @@ import AdminViewLiveEvents from './pages/AdminViewLiveEvents/AdminViewLiveEvents
 import AddMovie from './pages/AdminMovieManagement/AddMovie';
 import ViewMovie from './pages/AdminMovieManagement/ViewMovie';
 import AdminContactUs from './pages/AdminContactUs/AdminContactUs';
-import AdminAddNews from './pages/AdminAddNews/AdminAddNews';
+import AdminAddNews from './pages/AdminNewsManagement/AdminAddNews';
 import MovieProfile from './pages/AdminMovieManagement/MovieProfile';
 import UsersManagement from './pages/AdminAdditionalSection/UsersManagement';
+import AdminAddUpcomingMovie from './pages/AdminNewsManagement/AdminAddUpcomingMovie';
 
 ReactDOM.render(
     <BrowserRouter>
@@ -40,6 +41,7 @@ ReactDOM.render(
             <Route path='/AdminAddNews' element={<AdminAddNews />}/>
             <Route path='/MovieProfile' element={<MovieProfile/>}/>
             <Route path='/UsersManagement' element={<UsersManagement />}/>
+            <Route path='/AdminAddUpcomingMovie' element={<AdminAddUpcomingMovie />}/>
 
         </Routes>
     </BrowserRouter>,
