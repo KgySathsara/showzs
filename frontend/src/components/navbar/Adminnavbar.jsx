@@ -60,7 +60,9 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub14" icon={<AppstoreOutlined />} title="Additional Section">
-            <Menu.Item key="39">Users Management</Menu.Item>
+            <Menu.Item key="39">
+            <Link to="/UsersManagement">Users Management</Link>
+            </Menu.Item>
             <Menu.Item key="45">Payment Details</Menu.Item>
         </SubMenu>
       </Menu>
