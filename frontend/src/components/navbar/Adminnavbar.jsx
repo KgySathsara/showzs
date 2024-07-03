@@ -78,10 +78,6 @@ const AdminNavBar = () => {
                   <Link to="/MoviePay">Movie Payment</Link>
                 </Menu.Item>
               </SubMenu>
-//             <Menu.Item key="39">
-//             <Link to="/UsersManagement">Users Management</Link>
-//             </Menu.Item>
-//             <Menu.Item key="45">Payment Details</Menu.Item>
 
         </SubMenu>
       </Menu>
