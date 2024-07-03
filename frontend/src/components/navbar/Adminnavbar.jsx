@@ -45,12 +45,6 @@ const AdminNavBar = () => {
             <Menu.Item key="16">Edit Event Details</Menu.Item>
             <Menu.Item key="17">Delete Event</Menu.Item>
           </SubMenu>
-          {/* <SubMenu key="sub7" title="Categories">
-            <Menu.Item key="18">View All Categories</Menu.Item>
-            <Menu.Item key="19">Add New Category</Menu.Item>
-            <Menu.Item key="20">Edit Category</Menu.Item>
-            <Menu.Item key="21">Delete Category</Menu.Item>
-          </SubMenu> */}
         </SubMenu>
 
         <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
@@ -66,38 +60,8 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub14" icon={<AppstoreOutlined />} title="Additional Section">
-          <SubMenu key="sub15" title="Users Management">
-            <Menu.Item key="39">View All Users</Menu.Item>
-            <Menu.Item key="40">Search/Filter Users</Menu.Item>
-            <Menu.Item key="41">Add New User</Menu.Item>
-            <Menu.Item key="42">Edit User Details</Menu.Item>
-            <Menu.Item key="43">Delete User</Menu.Item>
-            <Menu.Item key="44">Assign Roles & Permissions</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub16" title="Settings">
-            <SubMenu key="sub17" title="General Settings">
-              <Menu.Item key="45">Payment Settings</Menu.Item>
-              <Menu.Item key="46">Email Settings</Menu.Item>
-            </SubMenu>
-          </SubMenu>
-          <SubMenu key="sub18" title="Analytics & Reports">
-            <Menu.Item key="47">View Reports (Sales, User Activity, etc.)</Menu.Item>
-            <Menu.Item key="48">Download Reports</Menu.Item>
-          </SubMenu>
-          <SubMenu key="sub19" title="Content Management">
-            <SubMenu key="sub20" title="Banners & Advertisements">
-              <Menu.Item key="49">View All Banners</Menu.Item>
-              <Menu.Item key="50">Add New Banner</Menu.Item>
-              <Menu.Item key="51">Edit Banner</Menu.Item>
-              <Menu.Item key="52">Delete Banner</Menu.Item>
-            </SubMenu>
-            <SubMenu key="sub21" title="Pages">
-              <Menu.Item key="53">View All Pages</Menu.Item>
-              <Menu.Item key="54">Add New Page</Menu.Item>
-              <Menu.Item key="55">Edit Page</Menu.Item>
-              <Menu.Item key="56">Delete Page</Menu.Item>
-            </SubMenu>
-          </SubMenu>
+            <Menu.Item key="39">Users Management</Menu.Item>
+            <Menu.Item key="45">Payment Details</Menu.Item>
         </SubMenu>
       </Menu>
     </Sider>
