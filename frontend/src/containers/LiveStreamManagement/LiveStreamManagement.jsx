@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Movie from '../../assest/wisal.jpg';
 import { Form, Input, Button, Upload } from 'antd';
 import { UploadOutlined, PlayCircleOutlined, StopOutlined } from '@ant-design/icons';
-import './LiveStreamManagement.css';
+// import './LiveStreamManagement.css';
 
 const LiveStreamManagement = () => {
   const [form] = Form.useForm();
@@ -69,8 +69,8 @@ const LiveStreamManagement = () => {
               </Upload>
             </Form.Item>
             <div className="form-buttons">
-              <Button type="primary" className='btn-movie-management' htmlType="submit">Edit Movie</Button>
-              <Button type="primary" className='btn-movie-management' htmlType="button">Delete Movie</Button>
+              <Button type="primary" className='btn-movie-management' htmlType="submit">Edit Live Event</Button>
+              <Button type="primary" className='btn-movie-management' htmlType="button">Delete Live Event</Button>
             </div>
           </Form>
         </div>
