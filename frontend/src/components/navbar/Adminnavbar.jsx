@@ -35,19 +35,15 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">
-          <SubMenu key="sub6" title="Events List">
             <Menu.Item key="14">
               <Link to="/AdminAddLiveEvents">Add Event</Link>
             </Menu.Item>
             <Menu.Item key="22">
               <Link to="/AdminStreamLiveEvents">Stream Management</Link>
             </Menu.Item>
-            <Menu.Item key="15">
+            {/* <Menu.Item key="15">
               <Link to="/AdminViewLiveEvents"> View Event</Link>
-            </Menu.Item>
-            <Menu.Item key="16">Edit Event Details</Menu.Item>
-            <Menu.Item key="17">Delete Event</Menu.Item>
-          </SubMenu>
+            </Menu.Item> */}
         </SubMenu>
 
         <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">

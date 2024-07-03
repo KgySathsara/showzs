@@ -69,8 +69,8 @@ const LiveStreamManagement = () => {
               </Upload>
             </Form.Item>
             <div className="form-buttons">
-              <Button type="primary" className='btn-movie-management' htmlType="submit">Edit Movie</Button>
-              <Button type="primary" className='btn-movie-management' htmlType="button">Delete Movie</Button>
+              <Button type="primary" className='btn-movie-management' htmlType="submit">Edit Live Event</Button>
+              <Button type="primary" className='btn-movie-management' htmlType="button">Delete Live Event</Button>
             </div>
           </Form>
         </div>
