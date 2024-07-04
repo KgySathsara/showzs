@@ -9,7 +9,6 @@
   background-color: #003366;
   color: white;
   padding: 20px;
-  border-radius: 10px;
 }
 
 .movie-info {
@@ -65,7 +64,7 @@
 .poster-container {
   position: relative;
   max-width: 100%;
-  border-radius: 10px;
+  /* border-radius: 10px; */
 }
 
 .movie-poster img {
@@ -101,18 +100,53 @@
   opacity: 1;
 }
 
-@media (max-width: 768px) {
-  .movie-details {
+.ticketImg {
+  width: 170px;
+  height: 90px;
+  margin-right: 10px;
+}
+
+@media (max-width: 1024px) {
+  .movie-actions {
+    padding-left: 20px;
     flex-direction: column;
   }
 
-  .movie-info {
-    padding-right: 7;
+  .watch-trailer, .ticket {
+    width: 100%;
     text-align: center;
+    margin-bottom: 10px;
+  }
+
+  .movie-info {
+    padding-right: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .movie-details {
+    flex-direction: column;
+    padding: 15px;
+  }
+
+  .movie-info {
+    padding-right: 0;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .movie-poster {
+    width: 100%;
+    margin-bottom: 20px;
   }
 
   .movie-poster img {
     max-width: 80%;
+  }
+
+  .movie-actions {
+    padding-left: 0;
+    justify-content: center;
   }
 }
 
@@ -121,13 +155,20 @@
     font-size: 28px;
   }
 
+  .movie-info p {
+    font-size: 14px;
+  }
+
   .movie-poster img {
     max-width: 100%;
   }
-}
 
-.ticketImg {
-  width: 170px;
-  height: 90px;
-  margin-right: 10px;
+  .ticketImg {
+    width: 120px;
+    height: 60px;
+  }
+
+  .watch-trailer{
+    width: 60%;
+  }
 }
