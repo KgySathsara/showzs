@@ -19,7 +19,7 @@ const Navbar = () => {
         </div>
         <div className='navbar-links-container'>
           <ul className="navLists flex">
-            {['Home', 'Movies', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+            {['Home', 'Movies', 'Movie View' , 'Live View' , 'Live Events', 'News', 'Contact Us'].map((item, index) => (
               <li 
                 key={index} 
                 className={`navItem ${activeIndex === index ? 'active' : ''}`} 

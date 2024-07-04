@@ -50,33 +50,55 @@ h1 {
   color: #fff;
 }
 
-/* Responsive Styles */
+/* Responsive styles */
 
-@media (max-width: 768px) {
-    h1 {
-      font-size: 40px;
-    }
-  
-    .event {
-      width: 80%;
-    }
-  
-    .event img {
-      max-height: 300px;
-    }
+@media screen and (max-width: 1024px) {
+  h1 {
+    font-size: 50px;
   }
-  
-  @media (max-width: 480px) {
-    h1 {
-      font-size: 30px;
-    }
-  
-    .event {
-      width: 100%;
-    }
-  
-    .watch-now {
-      padding: 10px;
-      font-size: 16px;
-    }
+
+  .event {
+    width: 450px;
   }
+
+  .event img {
+    height: 450px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  h1 {
+    font-size: 40px;
+  }
+
+  .event {
+    width: 400px;
+  }
+
+  .event img {
+    height: 400px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 28px;
+    padding: 10px;
+  }
+
+  .event-container{
+    width: 100%;
+    display: block;
+    padding: 0 15px;
+  }
+
+  .event {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .watch-now {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
