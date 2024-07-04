@@ -1,43 +1,38 @@
 import React from 'react';
 import { Form, Input, Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import './LiveViewEvent.css';
 
-export default function LiveViewEvent() {
-  const onFinish = (values) => {
-    console.log('Success:', values);
-  };
+const LiveViewEvent = () => {
+  const [form] = Form.useForm();
+  const navigate = useNavigate();
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
+  const handleSubmit = (values) => {
+    console.log('Received values:', values);
+    form.resetFields();
+    navigate('/WatchLive');
   };
 
   return (
-    <div className='live-view-event-container'>
-      <div className='live-view-event'>
-        <h2>Enter The Code Here !</h2>
-        <Form
-          name="codeForm"
-          layout="vertical"
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-          className="form-container"
-        >
-          <Form.Item
-            name="code"
-            rules={[{ required: true, message: 'Please input your code!' }]}
-          >
-            <Input placeholder='Paste the code here' className="code-input" />
+    <section className='movie-view'>
+      <div className='movie-view-container'>
+        <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
+          <h2>Enter The Code Here !</h2>
+          <Form.Item name="title" rules={[{ required: true, message: 'Please enter the code' }]}>
+            <Input placeholder='Please Enter The Code Here '/>
           </Form.Item>
-          <div className="button-group">
-            <Button type="default" htmlType="button" className="cancel-button">
-              Cancel
-            </Button>
-            <Button type="primary" htmlType="submit" className="ok-button">
-              Submit
-            </Button>
+          <div className="movie-view-btn">
+            <Form.Item>
+              <Button type="primary" onClick={() => form.resetFields()}>Clear</Button>
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">Submit</Button>
+            </Form.Item>
           </div>
         </Form>
       </div>
-    </div>
+    </section>
   );
 }
+
+export default LiveViewEvent;

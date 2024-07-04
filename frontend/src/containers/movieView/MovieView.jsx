@@ -17,7 +17,7 @@ const MovieView = () => {
     <section className='movie-view'>
       <div className='movie-view-container'>
         <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
-          <h2>Enter The Code Here</h2>
+          <h2>Enter The Code Here !</h2>
           <Form.Item name="title" rules={[{ required: true, message: 'Please enter the code' }]}>
             <Input placeholder='Please Enter The Code Here '/>
           </Form.Item>
