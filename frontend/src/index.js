@@ -26,6 +26,7 @@ import AdminAddUpcomingMovie from './pages/AdminNewsManagement/AdminAddUpcomingM
 import LiveView from './pages/LiveView/LiveView';
 import WatchMovie from './pages/Show/WatchMovie';
 import ViewMovieCode from './pages/Show/ViewMovie';
+import WatchLive from './pages/LiveView/WatchLive';
 
 
 ReactDOM.render(
@@ -55,6 +56,7 @@ ReactDOM.render(
             <Route path='/LiveView' element={<LiveView />}/>
             <Route path='/WatchMovie' element={<WatchMovie/>}/>
             <Route path='/ViewMovieCode' element={<ViewMovieCode/>}/>
+            <Route path='/WatchLive' element={<WatchLive/>}/>
         </Routes>
     </BrowserRouter>,
     document.getElementById('root')
