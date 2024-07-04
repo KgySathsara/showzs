@@ -1,84 +1,76 @@
-/* Container to center the form in the viewport */
-.live-view-event-container {
+.movie-view {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    background-color: #2C3E50; /* Dark blue background */
-    padding: 20px;
+    min-height: 100vh;
+    background-color: #f0f2f5;
   }
   
-  /* Form container styling */
-  .live-view-event {
-    background-color: #ECF0F1; /* Light grey background */
-    padding: 40px;
-    border-radius: 15px;
-    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
-    text-align: center;
+  .movie-view-container {
+    background-color: #ffffff;
+    padding: 30px 50px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
     width: 100%;
-    max-width: 400px;
   }
-  
-  /* Title styling */
-  h2 {
-    margin-bottom: 30px;
-    color: #34495E; /* Dark grey text */
-    font-size: 24px;
-  }
-  
-  /* Input field styling */
-  .code-input {
-    background-color: #F5B7B1; /* Light red background */
-    border: none;
-    border-radius: 5px;
-    padding: 10px;
+
+  .movie-view-container h2{
     text-align: center;
-    font-size: 18px;
+    padding-bottom: 20px;
+    font-size: 35px;
+  }
+  
+  .details-form .ant-form-item {
     margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
-  /* Button group styling */
-  .button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-  }
-  
-  /* Button styling */
-  .button-group .ant-btn {
-    width: 45%;
-    padding: 10px 20px;
-    font-size: 16px;
+  .details-form .ant-input {
+    height: 40px;
     border-radius: 5px;
-    transition: background-color 0.3s ease;
+    border: 1px solid #d9d9d9;
+    padding: 0 15px;
   }
   
-  /* Cancel button styling */
-  .cancel-button {
-    background-color: #2ECC71; /* Green */
-    color: white;
-    border: none;
+  .details-form .ant-form-item-label > label {
+    font-weight: 600;
+    color: #333333;
   }
   
-  .cancel-button:hover {
-    background-color: #27AE60; /* Darker green */
+  .details-form .ant-btn-primary {
+    background-color: #20448A;
+    border-color: #20448A;
+    border-radius: 5px;
+    width: 150px;
+    height: 40px;
+    font-size: 16px;
   }
   
-  /* Ok button styling */
-  .ok-button {
-    background-color: #E74C3C; /* Red */
-    color: white;
-    border: none;
+  .details-form .ant-btn-primary:hover {
+    background-color: #163b6e;
+    border-color: #163b6e;
+  }
+
+  .movie-view-btn{
+    padding: 10px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
   }
   
-  .ok-button:hover {
-    background-color: #C0392B; /* Darker red */
-  }
+  @media screen and (max-width: 768px) {
+    .movie-view-container {
+      padding: 20px 30px;
+    }
   
-  /* Input and button focus states */
-  .code-input:focus, .cancel-button:focus, .ok-button:focus {
-    outline: none;
-    box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+    .details-form .ant-input {
+      height: 35px;
+    }
+  
+    .details-form .ant-btn-primary {
+      height: 35px;
+      font-size: 14px;
+    }
   }
   
