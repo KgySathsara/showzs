@@ -10,7 +10,7 @@ import Contactus from './pages/Contactus/Contactus';
 import Login from './pages/login/Login';
 import Register from './pages/register/Register';
 import Admin from './pages/admin/Admin';
-import ViewLiveEvent from './pages/AdminLiveEvents/AdminLiveEvents';
+// import ViewLiveEvent from './pages/AdminLiveEvents/AdminLiveEvents';
 import AdminAddLiveEvents from './pages/AdminLiveEvents/AdminAddLiveEvents';
 import AdminViewLiveEvents from './pages/AdminViewLiveEvents/AdminViewLiveEvents';
 import AddMovie from './pages/AdminMovieManagement/AddMovie';
@@ -23,6 +23,9 @@ import LiveEventPay from './pages/Payments/LiveEventPay';
 import MoviePay from './pages/Payments/MoviePay';
 import UsersManagement from './pages/AdminAdditionalSection/UsersManagement';
 import AdminAddUpcomingMovie from './pages/AdminNewsManagement/AdminAddUpcomingMovie';
+import LiveView from './pages/LiveView/LiveView';
+import WatchMovie from './pages/Show/WatchMovie';
+import ViewMovieCode from './pages/Show/ViewMovie';
 
 
 ReactDOM.render(
@@ -36,7 +39,7 @@ ReactDOM.render(
             <Route path='/Login' element={<Login />}/>
             <Route path='/Register' element={<Register />}/>
             <Route path='/Admin' element={<Admin />}/>
-            <Route path='/ViewLiveEvent' element={<ViewLiveEvent />}/>
+            {/* <Route path='/ViewLiveEvent' element={<ViewLiveEvent />}/> */}
             <Route path='/AdminAddLiveEvents' element={<AdminAddLiveEvents />}/>
             <Route path='/AdminViewLiveEvents' element={<AdminViewLiveEvents />}/>
             <Route path='/AddMovie' element={<AddMovie />}/>
@@ -49,6 +52,9 @@ ReactDOM.render(
             <Route path='/MoviePay' element={<MoviePay/>}/>
             <Route path='/UsersManagement' element={<UsersManagement />}/>
             <Route path='/AdminAddUpcomingMovie' element={<AdminAddUpcomingMovie />}/>
+            <Route path='/LiveView' element={<LiveView />}/>
+            <Route path='/WatchMovie' element={<WatchMovie/>}/>
+            <Route path='/ViewMovieCode' element={<ViewMovieCode/>}/>
         </Routes>
     </BrowserRouter>,
     document.getElementById('root')
