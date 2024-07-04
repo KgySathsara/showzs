@@ -4,7 +4,6 @@ import Movie from '../../assest/wisal.jpg'
 import { Form, Input, Card } from 'antd';
 
 const MovieProfileManagement = () => {
-
   const [form] = Form.useForm();
 
   const handleSubmit = (values) => {
@@ -16,10 +15,10 @@ const MovieProfileManagement = () => {
     <section className='admin-movie-management'>
       <h2>Movie Profile</h2>
       <div className='movie-profile-card'>
-        <Card title="Monthly Revenue" className='profile-card' style={{ width: 300 }}>
-            <p>Monthly Revenue Content</p>
+        <Card title="Monthly Revenue" className='profile-card'>
+          <p>Monthly Revenue Content</p>
         </Card>
-        <Card title="Profile Views" className='profile-card' style={{ width: 300 }}>
+        <Card title="Profile Views" className='profile-card'>
           <p>Profile Views Content</p>
         </Card>
       </div>
@@ -54,4 +53,4 @@ const MovieProfileManagement = () => {
   );
 };
 
-export default MovieProfileManagement
+export default MovieProfileManagement;
