@@ -9,13 +9,21 @@ const Navbar = () => {
   const [showSubNav, setShowSubNav] = useState(false);
 
   const handleDropdownClick = (index) => {
-    setActiveIndex(index);
-    setShowSubNav(!showSubNav);
+    if (activeIndex === index && showSubNav) {
+      setShowSubNav(false);
+    } else {
+      setActiveIndex(index);
+      setShowSubNav(true);
+    }
   };
 
   const handleClick = (index) => {
     setActiveIndex(index);
-    setShowSubNav(false);
+    if (index === activeIndex && showSubNav) {
+      setShowSubNav(false);
+    } else {
+      setShowSubNav(true);
+    }
   };
 
   return (
@@ -26,28 +34,30 @@ const Navbar = () => {
         </div>
         <div className='navbar-links-container'>
           <ul className="navLists flex">
-            {['Home', 'Movies', 'Show', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+            {['Home', 'Movies', 'Shows', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
               <li 
                 key={index} 
                 className={`navItem ${activeIndex === index ? 'active' : ''}`} 
                 onClick={() => handleClick(index)}
+                onMouseEnter={() => item === 'Shows' && handleDropdownClick(index)}
+                onMouseLeave={() => item === 'Shows' && setShowSubNav(false)}
               >
                 <Link to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`} className="navLink">
                   {item}
-                  {item === 'Show' && (
+                  {item === 'Shows' && (
                     <FaCaretDown 
                       className="dropdown-icon" 
                       onClick={(e) => {
-                        e.stopPropagation(); 
+                        e.preventDefault();
                         handleDropdownClick(index);
                       }} 
                     />
                   )}
                 </Link>
-                {item === 'Show' && showSubNav && activeIndex === index && (
-                  <ul className="subNav">
-                    <li><Link to="/WatchMovie" className="navLink">Watch Movie</Link></li>
-                    <li><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
+                {item === 'Shows' && showSubNav && activeIndex === index && (
+                  <ul className="subNavLists">
+                    <li className="subNavItem"><Link to="/WatchMovie" className="navLink">Watch Movies</Link></li>
+                    <li className="subNavItem"><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
                   </ul>
                 )}
               </li>
@@ -61,7 +71,7 @@ const Navbar = () => {
         </div>
       </header>
     </section>
-  )
-}
+  );
+};
 
 export default Navbar;
