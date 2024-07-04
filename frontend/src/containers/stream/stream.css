@@ -74,38 +74,53 @@
     color: #fff;
   }
 
-  /* Responsive Styles */
-  
+/* Responsive styles */
+
 @media (max-width: 768px) {
-  h1 {
-      font-size: 40px;
-  }
+    h1 {
+        font-size: 36px;
+        padding: 15px;
+    }
 
-  .movie {
-      width: 80%;
-  }
+    .movie-container {
+        flex-direction: column;
+        align-items: center;
+    }
 
-  .movie img {
-      max-height: 300px;
-  }
+    .movie {
+        width: 90%;
+        max-width: 400px;
+    }
 
-  .watch-trailer, .buy-tickets {
-      padding: 10px;
-      font-size: 14px;
-  }
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .watch-trailer, .buy-tickets {
+        width: 80%;
+        margin: 5px 0;
+    }
 }
 
 @media (max-width: 480px) {
-  h1 {
-      font-size: 30px;
-  }
+    h1 {
+        font-size: 28px;
+        padding: 10px;
+    }
 
-  .movie {
-      width: 100%;
-  }
+    .movie {
+        width: 100%;
+        max-width: none;
+    }
 
-  .watch-trailer, .buy-tickets {
-      padding: 8px;
-      font-size: 12px;
-  }
+    .buttons {
+        width: 100%;
+    }
+
+    .watch-trailer, .buy-tickets {
+        width: 100%;
+        margin: 5px 0;
+    }
 }
