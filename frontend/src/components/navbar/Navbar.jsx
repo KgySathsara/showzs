@@ -1,14 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { FaUserCircle, FaCaretDown } from "react-icons/fa";
 import logo from '../../assest/logo.png';
 import './navbar.css';
-import { FaUserCircle } from "react-icons/fa";
 
 const Navbar = () => {
   const [activeIndex, setActiveIndex] = useState(null);
+  const [showSubNav, setShowSubNav] = useState(false);
+
+  const handleDropdownClick = (index) => {
+    setActiveIndex(index);
+    setShowSubNav(!showSubNav);
+  };
 
   const handleClick = (index) => {
     setActiveIndex(index);
+    setShowSubNav(false);
   };
 
   return (
@@ -19,7 +26,7 @@ const Navbar = () => {
         </div>
         <div className='navbar-links-container'>
           <ul className="navLists flex">
-            {['Home', 'Movies', 'Movie View' , 'Live View' , 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+            {['Home', 'Movies', 'Show', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
               <li 
                 key={index} 
                 className={`navItem ${activeIndex === index ? 'active' : ''}`} 
@@ -27,7 +34,22 @@ const Navbar = () => {
               >
                 <Link to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`} className="navLink">
                   {item}
+                  {item === 'Show' && (
+                    <FaCaretDown 
+                      className="dropdown-icon" 
+                      onClick={(e) => {
+                        e.stopPropagation(); 
+                        handleDropdownClick(index);
+                      }} 
+                    />
+                  )}
                 </Link>
+                {item === 'Show' && showSubNav && activeIndex === index && (
+                  <ul className="subNav">
+                    <li><Link to="/WatchMovie" className="navLink">Watch Movie</Link></li>
+                    <li><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
+                  </ul>
+                )}
               </li>
             ))}
           </ul>

@@ -59,6 +59,10 @@
     margin-left: 0;
 }
 
+.dropdown-icon {
+  margin-left: 5px;
+  cursor: pointer;
+}
 .subNavLists {
   position: absolute;
   left: 0;
