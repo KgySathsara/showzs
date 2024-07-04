@@ -57,7 +57,7 @@ const Navbar = () => {
                 {item === 'Shows' && showSubNav && activeIndex === index && (
                   <ul className="subNavLists">
                     <li className="subNavItem"><Link to="/ViewMovieCode" className="navLink">Watch Movies</Link></li>
-                    <li className="subNavItem"><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
+                    <li className="subNavItem"><Link to="/LiveView" className="navLink">Watch Live</Link></li>
                   </ul>
                 )}
               </li>
