@@ -22,4 +22,5 @@ export { default as AdminUsersManagement } from './usersManagement/AdminUsersMan
 export { default as AdminAddNewsManagement } from './adminAddNews/AdminAddNewsManagement';
 export { default as Trailers } from './Trailers/Trailers';
 export { default as LiveViewEvent } from './events/LiveViewEvent'; 
-
+export { default as MovieView } from './movieView/MovieView';
+export { default as MovieWatch} from './movieView/MovieWatch';
