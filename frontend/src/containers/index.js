@@ -21,5 +21,6 @@ export { default as MoviePayment } from './payment/MoviePayment';
 export { default as AdminUsersManagement } from './usersManagement/AdminUsersManagement';
 export { default as AdminAddNewsManagement } from './adminAddNews/AdminAddNewsManagement';
 export { default as Trailers } from './Trailers/Trailers';
+export { default as LiveViewEvent } from './events/LiveViewEvent'; 
 export { default as MovieView } from './movieView/MovieView';
 export { default as MovieWatch} from './movieView/MovieWatch';
