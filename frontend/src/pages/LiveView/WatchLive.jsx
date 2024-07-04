@@ -1,19 +1,18 @@
 import React from 'react';
-import { Footer , LiveViewEvent } from '../../containers';
+import { Footer , LiveWatchEvent } from '../../containers';
 import { Navbar } from '../../components';
-
-const LiveView = () => {
+const WatchLive = () => {
   return (
     <div className='watch-movie'>
       <div className='gradient_bg'>
         <Navbar />
       </div>
       <div className='watch-movie-content'>
-        <LiveViewEvent />
+        <LiveWatchEvent />
       </div>
       <Footer />
     </div>
   )
 }
 
-export default  LiveView;
+export default WatchLive;
