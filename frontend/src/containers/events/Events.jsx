@@ -12,15 +12,15 @@ const Events = () => {
         <div className="event-container">
           <div className="event animate__animated animate__fadeInUp">
             <img src={event1} alt="Event 1" />
-            <button className="watch-now"><a href='/LiveEvents'>Watch Now</a></button>
+            <button className="watch-now">Watch Now</button>
           </div>
           <div className="event animate__animated animate__fadeInUp">
             <img src={event2} alt="Event 2" />
-            <button className="watch-now"><a href='/LiveEvents'>Watch Now</a></button>
+            <button className="watch-now">Watch Now</button>
           </div>
           <div className="event animate__animated animate__fadeInUp">
             <img src={event3} alt="Event 3" />
-            <button className="watch-now"><a href='/LiveEvents'>Watch Now</a></button>
+            <button className="watch-now">Watch Now</button>
           </div>
         </div>
       </div>
