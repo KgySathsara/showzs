@@ -1,102 +1,74 @@
-.admin-movie-management h2,
-.admin-movie-container h2 {
+.admin-movie-management h2 {
   font-size: 30px;
   margin-top: 20px;
   text-align: center;
   color: #20448A;
 }
 
-.movie-management-container {
+.movie-profile-card {
   display: flex;
-  flex-direction: column; /* Default to column for mobile first */
-  justify-content: left;
-  align-items: center;
-  gap: 20px; /* Adjust gap for mobile */
-  margin: 20px; /* Reduce margin for mobile */
+  justify-content: space-between;
+  align-items: stretch; /* Ensures all items stretch to the same height */
+  gap: 20px;
+  margin-top: 3rem;
 }
 
-.movie-management-details,
-.movie-profile-management {
+.profile-card {
+  flex: 1; /* Ensures cards take up equal space */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.profile-card .ant-card-body {
+  flex-grow: 1; /* Ensures content stretches to fill the card */
+}
+
+.movie-management-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  margin: 30px 10px;
   width: 100%;
+  box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+}
+
+.movie-management-details, .movie-profile-management {
+  width: 100%;
+  max-width: 600px;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.movie-management-container .movie-card {
+.movie-card {
   width: 100%;
-  height: auto; /* Allow height to adjust based on content */
-  max-width: none; /* Remove max-width */
-  top: 0; /* Remove top margin for mobile */
+  max-width: 600px;
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
 }
 
 .movie-card img {
   width: 100%;
-  height: auto; /* Adjust image height to maintain aspect ratio */
-  object-fit: fill;
+  height: auto;
   border-radius: 20px;
-}
-
-.upload-image {
-  margin-top: 20px;
 }
 
 .details-form .ant-form-item {
   margin-bottom: 15px;
 }
 
-.form-buttons {
-  display: flex;
-  flex-direction: column; /* Stack buttons vertically on mobile */
-  gap: 15px;
-}
-
-.btn-movie-management {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.movie-profile-card {
-  display: flex;
-  flex-direction: column; /* Stack elements vertically on mobile */
-  justify-content: center;
-  align-items: center;
-  gap: 20px; /* Adjust gap for mobile */
-  margin-top: 3rem;
-}
-
-.movie-profile-card .profile-card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-/* Media queries for larger screens */
-@media (min-width: 768px) {
-  .movie-management-container {
-    flex-direction: row; /* Switch to row layout for larger screens */
-    gap: 60px;
-    margin: 30px 100px;
-  }
-
-  .movie-management-details,
-  .movie-profile-management {
-    width: 600px; /* Restore fixed width for larger screens */
-  }
-
+@media (max-width: 768px) {
   .movie-profile-card {
-    flex-direction: row; /* Align elements in a row */
-    gap: 150px;
+    flex-direction: column;
+    gap: 15px;
   }
 
-  .form-buttons {
-    flex-direction: row; /* Align buttons in a row */
-  }
-
-  .movie-management-container .movie-card {
-    height: 500px; /* Restore fixed height */
-    max-width: 800px;
-    top: 4rem; /* Restore top margin */
+  .profile-card {
+    width: 100%;
   }
 }
