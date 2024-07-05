@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Movie from '../../assest/wisal.jpg';
 import { Form, Input, Button, Upload } from 'antd';
-import { UploadOutlined, PlayCircleOutlined, StopOutlined } from '@ant-design/icons';
-// import './LiveStreamManagement.css';
+import { UploadOutlined } from '@ant-design/icons';
+import './LiveStreamManagement.css';
 
 const LiveStreamManagement = () => {
   const [form] = Form.useForm();
-  const [isPlaying, setIsPlaying] = useState(false);
+  // const [isPlaying, setIsPlaying] = useState(false);
 
   const handleSubmit = (values) => {
     console.log('Received values:', values);
@@ -17,22 +17,22 @@ const LiveStreamManagement = () => {
     return fileList;
   };
 
-  const handlePlayStop = () => {
-    setIsPlaying((prev) => !prev);
-    if (isPlaying) {
-      console.log('Stopping the stream');
-    } else {
-      console.log('Playing the stream');
-    }
-  };
+  // const handlePlayStop = () => {
+  //   setIsPlaying((prev) => !prev);
+  //   if (isPlaying) {
+  //     console.log('Stopping the stream');
+  //   } else {
+  //     console.log('Playing the stream');
+  //   }
+  // };
 
   return (
     <section className='admin-movie-management'>
       <h2>Live Stream Management</h2>
       <div className="movie-management-container">
-        <div className="movie-card">
+        <div className="live-movie-card">
           <img src={Movie} alt='movie' className="centered-image" />
-          <div className="stream-controls">
+          {/* <div className="stream-controls">
             <Button
               type="primary"
               shape="circle"
@@ -40,7 +40,7 @@ const LiveStreamManagement = () => {
               onClick={handlePlayStop}
               className="circular-button"
             />
-          </div>
+          </div> */}
         </div>
         <div className='movie-management-details'>
         <h3 className="centered-heading"> Stream Management Section</h3>

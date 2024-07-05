@@ -53,14 +53,25 @@
   width: 100%;
 }
 
-@media (min-width: 769px) {
+
+@media screen and (max-width: 480px) {
   .movie-management-container {
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: flex-start;
+    width: 90%;
+  }
+
+  .admin-movie-management h2 {
+    font-size: 20px;
   }
 
   .video-container {
-    width: 40%;
+    width: 100%;
+    margin-right: 11.3rem;
+  }
+
+  .video-container video {
+    width: 140%;
   }
 
   .movie-card,

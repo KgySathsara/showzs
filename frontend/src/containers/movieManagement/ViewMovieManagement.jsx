@@ -1,6 +1,6 @@
 import React from 'react';
 import './ViewMovieManagement.css';
-import visalAdaretrailer from '../../assest/visalAdareTrailer.mp4';
+import visalAdareMovie from '../../assest/visalAdareTrailer.mp4';
 import { Form, Input, Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
@@ -22,9 +22,9 @@ const ViewMovieManagement = () => {
       <div className="movie-management-container">
         <div className="video-container">
           <h3>Movie</h3>
-            <video controls src={visalAdaretrailer} alt="Visal Adare Trailer" />
+            <video controls src={visalAdareMovie} alt="Visal Adare Trailer" />
           <h3>Trailer</h3>
-            <video controls src={visalAdaretrailer} alt="Visal Adare Trailer" />
+            <video controls src={visalAdareMovie} alt="Visal Adare Trailer" />
         </div>
         <div className='movie-management-details'>
           <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
