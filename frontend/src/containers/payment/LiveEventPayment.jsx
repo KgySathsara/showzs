@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Table, Input, Row, Col } from 'antd';
+import { Table, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import './liveEventPayment.css';
 
@@ -106,24 +106,21 @@ const LiveEventPayment = () => {
     : data;
 
   return (
-    <div className='live-event-payment-container'>
-      <Row justify="center" gutter={[16, 16]}>
-        <Col xs={24} md={20} lg={16}>
-          <Search
-            placeholder="Search..."
-            enterButton={<SearchOutlined />}
-            size="large"
-            onSearch={onSearch}
-            style={{ marginBottom: 16 }}
-          />
-          <Table 
-            columns={columns} 
-            dataSource={filteredData} 
-            onChange={onChange} 
-            scroll={{ x: 800 }} 
-          />
-        </Col>
-      </Row>
+    <div className="live-event-payment-container">
+      <Search
+        placeholder="Search..."
+        enterButton={<SearchOutlined />}
+        size="large"
+        onSearch={onSearch}
+        style={{ marginBottom: 16, width: '100%' }}
+      />
+      <Table
+        columns={columns}
+        dataSource={filteredData}
+        onChange={onChange}
+        pagination={{ pageSize: 5 }}
+        scroll={{ x: 'max-content' }}
+      />
     </div>
   );
 };
