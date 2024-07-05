@@ -9,28 +9,24 @@ const data = [
     key: '1',
     name: 'John Brown',
     email: 'john.brown@example.com',
-    password: 'password123',
     tel: '123-456-7890',
   },
   {
     key: '2',
     name: 'Joe Black',
     email: 'joe.black@example.com',
-    password: 'password456',
     tel: '987-654-3210',
   },
   {
     key: '3',
     name: 'Jim Green',
     email: 'jim.green@example.com',
-    password: 'password789',
     tel: '555-666-7777',
   },
   {
     key: '4',
     name: 'Jim Red',
     email: 'jim.red@example.com',
-    password: 'password000',
     tel: '444-555-6666',
   },
 ];
@@ -142,12 +138,6 @@ const AdminUsersManagement = () => {
       ...getColumnSearchProps('email'),
     },
     {
-      title: 'Password',
-      dataIndex: 'password',
-      key: 'password',
-      width: '25%',
-    },
-    {
       title: 'Phone Number',
       dataIndex: 'tel',
       key: 'tel',
@@ -158,7 +148,7 @@ const AdminUsersManagement = () => {
   return (
     <div className='users-management-container'>
       <h2>Users Management</h2>
-      <Table columns={columns} dataSource={data} />
+      <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} scroll={{ x: 800 }} />
     </div>
   );
 };

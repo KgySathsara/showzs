@@ -53,7 +53,7 @@ const AdminAddNewManagement = () => {
             beforeUpload={beforeUpload}
             onChange={handleFileChange}
           >
-            <Button icon={<UploadOutlined />}>Upload Movie Image Or Video</Button>
+            <Button icon={<UploadOutlined />}>Upload Movie Media</Button>
           </Upload>
         </Form.Item>
         <Form.Item

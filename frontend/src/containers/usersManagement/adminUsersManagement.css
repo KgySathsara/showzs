@@ -5,3 +5,13 @@
     color: #20448A;
     margin-bottom: 20px;
 }
+
+@media (max-width: 576px) {
+    .users-management-container {
+      padding: 10px;
+    }
+  
+    .users-management-container h2 {
+      font-size: 18px;
+    }
+  }

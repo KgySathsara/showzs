@@ -26,7 +26,10 @@ export default function AdminContact() {
       <h2>Contact Us Messages</h2>
       <Row gutter={[16, 16]}>
         {messages.map((msg, index) => (
-          <Col span={8} key={index}>
+          <Col
+            key={index}
+            xs={24} sm={24} md={12} lg={8} xl={8}
+          >
             <Card title={msg.subject} bordered={true}>
               <p><strong>Name:</strong> {msg.name}</p>
               <p><strong>Email:</strong> {msg.email}</p>
