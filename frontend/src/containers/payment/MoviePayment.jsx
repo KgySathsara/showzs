@@ -98,15 +98,21 @@ const MoviePayment = () => {
   ) : data;
 
   return (
-    <div>
+    <div className="movie-payment-container">
       <Search
         placeholder="Search..."
         enterButton={<SearchOutlined />}
         size="large"
         onSearch={onSearch}
-        style={{ marginBottom: 16 }}
+        style={{ marginBottom: 16, width: '100%' }}
       />
-      <Table columns={columns} dataSource={filteredData} onChange={onChange} />
+      <Table
+        columns={columns}
+        dataSource={filteredData}
+        onChange={onChange}
+        pagination={{ pageSize: 5 }}
+        scroll={{ x: 'max-content' }}
+      />
     </div>
   );
 };
