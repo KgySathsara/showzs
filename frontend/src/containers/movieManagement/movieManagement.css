@@ -1,11 +1,5 @@
-.admin-movie-management h2 {
-  font-size: 30px;
-  margin-top: 20px;
-  text-align: center;
-  color: #20448A;
-}
-
-.admin-movie-container h2{
+.admin-movie-management h2,
+.admin-movie-container h2 {
   font-size: 30px;
   margin-top: 20px;
   text-align: center;
@@ -14,14 +8,16 @@
 
 .movie-management-container {
   display: flex;
+  flex-direction: column; /* Default to column for mobile first */
   justify-content: left;
-  align-items: flex-start;
-  gap: 60px;
-  margin: 30px 100px;
+  align-items: center;
+  gap: 20px; /* Adjust gap for mobile */
+  margin: 20px; /* Reduce margin for mobile */
 }
 
-.movie-management-details {
-  width: 600px;
+.movie-management-details,
+.movie-profile-management {
+  width: 100%;
   background-color: #fff;
   padding: 20px;
   border-radius: 10px;
@@ -29,17 +25,17 @@
 }
 
 .movie-management-container .movie-card {
-  position: relative;
-  height: 500px; 
-  max-width: 800px;
-  top: 4rem;
+  width: 100%;
+  height: auto; /* Allow height to adjust based on content */
+  max-width: none; /* Remove max-width */
+  top: 0; /* Remove top margin for mobile */
   border-radius: 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .movie-card img {
   width: 100%;
-  height: 100%;
+  height: auto; /* Adjust image height to maintain aspect ratio */
   object-fit: fill;
   border-radius: 20px;
 }
@@ -54,7 +50,7 @@
 
 .form-buttons {
   display: flex;
-  justify-content: space-between;
+  flex-direction: column; /* Stack buttons vertically on mobile */
   gap: 15px;
 }
 
@@ -63,23 +59,44 @@
   margin-top: 10px;
 }
 
-.movie-profile-management{
-  width: 600px;
-  background-color: #fff;
-  padding:20px;
-  margin-top: 4rem;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-}
-
-.movie-profile-card{
+.movie-profile-card {
   display: flex;
+  flex-direction: column; /* Stack elements vertically on mobile */
   justify-content: center;
   align-items: center;
-  gap: 150px;
+  gap: 20px; /* Adjust gap for mobile */
   margin-top: 3rem;
 }
 
-.movie-profile-card .profile-card{
+.movie-profile-card .profile-card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+/* Media queries for larger screens */
+@media (min-width: 768px) {
+  .movie-management-container {
+    flex-direction: row; /* Switch to row layout for larger screens */
+    gap: 60px;
+    margin: 30px 100px;
+  }
+
+  .movie-management-details,
+  .movie-profile-management {
+    width: 600px; /* Restore fixed width for larger screens */
+  }
+
+  .movie-profile-card {
+    flex-direction: row; /* Align elements in a row */
+    gap: 150px;
+  }
+
+  .form-buttons {
+    flex-direction: row; /* Align buttons in a row */
+  }
+
+  .movie-management-container .movie-card {
+    height: 500px; /* Restore fixed height */
+    max-width: 800px;
+    top: 4rem; /* Restore top margin */
+  }
 }
