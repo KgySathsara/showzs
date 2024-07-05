@@ -1,84 +1,78 @@
 .admin-movie-management h2 {
-    font-size: 30px;
-    margin-top: 20px;
-    text-align: center;
-    color: #20448A;
-  }
-  
-  .admin-movie-container h2 {
-    font-size: 30px;
-    margin-top: 20px;
-    text-align: center;
-    color: #20448A;
-  }
-  
+  font-size: 30px;
+  text-align: center;
+  color: #20448A;
+}
+
+.movie-management-container {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin: 30px 10px;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+.video-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 40%;
+  margin-left: 100px;
+}
+
+.video-container h3 {
+  font-size: 20px;
+  text-align: left;
+}
+
+.movie-management-details {
+  width: 60%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+
+.upload-image {
+  margin-top: 20px;
+}
+
+.details-form .ant-form-item {
+  margin-bottom: 15px;
+  margin-top: 20px;
+}
+
+.form-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.btn-movie-management {
+  width: 100%;
+}
+
+@media (min-width: 769px) {
   .movie-management-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;
-    margin: 30px 10px;
-    width: 100%;
-    box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+    flex-direction: row;
+    justify-content: space-between;
   }
-  
+
+  .video-container {
+    width: 40%;
+  }
+
+  .movie-card,
   .movie-management-details {
-    width: 100%;
-    max-width: 600px;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 0;
   }
-  
-  .movie-management-container .movie-card {
-    width: 100%;
-    max-width: 600px;
-    border-radius: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-    overflow: hidden;
-  }
-  
-  .movie-card img {
-    width: 100%;
-    height: auto;
-    border-radius: 20px;
-  }
-  
-  .upload-image {
-    margin-top: 20px;
-  }
-  
-  .details-form .ant-form-item {
-    margin-bottom: 15px;
-  }
-  
+
   .form-buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    flex-direction: row;
   }
-  
+
   .btn-movie-management {
-    width: 100%;
+    width: auto;
   }
-  
-  @media (min-width: 769px) {
-    .movie-management-container {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  
-    .movie-card, .movie-management-details {
-      margin-top: 0;
-    }
-  
-    .form-buttons {
-      flex-direction: row;
-    }
-  
-    .btn-movie-management {
-      width: auto;
-    }
-  }
-  
+}

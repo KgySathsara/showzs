@@ -1,6 +1,6 @@
 import React from 'react';
 import './ViewMovieManagement.css';
-import Movie from '../../assest/wisal.jpg';
+import visalAdaretrailer from '../../assest/visalAdareTrailer.mp4';
 import { Form, Input, Button, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
@@ -20,8 +20,11 @@ const ViewMovieManagement = () => {
     <section className='admin-movie-management'>
       <h2>View/Update/Delete Movie</h2>
       <div className="movie-management-container">
-      <div className="movie-card">
-          <img src={Movie} alt='movie' />
+        <div className="video-container">
+          <h3>Movie</h3>
+            <video controls src={visalAdaretrailer} alt="Visal Adare Trailer" />
+          <h3>Trailer</h3>
+            <video controls src={visalAdaretrailer} alt="Visal Adare Trailer" />
         </div>
         <div className='movie-management-details'>
           <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
@@ -48,13 +51,17 @@ const ViewMovieManagement = () => {
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>
+            <Form.Item name="image" rules={[{ required: true, message: 'Please upload the movie image or video!' }]} >
+          <Upload name="image" listType="picture" >
+            <Button icon={<UploadOutlined />}>Upload Movie Media</Button>
+          </Upload>
+        </Form.Item>
             <div className="form-buttons">
               <Button type="primary" className='btn-movie-management' htmlType="submit">Edit Movie</Button>
               <Button type="primary" className='btn-movie-management' htmlType="button">Delete Movie</Button>
             </div>
           </Form>
         </div>
-
       </div>
     </section>
   );
