@@ -57,3 +57,69 @@
 .movie-info a:hover {
   text-decoration: underline;
 }
+
+
+/* Responsive adjustments */
+
+@media (max-width: 1024px) {
+  .movie-card {
+    flex: 1 1 calc(100% - 20px);
+  }
+
+  .movie-card video {
+    height: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  .now-showing {
+    padding: 15px;
+  }
+
+  .now-showing h2 {
+    text-align: center;
+    font-size: 22px;
+  }
+
+  .movie-card {
+    flex: 1 1 calc(100% - 20px);
+  }
+
+  .movie-card video {
+    height: 300px;
+  }
+
+  .movie-info h3 {
+    font-size: 16px;
+  }
+
+  .movie-info p {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .now-showing {
+    padding: 10px;
+  }
+
+  .now-showing h2 {
+    font-size: 20px;
+  }
+
+  .movie-card {
+    flex: 1 1 calc(100% - 20px);
+  }
+
+  .movie-card video {
+    height: 200px;
+  }
+
+  .movie-info h3 {
+    font-size: 14px;
+  }
+
+  .movie-info p {
+    font-size: 12px;
+  }
+}
