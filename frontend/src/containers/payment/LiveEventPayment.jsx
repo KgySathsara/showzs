@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Table, Input } from 'antd';
+import { Table, Input, Row, Col } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import './liveEventPayment.css';
 
 const { Search } = Input;
 
@@ -8,10 +9,12 @@ const columns = [
   {
     title: 'User Name',
     dataIndex: 'name',
+    responsive: ['xs', 'sm', 'md', 'lg'],
   },
   {
     title: 'Mobile Number',
     dataIndex: 'number',
+    responsive: ['xs', 'sm', 'md', 'lg'],
     sorter: {
       compare: (a, b) => a.number - b.number,
       multiple: 3,
@@ -20,6 +23,7 @@ const columns = [
   {
     title: 'Paid Amounts',
     dataIndex: 'amount',
+    responsive: ['xs', 'sm', 'md', 'lg'],
     sorter: {
       compare: (a, b) => a.amount - b.amount,
       multiple: 2,
@@ -28,6 +32,7 @@ const columns = [
   {
     title: 'Event Name',
     dataIndex: 'event',
+    responsive: ['xs', 'sm', 'md', 'lg'],
     sorter: {
       compare: (a, b) => a.event - b.event,
       multiple: 1,
@@ -36,6 +41,7 @@ const columns = [
   {
     title: 'Date & Time',
     dataIndex: 'date',
+    responsive: ['xs', 'sm', 'md', 'lg'],
     sorter: {
       compare: (a, b) => a.date - b.date,
       multiple: 1,
@@ -73,7 +79,7 @@ const data = [
     name: 'Jim Red',
     number: '0778735281',
     amount: 'LKR200.00',
-    event: 'LPL LIve Stream',
+    event: 'LPL Live Stream',
     date: '2024-07-12',
   },
 ];
@@ -89,24 +95,35 @@ const LiveEventPayment = () => {
     setSearchText(value);
   };
 
-  const filteredData = searchText ? data.filter(item =>
-    item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.number.includes(searchText) ||
-    item.amount.includes(searchText) ||
-    item.event.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.date.includes(searchText)
-  ) : data;
+  const filteredData = searchText
+    ? data.filter(item =>
+        item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.number.includes(searchText) ||
+        item.amount.includes(searchText) ||
+        item.event.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.date.includes(searchText)
+      )
+    : data;
 
   return (
-    <div>
-      <Search
-        placeholder="Search..."
-        enterButton={<SearchOutlined />}
-        size="large"
-        onSearch={onSearch}
-        style={{ marginBottom: 16 }}
-      />
-      <Table columns={columns} dataSource={filteredData} onChange={onChange} />
+    <div className='live-event-payment-container'>
+      <Row justify="center" gutter={[16, 16]}>
+        <Col xs={24} md={20} lg={16}>
+          <Search
+            placeholder="Search..."
+            enterButton={<SearchOutlined />}
+            size="large"
+            onSearch={onSearch}
+            style={{ marginBottom: 16 }}
+          />
+          <Table 
+            columns={columns} 
+            dataSource={filteredData} 
+            onChange={onChange} 
+            scroll={{ x: 800 }} 
+          />
+        </Col>
+      </Row>
     </div>
   );
 };

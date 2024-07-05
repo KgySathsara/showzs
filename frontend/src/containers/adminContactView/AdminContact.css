@@ -1,22 +1,27 @@
-/* AdminContact.css */
 .admin-contact {
-    padding: 20px;
-    background: #f0f2f5;
+  padding: 20px;
+  background: #f0f2f5;
+}
+
+.admin-contact h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ant-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+@media screen and (max-width: 480px) {
+  .admin-contact {
+    width: 120%;
+    margin-left: -10% ;
   }
-  
-  .admin-contact h2 {
-    text-align: center;
-    margin-bottom: 20px;
+
+  .ant-card p{
+    text-align: left;
+    padding: auto;
   }
-  
-  .ant-card {
-    background: #fff;
-    border-radius: 8px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-  
-  .ant-card p {
-    margin: 0;
-    line-height: 1.6;
-  }
-  
+}

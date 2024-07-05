@@ -1,0 +1,21 @@
+@media (max-width: 576px) {
+  .live-event-payment-container {
+    padding: 10px;
+  }
+
+  .movie-payment-container {
+    padding: 10px;
+  }
+}
+
+.ant-table {
+  overflow-x: auto;
+}
+
+.ant-table-cell {
+  white-space: nowrap;
+}
+
+.ant-table-thead > tr > th {
+  white-space: nowrap;
+}
