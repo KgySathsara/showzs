@@ -1,6 +1,6 @@
 import React from 'react';
 import './movieManagement.css';
-import Movie from '../../assest/wisal.jpg'
+import visalAdare from '../../assest/visalAdareTrailer.mp4';
 import { Form, Input, Card } from 'antd';
 
 const MovieProfileManagement = () => {
@@ -23,8 +23,11 @@ const MovieProfileManagement = () => {
         </Card>
       </div>
       <div className="movie-management-container">
-        <div className="movie-card">
-          <img src={Movie} alt='movie' />
+      <div className="video-container">
+          <h3>Movie</h3>
+            <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
+          <h3>Trailer</h3>
+            <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
         </div>
         <div className='movie-profile-management'>
           <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">

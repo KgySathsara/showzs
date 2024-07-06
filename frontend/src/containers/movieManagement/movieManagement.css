@@ -8,13 +8,13 @@
 .movie-profile-card {
   display: flex;
   justify-content: space-between;
-  align-items: stretch; /* Ensures all items stretch to the same height */
+  align-items: stretch; 
   gap: 20px;
   margin-top: 3rem;
 }
 
 .profile-card {
-  flex: 1; /* Ensures cards take up equal space */
+  flex: 1; 
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -22,7 +22,7 @@
 }
 
 .profile-card .ant-card-body {
-  flex-grow: 1; /* Ensures content stretches to fill the card */
+  flex-grow: 1; 
 }
 
 .movie-management-container {
@@ -32,7 +32,7 @@
   gap: 20px;
   margin: 30px 10px;
   width: 100%;
-  box-sizing: border-box; /* Ensure padding and border are included in element's total width and height */
+  box-sizing: border-box; 
 }
 
 .movie-management-details, .movie-profile-management {
@@ -42,14 +42,6 @@
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
-.movie-card {
-  width: 100%;
-  max-width: 600px;
-  border-radius: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
-  overflow: hidden;
 }
 
 .movie-card img {
@@ -62,7 +54,7 @@
   margin-bottom: 15px;
 }
 
-@media (max-width: 768px) {
+@media screen and (max-width: 480px) {
   .movie-profile-card {
     flex-direction: column;
     gap: 15px;
@@ -70,5 +62,9 @@
 
   .profile-card {
     width: 100%;
+  }
+
+  .movie-profile-management{
+    width: 130%;
   }
 }
