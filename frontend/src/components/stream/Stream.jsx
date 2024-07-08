@@ -14,8 +14,8 @@ const Stream = () => {
               <h2>Visal ADare</h2>
               <p>3hr 30Min</p>
               <div className="buttons">
-                <button className="watch-trailer">Watch Trailer</button>
-                <button className="buy-tickets">Buy Tickets</button>
+              <button className="watch-trailer"><a href="/#">Watch Trailer</a></button>
+              <button className="buy-tickets"><a href="/LiveEvents">Buy Tickets</a></button>
               </div>
             </div>
             <div className="movie">
@@ -23,8 +23,8 @@ const Stream = () => {
               <h2>Sinhabahu</h2>
               <p>3hr 30Min</p>
               <div className="buttons">
-                <button className="watch-trailer">Watch Trailer</button>
-                <button className="buy-tickets">Buy Tickets</button>
+              <button className="watch-trailer"><a href="/#">Watch Trailer</a></button>
+              <button className="buy-tickets"><a href="/LiveEvents">Buy Tickets</a></button>
               </div>
             </div>
           </div>
