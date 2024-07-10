@@ -1,40 +1,26 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Space, Table } from 'antd';
+import { Button, Input, Space, Table, message } from 'antd';
 import Highlighter from 'react-highlight-words';
+import axios from 'axios';
 import './adminUsersManagement.css';
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    email: 'john.brown@example.com',
-    tel: '123-456-7890',
-  },
-  {
-    key: '2',
-    name: 'Joe Black',
-    email: 'joe.black@example.com',
-    tel: '987-654-3210',
-  },
-  {
-    key: '3',
-    name: 'Jim Green',
-    email: 'jim.green@example.com',
-    tel: '555-666-7777',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    email: 'jim.red@example.com',
-    tel: '444-555-6666',
-  },
-];
 
 const AdminUsersManagement = () => {
   const [searchText, setSearchText] = useState('');
   const [searchedColumn, setSearchedColumn] = useState('');
+  const [data, setData] = useState([]);
   const searchInput = useRef(null);
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/users')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        message.error('Failed to fetch users');
+        console.error(error);
+      });
+  }, []);
 
   const handleSearch = (selectedKeys, confirm, dataIndex) => {
     confirm();
@@ -144,7 +130,7 @@ const AdminUsersManagement = () => {
       width: '25%',
     },
   ];
-  
+
   return (
     <div className='users-management-container'>
       <h2>Users Management</h2>
