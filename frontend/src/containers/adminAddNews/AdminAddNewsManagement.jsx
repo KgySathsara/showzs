@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './adminAddNews.css';
 import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -11,7 +12,27 @@ const AdminAddNewManagement = () => {
   const [fileList, setFileList] = useState([]);
 
   const onFinish = (values) => {
-    setFormData(values);
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('date', values.date.format('YYYY-MM-DD'));
+    formData.append('duration', values.duration);
+    formData.append('category', values.category);
+    formData.append('description', values.description);
+    formData.append('price', values.price);
+    formData.append('image', values.image.file.originFileObj);
+
+    axios.post('http://127.0.0.1:8000/api/news', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(response => {
+      message.success('News added successfully!');
+    })
+    .catch(error => {
+      message.error('Failed to add news!');
+      console.error(error);
+    });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -32,7 +53,7 @@ const AdminAddNewManagement = () => {
     <section className='admin-upcoming-movies'>
       <h2>Add News</h2>
       <Form
-        name="add-movie"
+        name="add-news"
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
