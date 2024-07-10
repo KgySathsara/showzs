@@ -27,6 +27,12 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (formData.password !== formData.password_confirmation) {
+      alert('Passwords do not match');
+      return;
+    }
+
     if (!formData.terms) {
       alert('You must agree to the terms and privacy policy');
       return;
