@@ -1,35 +1,18 @@
+// src/components/LiveEventForm.js
 import React, { useState } from 'react';
-import { Form, Input, Button, DatePicker, TimePicker, Upload, Select, message } from 'antd';
+import { Form, Input, Button, DatePicker, TimePicker, Upload, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import axios from 'axios';
 
 const { Option } = Select;
 
-const LiveEventForm = () => {
+const LiveEventForm = ({ onSubmit }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
 
   const handleSubmit = (values) => {
-    const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('description', values.description);
-    formData.append('date', values.date.format('YYYY-MM-DD'));
-    formData.append('time', values.time.format('HH:mm'));
-    formData.append('ticketPrice', values.ticketPrice);
-    formData.append('coverImage', fileList[0]?.originFileObj);
-    formData.append('category', values.category);
-    formData.append('streamLink', values.streamLink);
-
-    axios.post('http://127.0.0.1:8000/api/live-events', formData)
-      .then(response => {
-        message.success('Live event created successfully');
-        form.resetFields();
-        setFileList([]);
-      })
-      .catch(error => {
-        message.error('Failed to create live event');
-        console.error(error);
-      });
+    onSubmit({ ...values, coverImage: fileList });
+    form.resetFields();
+    setFileList([]);
   };
 
   const handleUpload = ({ fileList }) => {
