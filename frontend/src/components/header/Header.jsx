@@ -22,7 +22,7 @@ const Header = () => {
         <div className='additional-content'>
           <div className='card-description'>
             <div className='card-details'>
-              <h3>16th May - 16th June</h3>
+              <a href="/Movies">Watch Now</a>
             </div>
             <div className='ticket'>
               <img src={ticket} alt='Ticket for Event 1'/>
@@ -30,7 +30,7 @@ const Header = () => {
           </div>
           <div className='card-description'>
             <div className='card-details'>
-              <h3>Watch Now</h3>
+              <a href="/LiveEvents">Watch Now</a>
             </div>
             <div className='ticket'>
               <img src={ticket} alt='Ticket for Event 2'/>
