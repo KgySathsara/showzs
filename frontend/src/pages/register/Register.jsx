@@ -39,13 +39,13 @@ const Register = () => {
     }
 
     try {
+      // console.log("Sending data:", formData);
       const response = await axios.post('http://127.0.0.1:8000/api/register', formData);
       console.log(response.data);
       alert('Registration successful!');
       navigate('/login');
     } catch (error) {
       console.error(error);
-      alert('Registration failed.');
     }
   };
 
