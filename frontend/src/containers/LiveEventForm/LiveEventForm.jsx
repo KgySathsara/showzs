@@ -25,7 +25,7 @@ const LiveEventForm = () => {
         message.success('Live event created successfully');
         form.resetFields();
         setFileList([]);
-      })
+      }) 
       .catch(error => {
         message.error('Failed to create live event');
         console.error(error);

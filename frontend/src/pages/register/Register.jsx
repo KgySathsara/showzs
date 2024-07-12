@@ -7,11 +7,11 @@ import axios from 'axios';
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    full_name: '',
     email: '',
     password: '',
     password_confirmation: '',
-    phone: '',
+    phone_number: '',
     terms: false,
   });
 
@@ -41,11 +41,11 @@ const Register = () => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/register', formData);
       console.log(response.data);
-      alert('Registration successful!');
+      alert('Registration successful !!');
       navigate('/login');
     } catch (error) {
       console.error(error);
-      alert('Registration failed.');
+      alert('Registration failed');
     }
   };
 
@@ -65,7 +65,7 @@ const Register = () => {
         </div>
         <form onSubmit={handleSubmit}>
           <div className="form-row">
-            <input type="text" name="name" placeholder="Full name" className="input-field" value={formData.name} onChange={handleChange} required />
+            <input type="text" name="full_name" placeholder="Full name" className="input-field" value={formData.full_name} onChange={handleChange} required />
             <input type="email" name="email" placeholder="Email address" className="input-field" value={formData.email} onChange={handleChange} required />
           </div>
           <div className="form-row">
@@ -73,7 +73,7 @@ const Register = () => {
             <input type="password" name="password_confirmation" placeholder="Confirm password" className="input-field" value={formData.password_confirmation} onChange={handleChange} required />
           </div>
           <div className="form-row">
-            <input type="tel" name="phone" placeholder="Phone number" className="input-field1" value={formData.phone} onChange={handleChange} required />
+            <input type="tel" name="phone_number" placeholder="Phone number" className="input-field1" value={formData.phone_number} onChange={handleChange} required />
           </div>
           <div className="terms-container">
             <input type="checkbox" id="terms" name="terms" checked={formData.terms} onChange={handleChange} />
