@@ -6,11 +6,54 @@ import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
 
+
   const navigate = useNavigate();
 
   const handleSignup = () => {
     // Navigate to the register page
     navigate('/Login');
+
+  const [formData, setFormData] = useState({
+    full_name: '',
+    email: '',
+    password: '',
+    password_confirmation: '',
+    phone_number: '',
+    terms: false,
+  });
+
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === 'checkbox' ? checked : value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.password_confirmation) {
+      alert('Passwords do not match');
+      return;
+    }
+
+    if (!formData.terms) {
+      alert('You must agree to the terms and privacy policy');
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/register', formData);
+      alert('Registration successful!');
+      navigate('/login');
+    } catch (error) {
+      console.error(error);
+      alert('Registration failed!');
+    }
+
   };
 
   return (
@@ -29,15 +72,24 @@ const Register = () => {
         </div>
         <form>
           <div className="form-row">
+
             <input type="text" placeholder="Full name" className="input-field" />
             <input type="email" placeholder="Email address" className="input-field" />
+
+            <input type="text" name="full_name" placeholder="Full name" className="input-field" value={formData.full_name} onChange={handleChange} required />
+            <input type="email" name="email" placeholder="Email address" className="input-field" value={formData.email} onChange={handleChange} required />
+
           </div>
           <div className="form-row">
             <input type="password" placeholder="Password" className="input-field" />
             <input type="password" placeholder="Confirm password" className="input-field" />
           </div>
           <div className="form-row">
+
           <input type="tel" placeholder="Phone number" className="input-field1" />
+
+            <input type="tel" name="phone_number" placeholder="Phone number" className="input-field1" value={formData.phone_number} onChange={handleChange} required />
+
           </div>
           <div className="terms-container">
             <input type="checkbox" id="terms" />
