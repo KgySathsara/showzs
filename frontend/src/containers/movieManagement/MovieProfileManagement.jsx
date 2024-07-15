@@ -1,10 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import './movieManagement.css';
 import visalAdare from '../../assest/visalAdareTrailer.mp4';
 import { Form, Input, Card } from 'antd';
 
 const MovieProfileManagement = () => {
   const [form] = Form.useForm();
+  const [movie, setMovie] = useState(null);
+
+  useEffect(() => {
+    const fetchMovie = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/movies');
+        console.log('Movie data:', response.data); 
+        const movieData = response.data;
+        const formData = {
+          ...movieData,
+          streamLink: movieData.stream_link,
+        };
+        setMovie(movieData);
+        form.setFieldsValue(formData);
+      } catch (error) {
+        console.error('Failed to fetch movie data:', error);
+      }
+    };
+
+    fetchMovie();
+  }, [form]);
 
   const handleSubmit = (values) => {
     console.log('Received values:', values);
@@ -23,11 +45,9 @@ const MovieProfileManagement = () => {
         </Card>
       </div>
       <div className="movie-management-container">
-      <div className="video-container">
-          <h3>Movie</h3>
-            <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
+        <div className="video-container">
           <h3>Trailer</h3>
-            <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
+          <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
         </div>
         <div className='movie-profile-management'>
           <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
