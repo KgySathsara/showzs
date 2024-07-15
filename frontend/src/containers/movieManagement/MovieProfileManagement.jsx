@@ -24,8 +24,8 @@ const MovieProfileManagement = () => {
       </div>
       <div className="movie-management-container">
       <div className="video-container">
-          {/* <h3>Movie</h3>
-            <video controls src={visalAdare} alt="Visal-Adare-Trailer" /> */}
+          <h3>Movie</h3>
+            <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
           <h3>Trailer</h3>
             <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
         </div>
