@@ -10,9 +10,31 @@ const LiveEventForm = ({ onSubmit }) => {
   const [fileList, setFileList] = useState([]);
 
   const handleSubmit = (values) => {
+
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    formData.append('date', values.date.format('YYYY-MM-DD'));
+    formData.append('time', values.time.format('HH:mm'));
+    formData.append('ticketPrice', values.ticketPrice);
+    formData.append('coverImage', fileList[0]?.originFileObj);
+    formData.append('category', values.category);
+    formData.append('streamLink', values.streamLink);
+
+    axios.post('http://127.0.0.1:8000/api/live-events', formData)
+      .then(response => {
+        message.success('Live event created successfully');
+        form.resetFields();
+        setFileList([]);
+      }) 
+      .catch(error => {
+        message.error('Failed to create live event');
+        console.error(error);
+      });
     onSubmit({ ...values, coverImage: fileList });
     form.resetFields();
     setFileList([]);
+
   };
 
   const handleUpload = ({ fileList }) => {

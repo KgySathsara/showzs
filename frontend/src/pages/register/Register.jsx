@@ -73,8 +73,10 @@ const Register = () => {
         <form>
           <div className="form-row">
 
+
             <input type="text" placeholder="Full name" className="input-field" />
             <input type="email" placeholder="Email address" className="input-field" />
+
 
             <input type="text" name="full_name" placeholder="Full name" className="input-field" value={formData.full_name} onChange={handleChange} required />
             <input type="email" name="email" placeholder="Email address" className="input-field" value={formData.email} onChange={handleChange} required />
@@ -86,9 +88,13 @@ const Register = () => {
           </div>
           <div className="form-row">
 
+            <input type="tel" name="phone_number" placeholder="Phone number" className="input-field1" value={formData.phone_number} onChange={handleChange} required />
+
+
           <input type="tel" placeholder="Phone number" className="input-field1" />
 
             <input type="tel" name="phone_number" placeholder="Phone number" className="input-field1" value={formData.phone_number} onChange={handleChange} required />
+
 
           </div>
           <div className="terms-container">
