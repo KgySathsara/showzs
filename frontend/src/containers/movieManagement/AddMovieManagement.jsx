@@ -1,19 +1,37 @@
 import React from 'react';
-import { Form, Input, Button, Upload } from 'antd';
+import { Form, Input, Button, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import './movieManagement.css';
 
 const AddMovieManagement = () => {
   const [form] = Form.useForm();
 
-  const handleSubmit = (values) => {
-    console.log('Received values:', values);
-    form.resetFields();
+  const handleSubmit = async (values) => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('genre', values.genre);
+    formData.append('director', values.director);
+    formData.append('duration', values.duration);
+    formData.append('price', values.price);
+    formData.append('stream_link', values.streamLink);
+    formData.append('picture', values.picture[0].originFileObj);
+
+    try {
+      await axios.post('http://127.0.0.1:8000/api/movies', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      message.success('Movie added successfully');
+      form.resetFields();
+    } catch (error) {
+      console.error('Error adding movie:', error);
+      message.error('Failed to add movie');
+    }
   };
 
-  const handleUpload = ({ fileList }) => {
-    return fileList;
-  };
+  const handleUpload = ({ fileList }) => fileList;
 
   return (
     <div className="admin-movie-container">
@@ -37,7 +55,7 @@ const AddMovieManagement = () => {
         <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload}>
+        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload} rules={[{ required: true, message: 'Please upload a picture' }]}>
           <Upload name="picture" listType="picture" beforeUpload={() => false}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
