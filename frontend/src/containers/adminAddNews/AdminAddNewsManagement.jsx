@@ -23,7 +23,7 @@ const AdminAddNewManagement = () => {
     formData.append('description', values.description);
     formData.append('price', values.price);
 
-    axios.post('http://your-laravel-app-url/api/add-news', formData)
+    axios.post('https://streamingplatform.com/api/add-news', formData)
       .then(response => {
         message.success('News added successfully!');
         setLoading(false);
