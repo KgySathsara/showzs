@@ -1,7 +1,8 @@
 // src/components/LiveEventForm.js
 import React, { useState } from 'react';
-import { Form, Input, Button, DatePicker, TimePicker, Upload, Select } from 'antd';
+import { Form, Input, Button, DatePicker, TimePicker, Upload, Select, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Option } = Select;
 
@@ -10,7 +11,6 @@ const LiveEventForm = ({ onSubmit }) => {
   const [fileList, setFileList] = useState([]);
 
   const handleSubmit = (values) => {
-
     const formData = new FormData();
     formData.append('title', values.title);
     formData.append('description', values.description);
@@ -26,7 +26,7 @@ const LiveEventForm = ({ onSubmit }) => {
         message.success('Live event created successfully');
         form.resetFields();
         setFileList([]);
-      }) 
+      })
       .catch(error => {
         message.error('Failed to create live event');
         console.error(error);
@@ -34,7 +34,6 @@ const LiveEventForm = ({ onSubmit }) => {
     onSubmit({ ...values, coverImage: fileList });
     form.resetFields();
     setFileList([]);
-
   };
 
   const handleUpload = ({ fileList }) => {
