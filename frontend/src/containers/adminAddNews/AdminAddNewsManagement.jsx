@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './adminAddNews.css';
 import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { TextArea } = Input;
 const { Option } = Select;
@@ -9,9 +10,30 @@ const { Option } = Select;
 const AdminAddNewManagement = () => {
   const [formData, setFormData] = useState({});
   const [fileList, setFileList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const onFinish = (values) => {
-    setFormData(values);
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('image', fileList[0].originFileObj);
+    formData.append('date', values.date.format('YYYY-MM-DD'));
+    formData.append('duration', values.duration);
+    formData.append('category', values.category);
+    formData.append('description', values.description);
+    formData.append('price', values.price);
+
+    axios.post('http://your-laravel-app-url/api/add-news', formData)
+      .then(response => {
+        message.success('News added successfully!');
+        setLoading(false);
+        setFormData({});
+        setFileList([]);
+      })
+      .catch(error => {
+        message.error('Failed to add news. Please try again.');
+        setLoading(false);
+      });
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -92,7 +114,7 @@ const AdminAddNewManagement = () => {
           <InputNumber min={0} placeholder='Ticket Price' />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" loading={loading}>
             Add News
           </Button>
         </Form.Item>
