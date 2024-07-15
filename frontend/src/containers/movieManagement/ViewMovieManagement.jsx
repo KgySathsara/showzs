@@ -11,6 +11,7 @@ const ViewMovieManagement = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [trailerUrl, setTrailerUrl] = useState('');
+  const [isMovieSelected, setIsMovieSelected] = useState(false);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -42,6 +43,7 @@ const ViewMovieManagement = () => {
       setSelectedMovie(movieData);
       setTrailerUrl(movieData.trailer); // Assuming trailer URL is available in movieData.trailer
       form.setFieldsValue(formData);
+      setIsMovieSelected(true);
     } catch (error) {
       console.error('Failed to fetch movie data:', error);
     }
@@ -54,6 +56,7 @@ const ViewMovieManagement = () => {
         console.log('Movie updated:', response.data);
         message.success('Movie updated successfully');
         form.resetFields();
+        setIsMovieSelected(false);
       } catch (error) {
         console.error('Failed to update movie:', error);
         message.error('Failed to update movie');
@@ -71,6 +74,7 @@ const ViewMovieManagement = () => {
         setSelectedMovie(null);
         form.resetFields();
         setTrailerUrl('');
+        setIsMovieSelected(false);
       } catch (error) {
         console.error('Failed to delete movie:', error);
         message.error('Failed to delete movie');
@@ -131,7 +135,9 @@ const ViewMovieManagement = () => {
               </Upload>
             </Form.Item>
             <div className="form-buttons">
-              <Button type="primary" className='btn-movie-management' htmlType="submit">Edit Movie</Button>
+              <Button type="primary" className='btn-movie-management' htmlType="submit">
+                {isMovieSelected ? 'Submit Movie' : 'Edit Movie'}
+              </Button>
               <Button type="primary" className='btn-movie-management' htmlType="button" onClick={handleDelete}>Delete Movie</Button>
             </div>
           </Form>
