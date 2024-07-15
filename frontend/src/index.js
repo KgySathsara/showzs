@@ -24,6 +24,7 @@ import UsersManagement from './pages/AdminAdditionalSection/UsersManagement';
 import AdminAddUpcomingMovie from './pages/AdminNewsManagement/AdminAddUpcomingMovie';
 import WatchMovie from './pages/Show/WatchMovie';
 import WatchLive from './pages/LiveView/WatchLive';
+import LiveEventProfile from './pages/LiveEventProfile/LiveEventProfile';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -45,6 +46,7 @@ root.render(
       <Route path='/AdminContactUs' element={<AdminContactUs />} />
       <Route path='/AdminAddNews' element={<AdminAddNews />} />
       <Route path='/MovieProfile' element={<MovieProfile />} />
+      <Route path='/LiveEventProfile' element={<LiveEventProfile />} />
       <Route path='/AdminStreamLiveEvents' element={<AdminStreamLiveEvents />} />
       <Route path='/LiveEventPay' element={<LiveEventPay />} />
       <Route path='/MoviePay' element={<MoviePay />} />

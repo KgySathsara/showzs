@@ -23,3 +23,4 @@ export { default as AdminAddNewsManagement } from './adminAddNews/AdminAddNewsMa
 export { default as Trailers } from './Trailers/Trailers';
 export { default as MovieWatch} from './movieView/MovieWatch';
 export { default as LiveWatchEvent} from './events/LiveWatchEvent';
+export { default as LiveProfile } from './events/LiveProfile.jsx';
