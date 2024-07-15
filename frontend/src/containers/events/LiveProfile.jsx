@@ -1,9 +1,23 @@
-import React from 'react';
+/* eslint-disable no-unused-vars */
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import visalAdare from '../../assest/visalAdareTrailer.mp4';
 import { Form, Input, Card } from 'antd';
 
 const LiveEventProfile = () => {
   const [form] = Form.useForm();
+  const [eventData, setEventData] = useState(null);
+
+  useEffect(() => {
+    axios.get('http://127.0.0.1:8000/api/live-events/show')
+      .then(response => {
+        setEventData(response.data);
+        form.setFieldsValue(response.data);
+      })
+      .catch(error => {
+        console.error('There was an error fetching the Live Event data!', error);
+      });
+  }, [form]);
 
   const handleSubmit = (values) => {
     console.log('Received values:', values);
@@ -22,29 +36,32 @@ const LiveEventProfile = () => {
         </Card>
       </div>
       <div className="movie-management-container">
-      <div className="video-container">
+        <div className="video-container">
           <h3>Live Event</h3>
-            <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
+          <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
         </div>
         <div className='movie-profile-management'>
           <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
-          <Form.Item name="title" label="Event" rules={[{ required: true, message: 'Please enter the Event title' }]}>
-              <Input />
+            <Form.Item name="title" label="Event" rules={[{ required: true, message: 'Please enter the Event title' }]}>
+              <Input readOnly />
             </Form.Item>
-            <Form.Item name="genre" label="Event Description" rules={[{ required: true, message: 'Please enter the Event Description' }]}>
-              <Input />
+            <Form.Item name="description" label="Event Description" rules={[{ required: true, message: 'Please enter the Event Description' }]}>
+              <Input readOnly />
             </Form.Item>
-            <Form.Item name="director" label="Director" rules={[{ required: true, message: 'Please enter the movie director' }]}>
-              <Input />
+            <Form.Item name="date" label="Event Date" rules={[{ required: true, message: 'Please enter the Date' }]}>
+              <Input readOnly />
             </Form.Item>
-            <Form.Item name="duration" label="Duration (in minutes)" rules={[{ required: true, message: 'Please enter the movie duration' }]}>
-              <Input type="number" />
+            <Form.Item  name="time" label="Event Time" rules={[{ required: true, message: 'Please select the event time' }]}>
+              <Input readOnly />
             </Form.Item>
-            <Form.Item name="price" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
-              <Input/>
+            <Form.Item name="ticketPrice" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
+              <Input readOnly />
+            </Form.Item>
+            <Form.Item name="category" label="Category" rules={[{ required: true, message: 'Please enter the Category' }]}>
+              <Input readOnly />
             </Form.Item>
             <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
-              <Input />
+              <Input readOnly />
             </Form.Item>
           </Form>
         </div>
