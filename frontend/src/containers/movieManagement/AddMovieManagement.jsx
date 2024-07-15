@@ -15,7 +15,8 @@ const AddMovieManagement = () => {
     formData.append('duration', values.duration);
     formData.append('price', values.price);
     formData.append('stream_link', values.streamLink);
-    formData.append('picture', values.picture[0].originFileObj);
+    formData.append('picture', values.picture[0].originFileObj); 
+    formData.append('trailer', values.trailer[0].originFileObj); 
 
     try {
       await axios.post('http://127.0.0.1:8000/api/movies', formData, {
@@ -60,6 +61,13 @@ const AddMovieManagement = () => {
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
+
+        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleUpload} rules={[{ required: true, message: 'Please upload the movie trailer' }]}>
+          <Upload name="trailer" listType="picture" beforeUpload={() => false}>
+            <Button icon={<UploadOutlined />}>Click to upload</Button>
+          </Upload>
+        </Form.Item>
+
         <Form.Item>
           <Button type="primary" htmlType="submit">Add Movie</Button>
         </Form.Item>
