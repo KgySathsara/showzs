@@ -41,11 +41,11 @@ const Register = () => {
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/register', formData);
       console.log(response.data);
-      alert('Registration successful !!');
+      alert('Registration successful!');
       navigate('/login');
     } catch (error) {
       console.error(error);
-      alert('Registration failed');
+      alert('Registration failed.');
     }
   };
 
