@@ -49,12 +49,9 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">
-          <Menu.Item key="14">
-            <Link to="/AdminAddLiveEvents">Add Event</Link>
-          </Menu.Item>
-          <Menu.Item key="22">
-            <Link to="/AdminStreamLiveEvents">Stream Management</Link>
-          </Menu.Item>
+          <Menu.Item key="50"><Link to="/LiveEventProfile">Live Event Profile</Link></Menu.Item>
+          <Menu.Item key="14"><Link to="/AdminAddLiveEvents">Add Event</Link></Menu.Item>
+          <Menu.Item key="22"><Link to="/AdminStreamLiveEvents">Stream Management</Link></Menu.Item>
         </SubMenu>
 
         <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
