@@ -1,27 +1,12 @@
 import React from 'react';
-import { Form, Input, Button, notification } from 'antd';
-import axios from 'axios';
+import { Form, Input, Button } from 'antd';
 import './ContactForm.css';
 
 const { TextArea } = Input;
 
 export default function ContactForm() {
   const onFinish = (values) => {
-    axios.post('http://127.0.0.1:8000/api/contact', values)
-      .then((response) => {
-        console.log('Success:', response.data);
-        notification.success({
-          message: 'Message Sent',
-          description: 'Your message has been sent successfully!',
-        });
-      })
-      .catch((error) => {
-        console.log('Failed:', error);
-        notification.error({
-          message: 'Message Failed',
-          description: 'There was an issue sending your message.',
-        });
-      });
+    console.log('Success:', values);
   };
 
   const onFinishFailed = (errorInfo) => {

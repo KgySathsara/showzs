@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './register.css';
 import background from '../../assest/banner.jpg';
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 
 const Register = () => {
+
+
+  const navigate = useNavigate();
+
+  const handleSignup = () => {
+    // Navigate to the register page
+    navigate('/Login');
+
   const [formData, setFormData] = useState({
     full_name: '',
     email: '',
@@ -46,6 +53,7 @@ const Register = () => {
       console.error(error);
       alert('Registration failed!');
     }
+
   };
 
   return (
@@ -53,7 +61,7 @@ const Register = () => {
       <img src={background} alt="register-background" />
       <div className="overlay"></div>
       <div className="registration-box">
-        <h2 className="registration-heading">Registration</h2>
+      <h2 className="registration-heading">Registration</h2>
         <div className='signin-container'>
           <button className="google-signin">
             <FcGoogle className="icon" /> Sign in with Google
@@ -62,27 +70,36 @@ const Register = () => {
         <div className="separator">
           <span>or</span>
         </div>
-        <form onSubmit={handleSubmit}>
+        <form>
           <div className="form-row">
+
+            <input type="text" placeholder="Full name" className="input-field" />
+            <input type="email" placeholder="Email address" className="input-field" />
+
             <input type="text" name="full_name" placeholder="Full name" className="input-field" value={formData.full_name} onChange={handleChange} required />
             <input type="email" name="email" placeholder="Email address" className="input-field" value={formData.email} onChange={handleChange} required />
+
           </div>
           <div className="form-row">
-            <input type="password" name="password" placeholder="Password" className="input-field" value={formData.password} onChange={handleChange} required />
-            <input type="password" name="password_confirmation" placeholder="Confirm password" className="input-field" value={formData.password_confirmation} onChange={handleChange} required />
+            <input type="password" placeholder="Password" className="input-field" />
+            <input type="password" placeholder="Confirm password" className="input-field" />
           </div>
           <div className="form-row">
+
+          <input type="tel" placeholder="Phone number" className="input-field1" />
+
             <input type="tel" name="phone_number" placeholder="Phone number" className="input-field1" value={formData.phone_number} onChange={handleChange} required />
+
           </div>
           <div className="terms-container">
-            <input type="checkbox" id="terms" name="terms" checked={formData.terms} onChange={handleChange} />
+            <input type="checkbox" id="terms" />
             <label htmlFor="terms">
               I agree to the <a href="/">terms</a> of use and <a href="/">privacy policy</a>
             </label>
           </div>
-          <button type="submit" className="submit-button">SIGN UP</button>
         </form>
       </div>
+      <button type="submit" className="submit-button"  onClick={handleSignup}>SIGN UP</button>
     </section>
   );
 };
