@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './movieManagement.css';
-import visalAdare from '../../assest/visalAdareTrailer.mp4';
 import { Form, Input, Card } from 'antd';
 
 const MovieProfileManagement = () => {
@@ -11,13 +10,20 @@ const MovieProfileManagement = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/movies');
-        console.log('Movie data:', response.data); 
+        const response = await axios.get('http://127.0.0.1:8000/api/movie');
+        console.log('Movie data:', response.data);
         const movieData = response.data;
+
+        // Map API response to form fields
         const formData = {
-          ...movieData,
+          title: movieData.title,
+          genre: movieData.genre,
+          director: movieData.director,
+          duration: movieData.duration,
+          price: movieData.price,
           streamLink: movieData.stream_link,
         };
+
         setMovie(movieData);
         form.setFieldsValue(formData);
       } catch (error) {
@@ -27,11 +33,6 @@ const MovieProfileManagement = () => {
 
     fetchMovie();
   }, [form]);
-
-  const handleSubmit = (values) => {
-    console.log('Received values:', values);
-    form.resetFields();
-  };
 
   return (
     <section className='admin-movie-management'>
@@ -47,27 +48,29 @@ const MovieProfileManagement = () => {
       <div className="movie-management-container">
         <div className="video-container">
           <h3>Trailer</h3>
-          <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
+          {movie && movie.trailer && (
+            <video controls src={movie.trailer} alt="Movie Trailer" />
+          )}
         </div>
         <div className='movie-profile-management'>
-          <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
-            <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter the movie title' }]}>
-              <Input />
+          <Form form={form} layout="vertical" className="details-form">
+            <Form.Item name="title" label="Title">
+              <Input disabled />
             </Form.Item>
-            <Form.Item name="genre" label="Genre" rules={[{ required: true, message: 'Please enter the movie genre' }]}>
-              <Input />
+            <Form.Item name="genre" label="Genre">
+              <Input disabled />
             </Form.Item>
-            <Form.Item name="director" label="Director" rules={[{ required: true, message: 'Please enter the movie director' }]}>
-              <Input />
+            <Form.Item name="director" label="Director">
+              <Input disabled />
             </Form.Item>
-            <Form.Item name="duration" label="Duration (in minutes)" rules={[{ required: true, message: 'Please enter the movie duration' }]}>
-              <Input type="number" />
+            <Form.Item name="duration" label="Duration (in minutes)">
+              <Input type="number" disabled />
             </Form.Item>
-            <Form.Item name="price" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
-              <Input />
+            <Form.Item name="price" label="Ticket Price">
+              <Input disabled />
             </Form.Item>
-            <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
-              <Input />
+            <Form.Item name="streamLink" label="Stream Link">
+              <Input disabled />
             </Form.Item>
           </Form>
         </div>
