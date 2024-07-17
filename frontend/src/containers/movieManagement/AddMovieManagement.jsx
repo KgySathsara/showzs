@@ -1,22 +1,32 @@
-import React from 'react';
-import { Form, Input, Button, Upload, message } from 'antd';
+import React, { useState } from 'react';
+import { Form, Input, Button, Upload, message, Modal } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './movieManagement.css';
 
 const AddMovieManagement = () => {
   const [form] = Form.useForm();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [emailForm] = Form.useForm();
 
   const handleSubmit = async (values) => {
+    setModalVisible(true);
+  };
+
+  const handleModalSubmit = async (values) => {
     const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('genre', values.genre);
-    formData.append('director', values.director);
-    formData.append('duration', values.duration);
-    formData.append('price', values.price);
-    formData.append('stream_link', values.streamLink);
-    formData.append('picture', values.picture[0].originFileObj); 
-    formData.append('trailer', values.trailer[0].originFileObj); 
+    const movieValues = form.getFieldsValue();
+
+    formData.append('title', movieValues.title);
+    formData.append('genre', movieValues.genre);
+    formData.append('director', movieValues.director);
+    formData.append('duration', movieValues.duration);
+    formData.append('price', movieValues.price);
+    formData.append('stream_link', movieValues.streamLink);
+    formData.append('picture', movieValues.picture[0].originFileObj);
+    formData.append('trailer', movieValues.trailer[0].originFileObj);
+    // formData.append('email', values.email);
+    // formData.append('password', values.password);
 
     try {
       await axios.post('http://127.0.0.1:8000/api/movies', formData, {
@@ -26,6 +36,8 @@ const AddMovieManagement = () => {
       });
       message.success('Movie added successfully');
       form.resetFields();
+      emailForm.resetFields();
+      setModalVisible(false);
     } catch (error) {
       console.error('Error adding movie:', error);
       message.error('Failed to add movie');
@@ -61,17 +73,34 @@ const AddMovieManagement = () => {
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-
         <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleUpload} rules={[{ required: true, message: 'Please upload the movie trailer' }]}>
           <Upload name="trailer" listType="picture" beforeUpload={() => false}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-
         <Form.Item>
           <Button type="primary" htmlType="submit">Add Movie</Button>
         </Form.Item>
       </Form>
+
+      <Modal
+        visible={modalVisible}
+        onCancel={() => setModalVisible(false)}
+        footer={null}
+      >
+        <Form form={emailForm} layout="vertical" onFinish={handleModalSubmit}>
+          <h2>Access For Content Owner</h2>
+          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please enter your email' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
+            <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">Submit</Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
