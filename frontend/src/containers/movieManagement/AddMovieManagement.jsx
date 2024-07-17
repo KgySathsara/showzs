@@ -14,33 +14,44 @@ const AddMovieManagement = () => {
   };
 
   const handleModalSubmit = async (values) => {
-    const formData = new FormData();
-    const movieValues = form.getFieldsValue();
-
-    formData.append('title', movieValues.title);
-    formData.append('genre', movieValues.genre);
-    formData.append('director', movieValues.director);
-    formData.append('duration', movieValues.duration);
-    formData.append('price', movieValues.price);
-    formData.append('stream_link', movieValues.streamLink);
-    formData.append('picture', movieValues.picture[0].originFileObj);
-    formData.append('trailer', movieValues.trailer[0].originFileObj);
-    // formData.append('email', values.email);
-    // formData.append('password', values.password);
-
     try {
-      await axios.post('http://127.0.0.1:8000/api/movies', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+      const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
+        email: values.email,
+        password: values.password,
+        full_name: values.fullName,
+        phone_number: values.phoneNumber,
+        user_type: 4, 
       });
-      message.success('Movie added successfully');
-      form.resetFields();
-      emailForm.resetFields();
-      setModalVisible(false);
+
+      if (userResponse.status === 201) {
+        const userId = userResponse.data.id;
+        const formData = new FormData();
+        const movieValues = form.getFieldsValue();
+
+        formData.append('title', movieValues.title);
+        formData.append('genre', movieValues.genre);
+        formData.append('director', movieValues.director);
+        formData.append('duration', movieValues.duration);
+        formData.append('price', movieValues.price);
+        formData.append('stream_link', movieValues.streamLink);
+        formData.append('picture', movieValues.picture[0].originFileObj);
+        formData.append('trailer', movieValues.trailer[0].originFileObj);
+        formData.append('user_id', userId);
+
+        await axios.post('http://127.0.0.1:8000/api/movies', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+
+        message.success('Movie added successfully');
+        form.resetFields();
+        emailForm.resetFields();
+        setModalVisible(false);
+      }
     } catch (error) {
-      console.error('Error adding movie:', error);
-      message.error('Failed to add movie');
+      console.error('Error adding movie or user:', error);
+      message.error('Failed to add movie or user');
     }
   };
 
@@ -95,6 +106,12 @@ const AddMovieManagement = () => {
           </Form.Item>
           <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
             <Input.Password />
+          </Form.Item>
+          <Form.Item name="fullName" label="Full Name">
+            <Input />
+          </Form.Item>
+          <Form.Item name="phoneNumber" label="Phone Number">
+            <Input />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">Submit</Button>
