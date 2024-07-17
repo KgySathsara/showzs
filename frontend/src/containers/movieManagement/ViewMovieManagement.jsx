@@ -55,7 +55,6 @@ const ViewMovieManagement = () => {
         const response = await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, values);
         console.log('Movie updated:', response.data);
         message.success('Movie updated successfully');
-        form.resetFields();
         setIsMovieSelected(false);
       } catch (error) {
         console.error('Failed to update movie:', error);
