@@ -39,6 +39,7 @@ const Register = () => {
     }
 
     try {
+      // eslint-disable-next-line no-unused-vars
       const response = await axios.post('http://127.0.0.1:8000/api/register', formData);
       alert('Registration successful!');
       navigate('/login');
