@@ -50,6 +50,29 @@ h1 {
   color: #fff;
 }
 
+.movie-info {
+  padding: 15px;
+}
+
+.movie-info h3 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.movie-info p {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.movie-info a {
+  color: #ffcc00;
+  text-decoration: none;
+}
+
+.movie-info a:hover {
+  text-decoration: underline;
+}
+
 /* Responsive styles */
 
 @media screen and (max-width: 1024px) {
