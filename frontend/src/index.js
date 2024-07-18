@@ -25,6 +25,8 @@ import AdminAddUpcomingMovie from './pages/AdminNewsManagement/AdminAddUpcomingM
 import WatchMovie from './pages/Show/WatchMovie';
 import WatchLive from './pages/LiveView/WatchLive';
 import LiveEventProfile from './pages/LiveEventProfile/LiveEventProfile';
+import EditorAccount from './pages/AdminSetting/EditorAccount';
+import PasswordManagement from './pages/AdminSetting/PasswordManagement';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -54,6 +56,8 @@ root.render(
       <Route path='/AdminAddUpcomingMovie' element={<AdminAddUpcomingMovie />} />
       <Route path='/WatchMovie' element={<WatchMovie />} />
       <Route path='/WatchLive' element={<WatchLive />} />
+      <Route path='/EditorAccount' element={<EditorAccount />} />
+      <Route path='/PasswordManagement' element={<PasswordManagement />} />
     </Routes>
   </BrowserRouter>
 );

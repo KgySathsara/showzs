@@ -24,3 +24,5 @@ export { default as Trailers } from './Trailers/Trailers';
 export { default as MovieWatch} from './movieView/MovieWatch';
 export { default as LiveWatchEvent} from './events/LiveWatchEvent';
 export { default as LiveProfile } from './events/LiveProfile.jsx';
+export { default as EditorAccountForm } from './AdminSetting/EditorAccountForm.jsx';
+export { default as PasswordResetForm } from './AdminSetting/PasswordResetForm.jsx';
