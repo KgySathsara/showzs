@@ -4,58 +4,51 @@ import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './movieManagement.css';
 
-const AddMovieManagement = ({ onSubmit = () => {} }) => {
+const AddMovieManagement = ({ onSubmit }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [trailerList, setTrailerList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [emailForm] = Form.useForm();
 
-  const handleSubmit = () => {
+  const handleSubmit = async (values) => {
     setModalVisible(true);
   };
 
   const handleModalSubmit = async (values) => {
-    const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
-      email: values.email,
-      password: values.password,
-      full_name: values.fullName,
-      phone_number: values.phoneNumber,
-      user_type: 4,
-    });
-
-    if (userResponse.status === 201 || userResponse.status === 200) {
-      const movieValues = form.getFieldsValue();
-      const formData = new FormData();
-      formData.append('title', movieValues.title);
-      formData.append('genre', movieValues.genre);
-      formData.append('director', movieValues.director);
-      formData.append('duration', movieValues.duration);
-      formData.append('price', movieValues.price);
-      formData.append('stream_link', movieValues.streamLink);
-      formData.append('picture', fileList[0]?.originFileObj);
-      formData.append('trailer', trailerList[0]?.originFileObj);
-
-      const movieResponse = await axios.post('http://127.0.0.1:8000/api/movies', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
+    try {
+      const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
+        email: values.email,
+        password: values.password,
+        full_name: values.fullName,
+        phone_number: values.phoneNumber,
+        user_type: 4,
       });
 
-      if (movieResponse.status === 201 || movieResponse.status === 200) {
+      if (userResponse.status === 201) {
+        const movieValues = form.getFieldsValue();
+        const formData = new FormData();
+        formData.append('title', movieValues.title);
+        formData.append('genre', movieValues.genre);
+        formData.append('director', movieValues.director);
+        formData.append('duration', movieValues.duration);
+        formData.append('price', movieValues.price);
+        formData.append('stream_link', movieValues.streamLink);
+        formData.append('picture', fileList[0]?.originFileObj);
+        formData.append('trailer', trailerList[0]?.originFileObj);
+
+        await axios.post('http://127.0.0.1:8000/api/movies', formData);
         message.success('Movie added successfully');
-        message.success('User added successfully');
         form.resetFields();
         emailForm.resetFields();
         setFileList([]);
         setTrailerList([]);
         setModalVisible(false);
         onSubmit({ ...movieValues, picture: fileList, trailer: trailerList });
-      } else {
-        throw new Error(`Unexpected response code from movie API: ${movieResponse.status}`);
       }
-    } else {
-      throw new Error(`Unexpected response code from user API: ${userResponse.status}`);
+    } catch (error) {
+      message.error('Failed to add movie or user');
+      console.error('Error adding movie or user:', error);
     }
   };
 
@@ -89,12 +82,12 @@ const AddMovieManagement = ({ onSubmit = () => {} }) => {
         <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload}>
+        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload} >
           <Upload name="picture" listType="picture" beforeUpload={() => false} onChange={handleUpload}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleTrailerUpload}>
+        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleTrailerUpload} >
           <Upload name="trailer" listType="picture" beforeUpload={() => false} onChange={handleTrailerUpload}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
