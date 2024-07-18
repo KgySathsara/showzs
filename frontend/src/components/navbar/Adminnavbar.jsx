@@ -7,6 +7,7 @@ import {
   MailOutlined,
   AppstoreOutlined,
   DashboardOutlined,
+  SettingOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
@@ -82,6 +83,16 @@ const AdminNavBar = () => {
             </Menu.Item>
           </SubMenu>
         </SubMenu>
+
+        <SubMenu key="sub16" icon={<SettingOutlined />} title="Setting Section">
+            <Menu.Item key="42">
+              <Link to="/EditorAccount">Editor Account</Link>
+            </Menu.Item>
+            <Menu.Item key="43">
+              <Link to="/PasswordManagement">Password Reset</Link>
+            </Menu.Item>
+        </SubMenu>
+
       </Menu>
     </Sider>
   );
