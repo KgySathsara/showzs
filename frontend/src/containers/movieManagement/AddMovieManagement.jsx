@@ -47,7 +47,6 @@ const AddMovieManagement = ({ onSubmit }) => {
         onSubmit({ ...movieValues, picture: fileList, trailer: trailerList });
       }
     } catch (error) {
-      message.error('Failed to add movie or user');
       console.error('Error adding movie or user:', error);
     }
   };
