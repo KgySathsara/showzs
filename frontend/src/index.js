@@ -27,6 +27,7 @@ import WatchLive from './pages/LiveView/WatchLive';
 import LiveEventProfile from './pages/LiveEventProfile/LiveEventProfile';
 import EditorAccount from './pages/AdminSetting/EditorAccount';
 import PasswordManagement from './pages/AdminSetting/PasswordManagement';
+import AdminLoginOnly from './pages/AdminLoginOnly/AdminLoginOnly';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -58,6 +59,7 @@ root.render(
       <Route path='/WatchLive' element={<WatchLive />} />
       <Route path='/EditorAccount' element={<EditorAccount />} />
       <Route path='/PasswordManagement' element={<PasswordManagement />} />
+      <Route path='/AdminLoginOnly' element={<AdminLoginOnly />} />
     </Routes>
   </BrowserRouter>
 );
