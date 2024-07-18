@@ -13,24 +13,6 @@ const AddMovieManagement = () => {
     setModalVisible(true);
   };
 
-
-
-  const handleModalSubmit = async (values) => {
-    const formData = new FormData();
-    const movieValues = form.getFieldsValue();
-
-    formData.append('title', movieValues.title);
-    formData.append('genre', movieValues.genre);
-    formData.append('director', movieValues.director);
-    formData.append('duration', movieValues.duration);
-    formData.append('price', movieValues.price);
-    formData.append('stream_link', movieValues.streamLink);
-    formData.append('picture', movieValues.picture[0].originFileObj);
-    formData.append('trailer', movieValues.trailer[0].originFileObj);
-    // formData.append('email', values.email);
-    // formData.append('password', values.password);
-
-
     const handleModalSubmit = async (values) => {
       try {
         const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
@@ -69,7 +51,7 @@ const AddMovieManagement = () => {
           setModalVisible(false);
         }
 
-        message.success('Movie added successfully');
+        message.success('User added successfully');
         form.resetFields();
         emailForm.resetFields();
         setModalVisible(false);
@@ -149,6 +131,5 @@ const AddMovieManagement = () => {
       </div>
     );
   };
-}
 
 export default AddMovieManagement;
