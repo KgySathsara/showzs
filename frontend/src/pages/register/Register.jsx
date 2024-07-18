@@ -54,7 +54,7 @@ const Register = () => {
       <img src={background} alt="register-background" />
       <div className="overlay"></div>
       <div className="registration-box">
-        <h2 className="registration-heading">Registration</h2>
+        <h2 style={{ textAlign: 'center' }} className="registration-heading">Registration</h2>
         <div className='signin-container'>
           <button className="google-signin">
             <FcGoogle className="icon" /> Sign in with Google

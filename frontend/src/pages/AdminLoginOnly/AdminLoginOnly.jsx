@@ -1,10 +1,10 @@
 import React from 'react'
-import background from '../../assest/banner.jpg'
-import './login.css';
+import background from '../../assest/banner.jpg';
+import './AdminLoginOnly.css';
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const AdminLoginOnly = () => {
 
   const navigate = useNavigate();
 
@@ -53,4 +53,4 @@ const Login = () => {
   )
 }
 
-export default Login
+export default AdminLoginOnly;
