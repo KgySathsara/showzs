@@ -1,12 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './header.css';
 import { FaBook } from 'react-icons/fa'; 
 import banner from '../../assest/banner.jpg';
-import card1 from '../../assest/wisal.jpg';
-import card2 from '../../assest/youth.jpg';
 import ticket from '../../assest/ticket.jpg';
 
 const Header = () => {
+  const [movie, setMovie] = useState(null);
+  // const [event, setEvent] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchLatestData = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/movie');
+        // const eventResponse = await axios.get('http://127.0.0.1:8000/api/events');
+        setMovie(response.data);
+        // setEvent(eventResponse.data);
+      } catch (error) {
+        console.error('Failed to fetch latest data:', error);
+      }
+    };
+
+    fetchLatestData();
+  }, []);
+
+  const handleBookNowMovie = () => {
+    navigate('/Movies');
+  };
+
+  const handleBookNowEvent = () => {
+    navigate('/LiveEvents');
+  };
+
+  const handleWatchNowMovie = () => {
+    navigate('/WatchMovie');
+  };
+
+  const handleWatchNowEvent = () => {
+    navigate('/WatchLive');
+  };
+
   return (
     <section className='header'>
       <div className='header-container'>
@@ -14,30 +49,34 @@ const Header = () => {
         <img src={banner} alt="Banner" />
         <div className="card-overlay">
           <div className="card">
-            <img src={card1} alt="Wisal Card" />
-            <div className="book-now">
+            {/* <img src={`http://127.0.0.1:8000${movie.picture_url}`} alt="Latest Movie" />  */}
+            <button className="book-now" onClick={handleBookNowMovie}>
               <FaBook /> Book Now
-            </div>
+            </button>
           </div>
           <div className="card">
-            <img src={card2} alt="Youth Card" />
-            <div className="book-now">
+            {/* <img src={`http://127.0.0.1:8000${event.picture_url}`} alt="Latest Event" /> */}
+            <button className="book-now" onClick={handleBookNowEvent}>
               <FaBook /> Book Now
-            </div>
+            </button>
           </div>
         </div>
         <div className='additional-content'>
           <div className='card-description'>
             <div className='card-details'>
-              <h3>16th May - 16th June</h3>
+              <button className='watch-now' onClick={handleWatchNowMovie}>
+                Watch Now
+              </button>
             </div>
             <div className='ticket'>
-              <img src={ticket} alt='Ticket for Event 1'/>
+              <img src={ticket} alt='Ticket for Movie 1'/>
             </div>
           </div>
           <div className='card-description'>
             <div className='card-details'>
-              <h3>Watch Now</h3>
+              <button className='watch-now' onClick={handleWatchNowEvent}>
+                Watch Now
+              </button>
             </div>
             <div className='ticket'>
               <img src={ticket} alt='Ticket for Event 2'/>
