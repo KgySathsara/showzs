@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 import React, { useState } from 'react';
 import { Form, Input, Button, notification, Radio } from 'antd';
 import axios from 'axios';
@@ -14,11 +13,12 @@ const PasswordResetForm = () => {
     // Make API call to reset password
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axios.post('/api/reset-password', values);
+      const response = await axios.post('http://127.0.0.1:8000/api/reset-password', values);
       notification.success({
         message: 'Password Reset',
         description: 'Your password has been successfully reset.',
       });
+      form.resetFields();
     } catch (error) {
       notification.error({
         message: 'Password Reset Failed',
@@ -32,7 +32,7 @@ const PasswordResetForm = () => {
     // Make API call to send OTP
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axios.post('/api/send-otp', { phone: values.phone });
+      const response = await axios.post('http://127.0.0.1:8000/api/send-otp', { phone: values.phone });
       setOtpSent(true);
       notification.success({
         message: 'OTP Sent',
@@ -90,6 +90,7 @@ const PasswordResetForm = () => {
             <Form.Item
               name="confirm_password"
               label="Confirm New Password"
+              dependencies={['new_password']}
               rules={[
                 { required: true, message: 'Please confirm your new password!' },
                 ({ getFieldValue }) => ({
@@ -134,6 +135,7 @@ const PasswordResetForm = () => {
             <Form.Item
               name="confirm_password"
               label="Confirm New Password"
+              dependencies={['new_password']}
               rules={[
                 { required: true, message: 'Please confirm your new password!' },
                 ({ getFieldValue }) => ({
