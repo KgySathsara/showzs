@@ -60,10 +60,6 @@
   transition: all 0.3s ease;
 }
 
-.card:hover img {
-  filter: blur(5px);
-}
-
 .card .book-now {
   position: absolute;
   top: 50%;
@@ -79,6 +75,18 @@
   display: none;
   align-items: center;
   gap: 10px;
+}
+
+.header .watch-now {
+  background-color: #66191a;
+  border: none;
+  padding: 10px 20px;
+  margin: 10px 0;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card:hover .book-now {
