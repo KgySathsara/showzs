@@ -62,6 +62,9 @@ const AdminNavBar = () => {
           <Menu.Item key="25">
             <Link to="/AdminAddUpcomingMovie">Add Up-Comming Movies</Link>
           </Menu.Item>
+          <Menu.Item key="26">
+            <Link to="/AdminEditUpcomingMovie">Edit/Delete Up-Comming Movies</Link>
+          </Menu.Item>
         </SubMenu>
 
         <SubMenu key="sub11" icon={<MailOutlined />} title="User Messages">
