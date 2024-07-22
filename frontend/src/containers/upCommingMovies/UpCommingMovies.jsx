@@ -24,7 +24,7 @@ const UpCommingMovies = () => {
       <div className='now-showing-container'>
         {upcomingMovies.map(movie => (
           <div key={movie.id} className='movie-card animate__animated animate__fadeInUp'>
-            <img src={`http://localhost:8000/images/${movie.image}`} alt={movie.title} />
+            <img src={`http://localhost:8000/storage/images/${movie.image}`} alt={movie.title} />
             <div className='movie-info'>
               <h3>{movie.title}</h3>
               <p>{movie.description}</p>

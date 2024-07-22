@@ -10,9 +10,16 @@ const { Option } = Select;
 const AdminUpcomingMovies = () => {
   const [form] = Form.useForm();
   const [previewImage, setPreviewImage] = useState(null);
-  const [formData, setFormData] = useState(null);
+  const [fileList, setFileList] = useState([]);
 
   const handleImagePreview = (file) => {
+    console.log('File received for preview:', file);
+
+    if (!(file instanceof Blob)) {
+      console.error('Expected Blob or File but received:', file);
+      return;
+    }
+
     const reader = new FileReader();
     reader.onload = () => {
       setPreviewImage(reader.result);
@@ -23,8 +30,8 @@ const AdminUpcomingMovies = () => {
   const onFinish = async (values) => {
     const formData = new FormData();
     formData.append('title', values.title);
-    if (values.image && values.image[0]) {
-      formData.append('image', values.image[0].originFileObj);
+    if (fileList.length > 0 && fileList[0].originFileObj) {
+      formData.append('image', fileList[0].originFileObj);
     }
     formData.append('date', values.date.format('YYYY-MM-DD'));
     formData.append('duration', values.duration);
@@ -41,7 +48,7 @@ const AdminUpcomingMovies = () => {
       message.success('Movie added successfully');
       form.resetFields();
       setPreviewImage(null);
-      setFormData(null);
+      setFileList([]);
     } catch (error) {
       console.error('Error adding movie:', error);
       if (error.response && error.response.data && error.response.data.errors) {
@@ -57,20 +64,11 @@ const AdminUpcomingMovies = () => {
     }
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
-
-  const handleChange = (info) => {
-    if (info.file.status === 'done') {
-      // Get the file for preview
-      const file = info.file.originFileObj;
-      handleImagePreview(file);
+  const handleChange = ({ file, fileList }) => {
+    if (file.status !== 'uploading' && file.originFileObj) {
+      handleImagePreview(file.originFileObj);
     }
-  };
-
-  const handleFormChange = (_, allValues) => {
-    setFormData(allValues);
+    setFileList(fileList);
   };
 
   return (
@@ -81,8 +79,6 @@ const AdminUpcomingMovies = () => {
         name="add-movie"
         layout="vertical"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        onValuesChange={handleFormChange}
       >
         <Form.Item
           name="title"
@@ -104,7 +100,7 @@ const AdminUpcomingMovies = () => {
           >
             <Button icon={<UploadOutlined />}>Upload Movie Image</Button>
           </Upload>
-          {previewImage && <img src={previewImage} alt="Image Preview" style={{ marginTop: 16, maxWidth: '100%' }} />}
+          {previewImage && <img src={previewImage} alt="Preview" style={{ marginTop: 16, maxWidth: '100%' }} />}
         </Form.Item>
         <Form.Item
           name="date"
@@ -147,18 +143,6 @@ const AdminUpcomingMovies = () => {
           </Button>
         </Form.Item>
       </Form>
-      {formData && (
-        <div className="preview-section">
-          <h3>Preview</h3>
-          <p><strong>Title:</strong> {formData.title}</p>
-          {/* {previewImage && <img src={previewImage} alt="Image Preview" style={{ marginTop: 16, maxWidth: '100%' }} />} */}
-          <p><strong>Release Date:</strong> {formData.date && formData.date.format('YYYY-MM-DD')}</p>
-          <p><strong>Duration:</strong> {formData.duration}</p>
-          <p><strong>Category:</strong> {formData.category}</p>
-          <p><strong>Description:</strong> {formData.description}</p>
-          <p><strong>Price:</strong> ${formData.price}</p>
-        </div>
-      )}
     </section>
   );
 }

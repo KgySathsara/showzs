@@ -16,19 +16,21 @@ const AdminEditUpcomingMovie = () => {
   const [isMovieSelected, setIsMovieSelected] = useState(false);
 
   useEffect(() => {
+
+    const fetchMovies = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8000/api/upcoming-movies');
+        console.log('Movie data:', response.data);
+        setMovies(response.data);
+      } catch (error) {
+        console.error('Failed to fetch movies:', error);
+      }
+    };
+
     fetchMovies();
   }, []);
 
-  const fetchMovies = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:8000/api/upcoming-movies');
-      setMovies(response.data);
-    } catch (error) {
-      console.error('Failed to fetch movies:', error);
-    }
-  };
-
-  const handleMovieChange = async (movieId) => {
+  const fetchMovie = async (movieId) => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/upcoming-movies/${movieId}`);
       const movieData = response.data;
@@ -40,76 +42,30 @@ const AdminEditUpcomingMovie = () => {
         category: movieData.category,
         description: movieData.description,
         price: movieData.price,
+        image: movieData.image ? [{ url: movieData.image }] : [],
       });
-      setPreviewImage(null);
+      setPreviewImage(movieData.image ? movieData.image : null);
       setIsMovieSelected(true);
     } catch (error) {
       console.error('Failed to fetch movie data:', error);
     }
   };
 
-  const handleChange = ({ file }) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      setPreviewImage(reader.result);
-    };
-    reader.readAsDataURL(file.originFileObj);
-  };
-
-  const onFinish = async (values) => {
-    const formData = new FormData();
-    formData.append('title', values.title);
-    if (values.image && values.image[0]) {
-      formData.append('image', values.image[0].originFileObj);
-    }
-    formData.append('date', values.date.format('YYYY-MM-DD'));
-    formData.append('duration', values.duration);
-    formData.append('category', values.category);
-    formData.append('description', values.description);
-    formData.append('price', values.price);
-
-    try {
-      await axios.post('http://127.0.0.1:8000/api/upcoming-movies', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      message.success('Movie added successfully');
-      form.resetFields();
-      setPreviewImage(null);
-      fetchMovies();
-    } catch (error) {
-      console.error('Error adding movie:', error);
-      message.error('Failed to add movie');
-    }
-  };
-
-  const onFinishEdit = async (values) => {
-    if (!selectedMovie) return;
-    const formData = new FormData();
-    formData.append('title', values.title);
-    if (values.image && values.image[0]) {
-      formData.append('image', values.image[0].originFileObj);
-    }
-    formData.append('date', values.date.format('YYYY-MM-DD'));
-    formData.append('duration', values.duration);
-    formData.append('category', values.category);
-    formData.append('description', values.description);
-    formData.append('price', values.price);
-
-    try {
-      await axios.put(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      message.success('Movie updated successfully');
-      form.resetFields();
-      setSelectedMovie(null);
-      fetchMovies();
-    } catch (error) {
-      console.error('Error updating movie:', error);
-      message.error('Failed to update movie');
+  const handleSubmit = async (values) => {
+    if (selectedMovie) {
+      try {
+        const formattedValues = {
+          ...values,
+          date: values.date ? moment(values.date).format('YYYY-MM-DD HH:mm:ss') : null,
+        };
+        const response = await axios.put(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, formattedValues);
+        console.log('Movie updated:', response.data);
+        message.success('Movie updated successfully');
+        setIsMovieSelected(false);
+      } catch (error) {
+        console.error('Failed to update movie:', error);
+        message.error('Failed to update movie');
+      }
     }
   };
 
@@ -128,19 +84,16 @@ const AdminEditUpcomingMovie = () => {
     }
   };
 
-  const handleFormChange = () => {
-    setIsMovieSelected(false);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.error('Failed:', errorInfo);
+  const handleMovieChange = (value) => {
+    console.log('Selected movie:', value);
+    fetchMovie(value);
   };
 
   return (
     <section className='admin-upcoming-movies'>
       <h2>Edit or Delete Upcoming Movie</h2>
       <div className="select-item-container">
-        <Form.Item name="category" label="Film" rules={[{ required: true, message: 'Please select a film' }]}>
+        <Form.Item name="category" label="Upcoming Movie" rules={[{ required: true, message: 'Please select a Upcoming Movie' }]}>
           <Select onChange={handleMovieChange} placeholder="Select Upcoming Movie">
             {movies.map(movie => (
               <Option key={movie.id} value={movie.id}>{movie.title}</Option>
@@ -148,50 +101,24 @@ const AdminEditUpcomingMovie = () => {
           </Select>
         </Form.Item>
       </div>
-      <Form
-        form={form}
-        name="edit-movie"
-        layout="vertical"
-        onFinish={isMovieSelected ? onFinishEdit : onFinish}
-        onFinishFailed={onFinishFailed}
-        onValuesChange={handleFormChange}
-      >
-        <Form.Item
-          name="title"
-          rules={[{ required: true, message: 'Please input the movie title!' }]}
-        >
-          <Input placeholder='Movie Title' />
+      <Form form={form} name="edit-movie" layout="vertical" onFinish={handleSubmit} >
+        <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter the movie title' }]}>
+          <Input />
         </Form.Item>
         <Form.Item
-          name="image"
-          rules={[{ required: true, message: 'Please upload the movie image!' }]}
-          valuePropName="fileList"
-          getValueFromEvent={(e) => Array.isArray(e) ? e : e && e.fileList}
-        >
-          <Upload
-            name="image"
-            listType="picture"
-            beforeUpload={() => false}
-            onChange={handleChange}
-          >
-            <Button icon={<UploadOutlined />}>Upload Movie Image</Button>
-          </Upload>
-          {previewImage && <img src={previewImage} alt="Image Preview" style={{ marginTop: 16, maxWidth: '100%' }} />}
-        </Form.Item>
-        <Form.Item
-          name="date"
+          name="date" label="Release Date"
           rules={[{ required: true, message: 'Please select the release date!' }]}
         >
           <DatePicker placeholder='Select Release Date' />
         </Form.Item>
         <Form.Item
-          name="duration"
+          name="duration" label="Duration"
           rules={[{ required: true, message: 'Please input the movie duration!' }]}
         >
-          <Input placeholder='Duration (e.g., 2h 30m)' />
+          <Input />
         </Form.Item>
         <Form.Item
-          name="category"
+          name="category" label="Category"
           rules={[{ required: true, message: 'Please select the movie category!' }]}
         >
           <Select placeholder='Select Category'>
@@ -212,6 +139,11 @@ const AdminEditUpcomingMovie = () => {
           rules={[{ required: true, message: 'Please input the ticket price!' }]}
         >
           <InputNumber min={0} placeholder='Ticket Price' />
+        </Form.Item>
+        <Form.Item name="picture" label="Picture">
+          <Upload name="picture" listType="picture" beforeUpload={() => false}>
+            <Button icon={<UploadOutlined />}>Click to upload</Button>
+          </Upload>
         </Form.Item>
         <div className="form-buttons">
           <Button type="primary" className='btn-movie-management' htmlType="submit">
