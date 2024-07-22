@@ -8,16 +8,16 @@ import ticket from '../../assest/ticket.jpg';
 
 const Header = () => {
   const [movie, setMovie] = useState(null);
-  // const [event, setEvent] = useState(null);
+  const [event, setEvent] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchLatestData = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/movie');
-        // const eventResponse = await axios.get('http://127.0.0.1:8000/api/events');
-        setMovie(response.data);
-        // setEvent(eventResponse.data);
+        const movieResponse = await axios.get('http://127.0.0.1:8000/api/movie');
+        const eventResponse = await axios.get('http://localhost:8000/api/live-events/showLastEvent');
+        setMovie(movieResponse.data);
+        setEvent(eventResponse.data);
       } catch (error) {
         console.error('Failed to fetch latest data:', error);
       }
@@ -48,18 +48,22 @@ const Header = () => {
         <div className="overlay"></div>
         <img src={banner} alt="Banner" />
         <div className="card-overlay">
-          <div className="card">
-            {/* <img src={`http://127.0.0.1:8000${movie.picture_url}`} alt="Latest Movie" />  */}
-            <button className="book-now" onClick={handleBookNowMovie}>
-              <FaBook /> Book Now
-            </button>
-          </div>
-          <div className="card">
-            {/* <img src={`http://127.0.0.1:8000${event.picture_url}`} alt="Latest Event" /> */}
-            <button className="book-now" onClick={handleBookNowEvent}>
-              <FaBook /> Book Now
-            </button>
-          </div>
+          {movie && (
+            <div className="card">
+              <img src={`http://127.0.0.1:8000${movie.picture_url}`} alt="Latest Movie" /> 
+              <button className="book-now" onClick={handleBookNowMovie}>
+                <FaBook /> Book Now
+              </button>
+            </div>
+          )}
+          {event && (
+            <div className="card">
+              <img src={`http://localhost:8000/images/${event.coverImage}`} alt="Latest Event" />
+              <button className="book-now" onClick={handleBookNowEvent}>
+                <FaBook /> Book Now
+              </button>
+            </div>
+          )}
         </div>
         <div className='additional-content'>
           <div className='card-description'>

@@ -28,6 +28,7 @@ import LiveEventProfile from './pages/LiveEventProfile/LiveEventProfile';
 import EditorAccount from './pages/AdminSetting/EditorAccount';
 import PasswordManagement from './pages/AdminSetting/PasswordManagement';
 import AdminLoginOnly from './pages/AdminLoginOnly/AdminLoginOnly';
+import AdminEditUpcomingMovie from './pages/AdminNewsManagement/AdminEditUpcomingMovie';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -60,6 +61,7 @@ root.render(
       <Route path='/EditorAccount' element={<EditorAccount />} />
       <Route path='/PasswordManagement' element={<PasswordManagement />} />
       <Route path='/AdminLoginOnly' element={<AdminLoginOnly />} />
+      <Route path='/AdminEditUpcomingMovie' element={<AdminEditUpcomingMovie />} />
     </Routes>
   </BrowserRouter>
 );

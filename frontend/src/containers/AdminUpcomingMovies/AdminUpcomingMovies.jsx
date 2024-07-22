@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './AdminUpcomingMovies.css';
 import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -9,6 +9,16 @@ const { Option } = Select;
 
 const AdminUpcomingMovies = () => {
   const [form] = Form.useForm();
+  const [previewImage, setPreviewImage] = useState(null);
+  const [formData, setFormData] = useState(null);
+
+  const handleImagePreview = (file) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      setPreviewImage(reader.result);
+    };
+    reader.readAsDataURL(file);
+  };
 
   const onFinish = async (values) => {
     const formData = new FormData();
@@ -30,6 +40,8 @@ const AdminUpcomingMovies = () => {
       });
       message.success('Movie added successfully');
       form.resetFields();
+      setPreviewImage(null);
+      setFormData(null);
     } catch (error) {
       console.error('Error adding movie:', error);
       if (error.response && error.response.data && error.response.data.errors) {
@@ -49,6 +61,18 @@ const AdminUpcomingMovies = () => {
     console.log('Failed:', errorInfo);
   };
 
+  const handleChange = (info) => {
+    if (info.file.status === 'done') {
+      // Get the file for preview
+      const file = info.file.originFileObj;
+      handleImagePreview(file);
+    }
+  };
+
+  const handleFormChange = (_, allValues) => {
+    setFormData(allValues);
+  };
+
   return (
     <section className='admin-upcoming-movies'>
       <h2>Add Upcoming Movie</h2>
@@ -58,6 +82,7 @@ const AdminUpcomingMovies = () => {
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
+        onValuesChange={handleFormChange}
       >
         <Form.Item
           name="title"
@@ -74,10 +99,12 @@ const AdminUpcomingMovies = () => {
           <Upload
             name="image"
             listType="picture"
-            beforeUpload={() => false} 
+            beforeUpload={() => false}
+            onChange={handleChange}
           >
             <Button icon={<UploadOutlined />}>Upload Movie Image</Button>
           </Upload>
+          {previewImage && <img src={previewImage} alt="Image Preview" style={{ marginTop: 16, maxWidth: '100%' }} />}
         </Form.Item>
         <Form.Item
           name="date"
@@ -120,6 +147,18 @@ const AdminUpcomingMovies = () => {
           </Button>
         </Form.Item>
       </Form>
+      {formData && (
+        <div className="preview-section">
+          <h3>Preview</h3>
+          <p><strong>Title:</strong> {formData.title}</p>
+          {/* {previewImage && <img src={previewImage} alt="Image Preview" style={{ marginTop: 16, maxWidth: '100%' }} />} */}
+          <p><strong>Release Date:</strong> {formData.date && formData.date.format('YYYY-MM-DD')}</p>
+          <p><strong>Duration:</strong> {formData.duration}</p>
+          <p><strong>Category:</strong> {formData.category}</p>
+          <p><strong>Description:</strong> {formData.description}</p>
+          <p><strong>Price:</strong> ${formData.price}</p>
+        </div>
+      )}
     </section>
   );
 }
