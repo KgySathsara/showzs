@@ -50,7 +50,7 @@ const Header = () => {
         <div className="card-overlay">
           {movie && (
             <div className="card">
-              <img src={`http://127.0.0.1:8000${movie.picture_url}`} alt="Latest Movie" /> 
+              <img src={`http://127.0.0.1:8000/images/${movie.picture}`} alt="Latest Movie" /> 
               <button className="book-now" onClick={handleBookNowMovie}>
                 <FaBook /> Book Now
               </button>

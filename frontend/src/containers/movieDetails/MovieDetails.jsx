@@ -38,8 +38,8 @@ const MovieDetails = () => {
       </div>
       <div className='movie-poster'>
         <div className="poster-container">
-          {movie.picture_url ? (
-            <img src={`http://127.0.0.1:8000${movie.picture_url}`} alt={movie.title} />
+          {movie.picture ? (
+            <img src={`http://127.0.0.1:8000/images/${movie.picture}`} alt={movie.title} />
           ) : null}
           <div className="movie-details-overlay"> 
             <h2>{`${movie.title} - The Movie` || ''}</h2>
