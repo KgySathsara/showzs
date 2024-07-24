@@ -7,30 +7,27 @@ const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
 
   useEffect(() => {
-    const fetchMovie = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/movie');
+    axios.get('http://127.0.0.1:8000/api/movie')
+      .then(response => {
         console.log('Movie data:', response.data);
         setMovie(response.data);
-      } catch (error) {
+      })
+      .catch(error => {
         console.error('Failed to fetch movie data:', error);
-      }
-    };
-
-    fetchMovie();
+      });
   }, []);
 
   if (!movie) {
-    return null; 
+    return <p>No movie details available.</p>;
   }
 
   return (
     <section className='movie-details'>
       <div className='movie-info'>
-        <h1>{movie.title || ''}</h1>
-        <p>{`Directed by: ${movie.director}` || ''}</p>
-        <p>{`Genre: ${movie.genre}` || ''} </p>
-        <p>{`Duration: ${movie.duration} Min` || ''}</p>
+        <h1>{movie.title}</h1>
+        <p>{`Directed by: ${movie.director}`}</p>
+        <p>{`Genre: ${movie.genre}`}</p>
+        <p>{`Duration: ${movie.duration} Min`}</p>
         <div className="movie-actions">
           <img src={ticket} alt="Ticket" className='ticketImg' />
           <button className="watch-trailer">Watch Trailer</button>
@@ -38,19 +35,19 @@ const MovieDetails = () => {
       </div>
       <div className='movie-poster'>
         <div className="poster-container">
-          {movie.picture ? (
+          {movie.picture && (
             <img src={`http://127.0.0.1:8000/images/${movie.picture}`} alt={movie.title} />
-          ) : null}
-          <div className="movie-details-overlay"> 
-            <h2>{`${movie.title} - The Movie` || ''}</h2>
-            <p>{`Directed by ${movie.director}` || ''}</p>
-            <p>{`Genre: ${movie.genre}` || ''} </p>
-            <p>{`Duration: ${movie.duration} Min` || ''}</p>
+          )}
+          <div className="movie-details-overlay">
+            <h2>{`${movie.title} - The Movie`}</h2>
+            <p>{`Directed by ${movie.director}`}</p>
+            <p>{`Genre: ${movie.genre}`}</p>
+            <p>{`Duration: ${movie.duration} Min`}</p>
           </div>
         </div>
       </div>
     </section>
   );
-}
+};
 
 export default MovieDetails;
