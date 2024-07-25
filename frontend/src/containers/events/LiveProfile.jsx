@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import visalAdare from '../../assest/visalAdareTrailer.mp4';
 import { Form, Input, Card } from 'antd';
 
 const LiveEventProfile = () => {
@@ -38,7 +37,9 @@ const LiveEventProfile = () => {
       <div className="movie-management-container">
         <div className="video-container">
           <h3>Live Event</h3>
-          <video controls src={visalAdare} alt="Visal-Adare-Trailer" />
+          {eventData && (
+            <img src={`http://localhost:8000/images/${eventData.coverImage}`} alt={eventData.title} />
+          )}
         </div>
         <div className='movie-profile-management'>
           <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
@@ -51,7 +52,7 @@ const LiveEventProfile = () => {
             <Form.Item name="date" label="Event Date" rules={[{ required: true, message: 'Please enter the Date' }]}>
               <Input readOnly />
             </Form.Item>
-            <Form.Item  name="time" label="Event Time" rules={[{ required: true, message: 'Please select the event time' }]}>
+            <Form.Item name="time" label="Event Time" rules={[{ required: true, message: 'Please select the event time' }]}>
               <Input readOnly />
             </Form.Item>
             <Form.Item name="ticketPrice" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
