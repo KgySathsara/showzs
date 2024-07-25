@@ -1,5 +1,5 @@
 import React from 'react';
-import { Footer, Events, Payment } from '../../containers';
+import { Footer, Events, Paybuttons } from '../../containers';
 import { Navbar } from '../../components';
 // import './LiveEvents.css';
 
@@ -11,7 +11,7 @@ const LiveEvents = () => {
       </div>
       <div className='live-events-content'>
         <Events />
-        <Payment />
+        <Paybuttons />
       </div>
       <Footer />
     </div>
