@@ -48,8 +48,8 @@ const MovieProfileManagement = () => {
       <div className="movie-management-container">
         <div className="video-container">
           <h3>Trailer</h3>
-          {movie && movie.trailer && (
-            <video controls src={movie.trailer} alt="Movie Trailer" />
+          {movie && (
+            <video controls src={`http://localhost:8000/trailers/${movie.trailer}`} alt="Movie Trailer" />
           )}
         </div>
         <div className='movie-profile-management'>
