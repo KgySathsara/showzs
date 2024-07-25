@@ -136,10 +136,16 @@ body{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    margin-top: 80px;
     z-index: 1;
     border: 1px solid #ffffff;
   }
+
+  .signup-button{
+    display: flex;
+    flex-direction: column;
+    margin-top: 8%;
+}
+
   
  /* Media Queries */
 

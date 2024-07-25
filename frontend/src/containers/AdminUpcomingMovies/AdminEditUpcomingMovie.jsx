@@ -11,7 +11,6 @@ const { Option } = Select;
 const AdminEditUpcomingMovie = () => {
   const [form] = Form.useForm();
   const [movies, setMovies] = useState([]);
-  const [previewImage, setPreviewImage] = useState(null);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isMovieSelected, setIsMovieSelected] = useState(false);
 
@@ -44,7 +43,6 @@ const AdminEditUpcomingMovie = () => {
         price: movieData.price,
         image: movieData.image ? [{ url: movieData.image }] : [],
       });
-      setPreviewImage(movieData.image ? movieData.image : null);
       setIsMovieSelected(true);
     } catch (error) {
       console.error('Failed to fetch movie data:', error);
