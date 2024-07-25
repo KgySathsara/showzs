@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './nowShowing.css';
+import './nowShowing.css'
 
 const NowShowing = () => {
   const [movies, setMovies] = useState([]);
@@ -27,7 +27,7 @@ const NowShowing = () => {
   return (
     <section className="now-showing">
       <div className="now-showing-container">
-        <h1>Now Showing</h1>
+        <h2>Now Showing</h2>
         <div className="movie-container">
           {movies.length > 0 ? (
             movies.map(movie => (

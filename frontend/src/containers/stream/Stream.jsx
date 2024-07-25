@@ -6,18 +6,30 @@ const Stream = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    const fetchMovies = async () => {
-      try {
-        const response = await axios.get('http://127.0.0.1:8000/api/movies');
-        setMovies(response.data);
-        
-      } catch (error) {
-        console.error('Failed to fetch movies:', error);
-      }
-    };
-
-    fetchMovies();
+    axios.get('http://localhost:8000/api/movies')
+      .then(response => {
+        console.log('API response:', response.data); // Log the response
+        if (response.status === 200) {
+          let responseData = response.data;
+  
+          // Ensure responseData is an array
+          if (!Array.isArray(responseData)) {
+            responseData = [responseData];
+          }
+  
+          // Sort by date descending
+          const sortedMovies = responseData.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 2);
+  
+          setMovies(sortedMovies);
+        } else {
+          console.error('No movies found:', response.data.error);
+        }
+      })
+      .catch(error => {
+        console.error('There was an error fetching the movies!', error);
+      });
   }, []);
+  
 
   return (
     <section className='stream'>
