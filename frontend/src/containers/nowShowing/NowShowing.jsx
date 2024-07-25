@@ -6,9 +6,18 @@ const NowShowing = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/movies/last-two')
+    axios.get('http://127.0.0.1:8000/api/movies')
       .then(response => {
-        setMovies(response.data);
+        console.log('API response:', response.data); // Log the response
+        let responseData = response.data;
+        if (!Array.isArray(responseData)) {
+          responseData = [responseData];
+        }
+
+        // Sort by date descending and take the first 2 movies
+        const sortedMovies = responseData.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 2);
+
+        setMovies(sortedMovies);
       })
       .catch(error => {
         console.error('There was an error fetching the movies!', error);
@@ -16,24 +25,30 @@ const NowShowing = () => {
   }, []);
 
   return (
-    <section className='now-showing'>
-      <h2>Now Showing</h2>
-      <div className='now-showing-container'>
-        {movies.map((movie, index) => (
-          <div key={index} className={`movie-card animate__animated ${index % 2 === 0 ? 'animate__fadeInLeft' : 'animate__fadeInRight'}`}>
-            <img src={movie.picture_url} alt={`${movie.title} Poster`} />
-            <div className='movie-info'>
-              <h3>{movie.title}</h3>
-              <p>{movie.genre} - {movie.director}</p>
-              <p>Duration: {movie.duration} minutes</p>
-              <p>Price: ${movie.price}</p>
-              <p>Stream: <a href={movie.stream_link} target="_blank" rel="noopener noreferrer">{movie.stream_link}</a></p>
-            </div>
-          </div>
-        ))}
+    <section className="now-showing">
+      <div className="now-showing-container">
+        <h1>Now Showing</h1>
+        <div className="movie-container">
+          {movies.length > 0 ? (
+            movies.map(movie => (
+              <div className="movie-card animate__animated animate__fadeInUp" key={movie.id}>
+                <img src={`http://127.0.0.1:8000/images/${movie.picture}`} alt={movie.title} />
+                <div className="movie-info">
+                  <h3>{movie.title}</h3>
+                  <p>{movie.genre} - {movie.director}</p>
+                  <p>Duration: {movie.duration} minutes</p>
+                  <p>Price: ${movie.price}</p>
+                  <p>Stream: <a href={movie.stream_link} target="_blank" rel="noopener noreferrer">{movie.stream_link}</a></p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No movies available.</p>
+          )}
+        </div>
       </div>
     </section>
   );
-}
+};
 
 export default NowShowing;
