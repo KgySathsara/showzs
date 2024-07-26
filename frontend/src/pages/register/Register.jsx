@@ -80,6 +80,12 @@ const Register = () => {
             <label htmlFor="terms">
               I agree to the <a href="/">terms</a> of use and <a href="/">privacy policy</a>
             </label>
+
+            <div className='signup-button'>
+              <label htmlFor="terms">
+                Already have an account ?<a href="/Login">Sign in</a>
+              </label>
+            </div>
           </div>
           <button type="submit" className="submit-button">SIGN UP</button>
         </form>
