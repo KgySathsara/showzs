@@ -55,7 +55,7 @@ const Login = () => {
       <div className="overlay"></div>
       <img src={background} alt="login-background" />
       <div className="login-box">
-        <h2 className="login-heading">Login</h2>
+        <h2 style={{ textAlign: 'center' }} className="login-heading">Login</h2>
         <div className="login-container">
           <button className="google-login">
             <FcGoogle className="icon" /> Sign in with Google
