@@ -8,47 +8,33 @@ const { TextArea } = Input;
 const { Option } = Select;
 
 const AdminAddNewManagement = () => {
-  const [formData, setFormData] = useState({});
-  const [fileList, setFileList] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [trailerList, setTrailerList] = useState([]);
 
-  const onFinish = (values) => {
-    setLoading(true);
+  const onFinish = async (values) => {
     const formData = new FormData();
     formData.append('title', values.title);
-    formData.append('image', fileList[0].originFileObj);
+    formData.append('trailer', trailerList[0]?.originFileObj);
     formData.append('date', values.date.format('YYYY-MM-DD'));
     formData.append('duration', values.duration);
     formData.append('category', values.category);
     formData.append('description', values.description);
     formData.append('price', values.price);
 
-    axios.post('http://localhost:8000/api/news', formData)
-      .then(response => {
-        message.success('News added successfully!');
-        setLoading(false);
-        setFormData({});
-        setFileList([]);
-      })
-      .catch(error => {
-        message.error('Failed to add news. Please try again.');
-        setLoading(false);
+    try {
+      const response = await axios.post('http://localhost:8000/api/news', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
-  };
-
-  const beforeUpload = (file) => {
-    const isImageOrVideo = file.type.startsWith('image/') || file.type.startsWith('video/');
-    if (!isImageOrVideo) {
-      message.error('You can only upload image or video files!');
+      message.success('News added successfully!');
+      setTrailerList([]);
+    } catch (error) {
+      console.error('Error adding news:', error.response?.data || error.message);
+      message.error('Failed to add news. Please try again.');
     }
-    return isImageOrVideo || Upload.LIST_IGNORE;
   };
 
-  const handleFileChange = ({ fileList }) => setFileList(fileList);
+  const handleFileChange = ({ fileList }) => setTrailerList(fileList);
 
   return (
     <section className='admin-upcoming-movies'>
@@ -57,7 +43,6 @@ const AdminAddNewManagement = () => {
         name="add-news"
         layout="vertical"
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
       >
         <Form.Item
           name="title"
@@ -66,13 +51,13 @@ const AdminAddNewManagement = () => {
           <Input placeholder='News Title' />
         </Form.Item>
         <Form.Item
-          name="image"
+          name="trailer"
           rules={[{ required: true, message: 'Please upload the trailer!' }]}
         >
           <Upload
-            name="image"
+            name="trailer"
             listType="picture"
-            beforeUpload={beforeUpload}
+            beforeUpload={() => false}
             onChange={handleFileChange}
           >
             <Button icon={<UploadOutlined />}>Upload Trailer</Button>
@@ -114,32 +99,11 @@ const AdminAddNewManagement = () => {
           <InputNumber min={0} placeholder='Ticket Price' />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit" loading={loading}>
+          <Button type="primary" htmlType="submit">
             Add News
           </Button>
         </Form.Item>
       </Form>
-
-      <div className="form-preview">
-        {formData.title && <p><strong>Title:</strong> {formData.title}</p>}
-        {fileList.length > 0 && (
-          <div>
-            {fileList[0].type.startsWith('image/') ? (
-              <img src={URL.createObjectURL(fileList[0].originFileObj)} alt="Uploaded" style={{ width: '150px' }} />
-            ) : (
-              <video width="300" controls>
-                <source src={URL.createObjectURL(fileList[0].originFileObj)} type={fileList[0].type} />
-                Your browser does not support the video tag.
-              </video>
-            )}
-          </div>
-        )}
-        {formData.date && <p><strong>Release Date:</strong> {formData.date.format('YYYY-MM-DD')}</p>}
-        {formData.duration && <p><strong>Duration:</strong> {formData.duration}</p>}
-        {formData.category && <p><strong>Category:</strong> {formData.category}</p>}
-        {formData.description && <p><strong>Description:</strong> {formData.description}</p>}
-        {formData.price !== undefined && <p><strong>Ticket Price:</strong> ${formData.price}</p>}
-      </div>
     </section>
   );
 };
