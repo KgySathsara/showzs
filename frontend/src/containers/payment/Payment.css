@@ -1,3 +1,20 @@
+.centered-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.movie-actions {
+  text-align: center;
+}
+
+.frame {
+  border: 3px solid #000; /* Adjust the color and width as needed */
+  padding: 40px; /* Adjust the padding as needed */
+  border-radius: 10px; /* Optional: for rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: for a subtle shadow */
+}
+
 .payment-container {
   background-color: #f2f2f2;
   padding: 40px;
