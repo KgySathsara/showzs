@@ -23,7 +23,7 @@ const AdminAddNewManagement = () => {
     formData.append('description', values.description);
     formData.append('price', values.price);
 
-    axios.post('https://streamingplatform.com/api/add-news', formData)
+    axios.post('http://localhost:8000/api/news', formData)
       .then(response => {
         message.success('News added successfully!');
         setLoading(false);
@@ -54,20 +54,20 @@ const AdminAddNewManagement = () => {
     <section className='admin-upcoming-movies'>
       <h2>Add News</h2>
       <Form
-        name="add-movie"
+        name="add-news"
         layout="vertical"
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
       >
         <Form.Item
           name="title"
-          rules={[{ required: true, message: 'Please input the movie title!' }]}
+          rules={[{ required: true, message: 'Please input the news title!' }]}
         >
-          <Input placeholder='Movie Title' />
+          <Input placeholder='News Title' />
         </Form.Item>
         <Form.Item
           name="image"
-          rules={[{ required: true, message: 'Please upload the movie image or video!' }]}
+          rules={[{ required: true, message: 'Please upload the trailer!' }]}
         >
           <Upload
             name="image"
@@ -75,7 +75,7 @@ const AdminAddNewManagement = () => {
             beforeUpload={beforeUpload}
             onChange={handleFileChange}
           >
-            <Button icon={<UploadOutlined />}>Upload Movie Media</Button>
+            <Button icon={<UploadOutlined />}>Upload Trailer</Button>
           </Upload>
         </Form.Item>
         <Form.Item
@@ -86,13 +86,13 @@ const AdminAddNewManagement = () => {
         </Form.Item>
         <Form.Item
           name="duration"
-          rules={[{ required: true, message: 'Please input the movie duration!' }]}
+          rules={[{ required: true, message: 'Please input the news duration!' }]}
         >
           <Input placeholder='Duration (e.g., 2h 30m)' />
         </Form.Item>
         <Form.Item
           name="category"
-          rules={[{ required: true, message: 'Please select the movie category!' }]}
+          rules={[{ required: true, message: 'Please select the news category!' }]}
         >
           <Select placeholder='Select Category'>
             <Option value="Action">Action</Option>
@@ -103,7 +103,7 @@ const AdminAddNewManagement = () => {
         </Form.Item>
         <Form.Item
           name="description"
-          rules={[{ required: true, message: 'Please input the movie description!' }]}
+          rules={[{ required: true, message: 'Please input the news description!' }]}
         >
           <TextArea placeholder='Description' rows={4} />
         </Form.Item>
@@ -142,6 +142,6 @@ const AdminAddNewManagement = () => {
       </div>
     </section>
   );
-}
+};
 
 export default AdminAddNewManagement;

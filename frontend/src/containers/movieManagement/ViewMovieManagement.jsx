@@ -17,7 +17,7 @@ const ViewMovieManagement = () => {
     const fetchMovies = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/movies');
-        console.log('Movie data:', response.data); 
+        console.log('Movie data:', response.data);
         setMovies(response.data);
       } catch (error) {
         console.error('Failed to fetch movies:', error);
@@ -30,7 +30,7 @@ const ViewMovieManagement = () => {
   const fetchMovie = async (movieId) => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/movies/${movieId}`);
-      console.log('Movie data:', response.data); 
+      console.log('Movie data:', response.data);
       const movieData = response.data;
       const formData = {
         title: movieData.title,

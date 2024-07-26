@@ -8,6 +8,7 @@ import {
   AppstoreOutlined,
   DashboardOutlined,
   SettingOutlined,
+  ForwardOutlined,
 } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
@@ -59,13 +60,21 @@ const AdminNavBar = () => {
           <Menu.Item key="24">
             <Link to="/AdminAddNews">Add News</Link>
           </Menu.Item>
+          <Menu.Item key="27">
+            <Link to="/AdminEditNews">Edit/Delete News</Link>
+          </Menu.Item>
+
+          </SubMenu>
+
+          <SubMenu key="sub9" icon=<ForwardOutlined /> title="News Management">
           <Menu.Item key="25">
             <Link to="/AdminAddUpcomingMovie">Add Up-Comming Movies</Link>
           </Menu.Item>
           <Menu.Item key="26">
             <Link to="/AdminEditUpcomingMovie">Edit/Delete Up-Comming Movies</Link>
           </Menu.Item>
-        </SubMenu>
+          </SubMenu>
+        
 
         <SubMenu key="sub11" icon={<MailOutlined />} title="User Messages">
           <Menu.Item key="31">
