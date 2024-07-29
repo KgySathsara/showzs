@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const PasswordResetPage = () => {
   const [email, setEmail] = useState('');
@@ -8,6 +9,7 @@ const PasswordResetPage = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [step, setStep] = useState(1); // Step 1 for requesting reset, Step 2 for OTP verification and password reset
+  const navigate = useNavigate();
 
   const handleRequestReset = async () => {
     try {
@@ -27,6 +29,7 @@ const PasswordResetPage = () => {
     try {
       await axios.post('http://127.0.0.1:8000/api/password-reset/verify', { email, otp, newPassword });
       message.success('Password reset successful');
+      navigate('/'); // Redirect to the main page
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
         message.error(error.response.data.message);
