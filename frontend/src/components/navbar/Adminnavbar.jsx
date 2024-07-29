@@ -64,17 +64,17 @@ const AdminNavBar = () => {
             <Link to="/AdminEditNews">Edit/Delete News</Link>
           </Menu.Item>
 
-          </SubMenu>
+        </SubMenu>
 
-          <SubMenu key="sub9" icon=<ForwardOutlined /> title="News Management">
+        <SubMenu key="sub9" icon={<ForwardOutlined />} title="Upcoming Movie Management">
           <Menu.Item key="25">
             <Link to="/AdminAddUpcomingMovie">Add Up-Comming Movies</Link>
           </Menu.Item>
           <Menu.Item key="26">
             <Link to="/AdminEditUpcomingMovie">Edit/Delete Up-Comming Movies</Link>
           </Menu.Item>
-          </SubMenu>
-        
+        </SubMenu>
+
 
         <SubMenu key="sub11" icon={<MailOutlined />} title="User Messages">
           <Menu.Item key="31">
@@ -97,12 +97,12 @@ const AdminNavBar = () => {
         </SubMenu>
 
         <SubMenu key="sub16" icon={<SettingOutlined />} title="Setting Section">
-            <Menu.Item key="42">
-              <Link to="/EditorAccount">Editor Account</Link>
-            </Menu.Item>
-            <Menu.Item key="43">
-              <Link to="/PasswordManagement">Password Reset</Link>
-            </Menu.Item>
+          <Menu.Item key="42">
+            <Link to="/EditorAccount">Editor Account</Link>
+          </Menu.Item>
+          <Menu.Item key="43">
+            <Link to="/PasswordManagement">Password Reset</Link>
+          </Menu.Item>
         </SubMenu>
 
       </Menu>
