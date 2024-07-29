@@ -1,166 +1,95 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, notification, Radio } from 'antd';
+import { Form, Input, Button, message } from 'antd';
 import axios from 'axios';
-import './EditorAccount.css';
 
-const PasswordResetForm = () => {
-  const [form] = Form.useForm();
-  const [resetOption, setResetOption] = useState('email');
-  const [otpSent, setOtpSent] = useState(false);
+const PasswordResetPage = () => {
+  const [email, setEmail] = useState('');
+  const [otp, setOtp] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [step, setStep] = useState(1); // Step 1 for requesting reset, Step 2 for OTP verification and password reset
 
-  const onFinish = async (values) => {
-    console.log('Form values: ', values);
-    // Make API call to reset password
+  const handleRequestReset = async () => {
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post('http://127.0.0.1:8000/api/reset-password', values);
-      notification.success({
-        message: 'Password Reset',
-        description: 'Your password has been successfully reset.',
-      });
-      form.resetFields();
+      await axios.post('http://127.0.0.1:8000/api/password-reset/request', { email });
+      message.success('OTP has been sent to your email');
+      setStep(2); // Move to the next step
     } catch (error) {
-      notification.error({
-        message: 'Password Reset Failed',
-        description: 'There was an error resetting your password.',
-      });
+      if (error.response && error.response.data && error.response.data.message) {
+        message.error(error.response.data.message);
+      } else {
+        message.error('Error sending OTP');
+      }
     }
   };
 
-  const sendOtp = async (values) => {
-    console.log('Phone number: ', values.phone);
-    // Make API call to send OTP
+  const handleResetPassword = async () => {
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post('http://127.0.0.1:8000/api/send-otp', { phone: values.phone });
-      setOtpSent(true);
-      notification.success({
-        message: 'OTP Sent',
-        description: 'The OTP has been sent to your phone number.',
-      });
+      await axios.post('http://127.0.0.1:8000/api/password-reset/verify', { email, otp, newPassword });
+      message.success('Password reset successful');
     } catch (error) {
-      notification.error({
-        message: 'OTP Sending Failed',
-        description: 'There was an error sending the OTP.',
-      });
+      if (error.response && error.response.data && error.response.data.message) {
+        message.error(error.response.data.message);
+      } else {
+        message.error('Error resetting password');
+      }
     }
-  };
-
-  const handlePhoneFinish = async (values) => {
-    await sendOtp(values);
   };
 
   return (
     <section className='admin-upcoming-movies'>
       <h2>Password Reset</h2>
-      <Radio.Group 
-        value={resetOption} 
-        onChange={(e) => {
-          setResetOption(e.target.value);
-          setOtpSent(false);
-          form.resetFields();
-        }} 
-        style={{ marginBottom: 20 }}
-      >
-        <Radio.Button value="email">Email</Radio.Button>
-        <Radio.Button value="phone">Phone Number</Radio.Button>
-      </Radio.Group>
-      <Form
-        form={form}
-        name="password_reset"
-        onFinish={resetOption === 'phone' && !otpSent ? handlePhoneFinish : onFinish}
-        layout="vertical"
-      >
-        {resetOption === 'email' && (
-          <>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[{ required: true, message: 'Please input your email!', type: 'email' }]}
-            >
-              <Input />
+      <div>
+        {step === 1 ? (
+          <Form onFinish={handleRequestReset}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+        ) : (
+          <Form onFinish={handleResetPassword}>
+            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="OTP" name="otp" rules={[{ required: true }]}>
+              <Input value={otp} onChange={(e) => setOtp(e.target.value)} />
+            </Form.Item>
+            <Form.Item label="New Password" name="newPassword" rules={[{ required: true }]}>
+              <Input.Password value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
             </Form.Item>
             <Form.Item
-              name="new_password"
-              label="New Password"
-              rules={[{ required: true, message: 'Please input your new password!' }]}
-            >
-              <Input.Password />
-            </Form.Item>
-            <Form.Item
-              name="confirm_password"
-              label="Confirm New Password"
-              dependencies={['new_password']}
+              label="Confirm Password"
+              name="confirmPassword"
+              dependencies={['newPassword']}
               rules={[
-                { required: true, message: 'Please confirm your new password!' },
+                { required: true, message: 'Please confirm your password!' },
                 ({ getFieldValue }) => ({
                   validator(_, value) {
-                    if (!value || getFieldValue('new_password') === value) {
+                    if (!value || getFieldValue('newPassword') === value) {
                       return Promise.resolve();
                     }
-                    return Promise.reject(new Error('The two passwords do not match!'));
+                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
                   },
                 }),
               ]}
             >
-              <Input.Password />
+              <Input.Password value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
             </Form.Item>
-          </>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Reset Password
+              </Button>
+            </Form.Item>
+          </Form>
         )}
-        {resetOption === 'phone' && !otpSent && (
-          <Form.Item
-            name="phone"
-            label="Phone Number"
-            rules={[{ required: true, message: 'Please input your phone number!' }]}
-          >
-            <Input />
-          </Form.Item>
-        )}
-        {resetOption === 'phone' && otpSent && (
-          <>
-            <Form.Item
-              name="otp"
-              label="OTP"
-              rules={[{ required: true, message: 'Please input the OTP!' }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name="new_password"
-              label="New Password"
-              rules={[{ required: true, message: 'Please input your new password!' }]}
-            >
-              <Input.Password />
-            </Form.Item>
-            <Form.Item
-              name="confirm_password"
-              label="Confirm New Password"
-              dependencies={['new_password']}
-              rules={[
-                { required: true, message: 'Please confirm your new password!' },
-                ({ getFieldValue }) => ({
-                  validator(_, value) {
-                    if (!value || getFieldValue('new_password') === value) {
-                      return Promise.resolve();
-                    }
-                    return Promise.reject(new Error('The two passwords do not match!'));
-                  },
-                }),
-              ]}
-            >
-              <Input.Password />
-            </Form.Item>
-          </>
-        )}
-
-        <Form.Item>
-          <Button type="primary" htmlType="submit">
-            {resetOption === 'phone' && !otpSent ? 'Send OTP' : 'Reset Password'}
-          </Button>
-        </Form.Item>
-      </Form>
+      </div>
     </section>
   );
 };
 
-export default PasswordResetForm;
+export default PasswordResetPage;
