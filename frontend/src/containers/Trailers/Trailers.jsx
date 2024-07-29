@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './trailers.css';
-import ReactPlayer from 'react-player'
+import axios from 'axios';
 
 const Trailers = () => {
+  const [trailers, setTrailers] = useState([]);
+
+  useEffect(() => {
+    fetchTrailers();
+  }, []);
+
+  const fetchTrailers = async () => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/news');
+      console.log('API Response:', response.data); // Debugging line
+      setTrailers(response.data.news);
+    } catch (error) {
+      console.error('Error fetching trailers:', error);
+    }
+  };
+
   return (
     <section className='now-showing'>
       <h2>Trailers</h2>
       <div className='now-showing-container'>
-        <div className='movie-card animate__animated animate__fadeInLeft'>
-          <ReactPlayer url='https://www.youtube.com/watch?v=28oPwzIbAyY' />
-          <div className='movie-info'>
-            <h3>Visal Adare - The Movie</h3>
-            <p>18176 likes - 1995 talking about this</p>
-            <p>Embark on an emotional rollercoaster of friendship, love, heartbreak, laughter, and joy...</p>
-          </div>
-        </div>
-        <div className='movie-card animate__animated animate__fadeInRight'>
-          <ReactPlayer url='https://www.youtube.com/watch?v=28oPwzIbAyY' />
-          <div className='movie-info'>
-            <h3>Sinhabahu</h3>
-            <p>50K+ Views</p>
-            <p>Sinhabahu, is a 2024 Sri Lankan Sinhalese historical thriller film directed by Somaratne Dissanayake and co-produced by Gamini Wickramasinghe and Renuka Balasuriya. The film is based on the legend in the Mahāvamsa where playwright Ediriweera Sarachchandra produced a stage drama under the same title. <a href="https://en.wikipedia.org/wiki/Sinhabahu">Wikipedia</a></p>
-          </div>
-        </div>
+        {trailers.length > 0 ? (
+          trailers.map((news) => (
+            <div className='movie-card animate__animated animate__fadeInLeft' key={news.id}>
+              <video width="700px" height="400px" controls>
+                <source src="https://d2uwe80k6ws98m.cloudfront.net/stageBG.mp4" type="video/mp4" />
+              </video>
+              <div className='movie-info'>
+                <h3>{news.title}</h3>
+                <p>Description: {news.description}</p>
+                <p>Duration: {news.duration}</p>
+                <p>Category: {news.category}</p>
+                <p>Price: {news.price}</p>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p>No trailers available</p>
+        )}
       </div>
     </section>
   );
