@@ -4,7 +4,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const PasswordResetPage = () => {
-  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,8 +13,8 @@ const PasswordResetPage = () => {
 
   const handleRequestReset = async () => {
     try {
-      await axios.post('http://127.0.0.1:8000/api/password-reset/request', { email });
-      message.success('OTP has been sent to your email');
+      await axios.post('http://127.0.0.1:8000/api/passwordreset/request', { phone_number: phone });
+      message.success('OTP has been sent to your phone');
       setStep(2); // Move to the next step
     } catch (error) {
       if (error.response && error.response.data && error.response.data.message) {
@@ -27,7 +27,7 @@ const PasswordResetPage = () => {
 
   const handleResetPassword = async () => {
     try {
-      await axios.post('http://127.0.0.1:8000/api/password-reset/verify', { email, otp, newPassword });
+      await axios.post('http://127.0.0.1:8000/api/passwordreset/verify', { phone_number: phone, otp, newPassword, newPassword_confirmation: confirmPassword });
       message.success('Password reset successful');
       navigate('/'); // Redirect to the main page
     } catch (error) {
@@ -45,8 +45,8 @@ const PasswordResetPage = () => {
       <div>
         {step === 1 ? (
           <Form onFinish={handleRequestReset}>
-            <Form.Item label="User Email" name="email" rules={[{ required: true, type: 'email' }]}>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Form.Item label="Phone Number" name="phone" rules={[{ required: true, message: 'Please input your phone number!' }]}>
+              <Input value={phone} onChange={(e) => setPhone(e.target.value)} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">
@@ -56,13 +56,10 @@ const PasswordResetPage = () => {
           </Form>
         ) : (
           <Form onFinish={handleResetPassword}>
-            <Form.Item label="Email" name="email" rules={[{ required: true, type: 'email' }]}>
-              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
-            </Form.Item>
-            <Form.Item label="OTP" name="otp" rules={[{ required: true }]}>
+            <Form.Item label="OTP" name="otp" rules={[{ required: true, message: 'Please input the OTP!' }]}>
               <Input value={otp} onChange={(e) => setOtp(e.target.value)} />
             </Form.Item>
-            <Form.Item label="New Password" name="newPassword" rules={[{ required: true }]}>
+            <Form.Item label="New Password" name="newPassword" rules={[{ required: true, message: 'Please input your new password!' }]}>
               <Input.Password value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
             </Form.Item>
             <Form.Item
