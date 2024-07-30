@@ -17,7 +17,6 @@ const ViewMovieManagement = () => {
     const fetchMovies = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/movies');
-        console.log('Movie data:', response.data);
         setMovies(response.data);
       } catch (error) {
         console.error('Failed to fetch movies:', error);
@@ -30,7 +29,6 @@ const ViewMovieManagement = () => {
   const fetchMovie = async (movieId) => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/movies/${movieId}`);
-      console.log('Movie data:', response.data);
       const movieData = response.data;
       const formData = {
         title: movieData.title,
@@ -38,10 +36,10 @@ const ViewMovieManagement = () => {
         director: movieData.director,
         duration: movieData.duration,
         price: movieData.price,
-        streamLink: movieData.stream_link,
+        stream_link: movieData.stream_link,
       };
       setSelectedMovie(movieData);
-      setTrailerUrl(movieData.trailer); // Assuming trailer URL is available in movieData.trailer
+      setTrailerUrl(movieData.trailer);
       form.setFieldsValue(formData);
       setIsMovieSelected(true);
     } catch (error) {
@@ -52,8 +50,7 @@ const ViewMovieManagement = () => {
   const handleSubmit = async (values) => {
     if (selectedMovie) {
       try {
-        const response = await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, values);
-        console.log('Movie updated:', response.data);
+        await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, values);
         message.success('Movie updated successfully');
         setIsMovieSelected(false);
       } catch (error) {
@@ -62,12 +59,12 @@ const ViewMovieManagement = () => {
       }
     }
   };
+  
 
   const handleDelete = async () => {
     if (selectedMovie) {
       try {
         await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`);
-        console.log('Movie deleted');
         message.success('Movie deleted successfully');
         setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
         setSelectedMovie(null);
@@ -82,8 +79,7 @@ const ViewMovieManagement = () => {
   };
 
   const handleMovieChange = (value) => {
-    console.log('Selected movie:', value);
-    fetchMovie(value); // Fetch details of the selected movie
+    fetchMovie(value);
   };
 
   return (
@@ -101,7 +97,9 @@ const ViewMovieManagement = () => {
       <div className="movie-management-container">
         <div className="video-container">
           <h3>Trailer</h3>
-          <video controls src={trailerUrl} alt="Movie Trailer" />
+          {trailerUrl && (
+            <video controls src={`http://localhost:8000/trailers/${trailerUrl}`} alt="Movie Trailer" />
+          )}
         </div>
         <div className='movie-management-details'>
           <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
@@ -120,7 +118,7 @@ const ViewMovieManagement = () => {
             <Form.Item name="price" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
               <Input />
             </Form.Item>
-            <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
+            <Form.Item name="stream_link" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
               <Input />
             </Form.Item>
             <Form.Item name="picture" label="Picture">
@@ -135,7 +133,7 @@ const ViewMovieManagement = () => {
             </Form.Item>
             <div className="form-buttons">
               <Button type="primary" className='btn-movie-management' htmlType="submit">
-                {isMovieSelected ? 'Submit Movie' : 'Edit Movie'}
+                {isMovieSelected ? 'Update Movie' : 'Edit Movie'}
               </Button>
               <Button type="primary" className='btn-movie-management' htmlType="button" onClick={handleDelete}>Delete Movie</Button>
             </div>
