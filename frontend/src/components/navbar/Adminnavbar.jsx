@@ -110,13 +110,6 @@ const AdminNavBar = () => {
             </Menu.Item>
             </SubMenu>
 
-          <Menu.Item key="42">
-            <Link to="/EditorAccount">Editor Account</Link>
-          </Menu.Item>
-          <Menu.Item key="43">
-            <Link to="/PasswordManagement">Password Reset</Link>
-          </Menu.Item>
-
         </SubMenu>
 
       </Menu>
