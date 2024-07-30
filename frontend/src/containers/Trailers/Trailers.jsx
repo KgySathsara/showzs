@@ -23,24 +23,20 @@ const Trailers = () => {
     <section className='now-showing'>
       <h2>Trailers</h2>
       <div className='now-showing-container'>
-        {trailers.length > 0 ? (
-          trailers.map((news) => (
-            <div className='movie-card animate__animated animate__fadeInLeft' key={news.id}>
-              <video width="700px" height="400px" controls>
-                <source src="https://d2uwe80k6ws98m.cloudfront.net/stageBG.mp4" type="video/mp4" />
-              </video>
-              <div className='movie-info'>
-                <h3>{news.title}</h3>
-                <p>Description: {news.description}</p>
-                <p>Duration: {news.duration}</p>
-                <p>Category: {news.category}</p>
-                <p>Price: {news.price}</p>
-              </div>
+        {trailers.map(news => (
+          <div className='movie-card animate__animated animate__fadeInLeft' key={news.id}>
+            {news.trailer && (
+              <video controls src={`http://localhost:8000/trailers/${news.trailer}`} alt="Movie Trailer" />
+            )}
+            <div className='movie-info'>
+              <h3>{news.title}</h3>
+              <p>Description: {news.description}</p>
+              <p>Duration: {news.duration}</p>
+              <p>Category: {news.category}</p>
+              <p>Price: {news.price}</p>
             </div>
-          ))
-        ) : (
-          <p>No trailers available</p>
-        )}
+          </div>
+        ))}
       </div>
     </section>
   );

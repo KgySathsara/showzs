@@ -35,7 +35,13 @@ const AddMovieManagement = ({ onSubmit }) => {
         formData.append('price', movieValues.price);
         formData.append('stream_link', movieValues.streamLink);
         formData.append('picture', fileList[0]?.originFileObj);
-        formData.append('trailer', trailerList[0]?.originFileObj);
+
+        // Check if trailer is selected
+        if (trailerList.length > 0) {
+          formData.append('trailer', trailerList[0]?.originFileObj);
+        } else {
+          formData.append('trailer', ''); // or some default value
+        }
 
         await axios.post('http://127.0.0.1:8000/api/movies', formData);
         message.success('Movie added successfully');
@@ -81,16 +87,17 @@ const AddMovieManagement = ({ onSubmit }) => {
         <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload} >
+        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload}>
           <Upload name="picture" listType="picture" beforeUpload={() => false} onChange={handleUpload}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleTrailerUpload} >
+        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleTrailerUpload}>
           <Upload name="trailer" listType="picture" beforeUpload={() => false} onChange={handleTrailerUpload}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
+
         <Form.Item>
           <Button type="primary" htmlType="submit">Add Movie</Button>
         </Form.Item>
