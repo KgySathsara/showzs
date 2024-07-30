@@ -13,6 +13,7 @@ const AdminLoginOnly = () => {
     navigate('/');
   };
 
+  // eslint-disable-next-line no-unused-vars
   const handleRegister = () => {
     // Navigate to the register page
     navigate('/Register');
@@ -45,9 +46,6 @@ const AdminLoginOnly = () => {
           </div>
         </form>
         <button type="submit" className="signin-button"  onClick={handleSignin}>SIGN IN</button>
-        <div className="register-link">
-          Don't have an account? <button className="reg-btn" onClick={handleRegister}>Register</button>
-        </div>
       </div>
     </section>
   )

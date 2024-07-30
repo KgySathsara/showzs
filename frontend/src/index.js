@@ -30,6 +30,7 @@ import PasswordManagement from './pages/AdminSetting/PasswordManagement';
 import AdminLoginOnly from './pages/AdminLoginOnly/AdminLoginOnly';
 import AdminEditUpcomingMovie from './pages/AdminNewsManagement/AdminEditUpcomingMovie';
 import AdminEditNews from './pages/AdminNewsManagement/AdminEditNews';
+import PhoneNumber from './pages/AdminSetting/PhoneNumber';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -64,6 +65,7 @@ root.render(
       <Route path='/AdminLoginOnly' element={<AdminLoginOnly />} />
       <Route path='/AdminEditUpcomingMovie' element={<AdminEditUpcomingMovie />} />
       <Route path='/AdminEditNews' element={<AdminEditNews />} />
+      <Route path='/PhoneNumber' element={<PhoneNumber />} />
     </Routes>
   </BrowserRouter>
 );

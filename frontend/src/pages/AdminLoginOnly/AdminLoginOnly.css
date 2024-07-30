@@ -51,7 +51,7 @@ body{
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
     z-index: 1;
     border: 2px solid #ffffff;
-    margin-top: -40px;
+    margin-top: -50px;
   }
   
   .google-login{
@@ -148,7 +148,7 @@ body{
     border: none;
     border-radius: 15px;
     cursor: pointer;
-    margin-top: 80px;
+    margin-top: 40px;
     z-index: 1;
     border: 1px solid #ffffff;
   }
