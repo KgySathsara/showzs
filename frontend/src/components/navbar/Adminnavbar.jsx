@@ -100,9 +100,14 @@ const AdminNavBar = () => {
             <Menu.Item key="42">
               <Link to="/EditorAccount">Editor Account</Link>
             </Menu.Item>
+            <SubMenu key="sub17" title="Password Reset">
             <Menu.Item key="43">
-              <Link to="/PasswordManagement">Password Reset</Link>
+              <Link to="/PasswordManagement">Use Email</Link>
             </Menu.Item>
+            <Menu.Item key="44">
+              <Link to="/PhoneNumber">Use Phone Number</Link>
+            </Menu.Item>
+            </SubMenu>
         </SubMenu>
 
       </Menu>
