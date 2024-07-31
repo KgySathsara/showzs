@@ -32,7 +32,7 @@ const Events = () => {
           {events.length > 0 ? (
             events.map(event => (
               <div className="event animate__animated animate__fadeInUp" key={event.id}>
-                <img src={`http://localhost:8000/images/${event.coverImage}`} alt={event.title} />
+                <img src={event.coverImage} alt={event.title} />
                 <div className="movie-info">
                   <h3>{event.title}</h3>
                   <p>{event.description}</p>

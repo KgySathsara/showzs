@@ -40,7 +40,7 @@ const Stream = () => {
           {movies.map((movie) => (
             <div className="movie" key={movie.id}>
               {movie.picture ? (
-             <img src={`http://127.0.0.1:8000/images/${movie.picture}`} alt={movie.title} />
+             <img src={movie.picture} alt={movie.title} />
           ) : null}
               <h2>{movie.title}</h2>
               <p>{movie.duration} min</p>

@@ -34,14 +34,47 @@ const AddMovieManagement = ({ onSubmit }) => {
         formData.append('duration', movieValues.duration);
         formData.append('price', movieValues.price);
         formData.append('stream_link', movieValues.streamLink);
-        formData.append('picture', fileList[0]?.originFileObj);
 
-        // Check if trailer is selected
-        if (trailerList.length > 0) {
-          formData.append('trailer', trailerList[0]?.originFileObj);
-        } else {
-          formData.append('trailer', ''); // or some default value
+        let coverImageUrl = '';
+        if (fileList.length > 0) {
+          const coverImage = fileList[0].originFileObj;
+          const coverImageResponse = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
+            params: {
+              file_name: coverImage.name,
+              file_type: coverImage.type,
+            },
+          });
+          await fetch(coverImageResponse.data.url, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': coverImage.type,
+            },
+            body: coverImage,
+          });
+          coverImageUrl = coverImageResponse.data.url.split('?')[0];
         }
+
+        let trailerUrl = '';
+        if (trailerList.length > 0) {
+          const trailer = trailerList[0].originFileObj;
+          const trailerResponse = await axios.get('http://127.0.0.1:8000/api/s3-Trailers', {
+            params: {
+              file_name: trailer.name,
+              file_type: trailer.type,
+            },
+          });
+          await fetch(trailerResponse.data.url, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': trailer.type,
+            },
+            body: trailer,
+          });
+          trailerUrl = trailerResponse.data.url.split('?')[0]; 
+        }
+
+        formData.append('picture', coverImageUrl);
+        formData.append('trailer', trailerUrl);
 
         await axios.post('http://127.0.0.1:8000/api/movies', formData);
         message.success('Movie added successfully');
@@ -50,7 +83,7 @@ const AddMovieManagement = ({ onSubmit }) => {
         setFileList([]);
         setTrailerList([]);
         setModalVisible(false);
-        onSubmit({ ...movieValues, picture: fileList, trailer: trailerList });
+        onSubmit({ ...movieValues, picture: coverImageUrl, trailer: trailerUrl });
       }
     } catch (error) {
       console.error('Error adding movie or user:', error);

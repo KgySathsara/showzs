@@ -97,7 +97,7 @@ const LiveStreamManagement = () => {
       <div className="movie-management-container">
       {selectedEvent && (
           <div className="live-movie-card">
-            <img src={`http://localhost:8000/images/${selectedEvent.coverImage}`} alt={selectedEvent.title} />
+            <img src={selectedEvent.coverImage} alt={selectedEvent.title} />
           </div>
         )}
         <div className='movie-management-details'>

@@ -27,11 +27,49 @@ const AdminUpcomingMovies = () => {
     reader.readAsDataURL(file);
   };
 
+  const getSignedUrl = async (file) => {
+    try {
+      const response = await axios.get('http://localhost:8000/api/s3-CoverImages', {
+        params: {
+          file_name: file.name,
+          file_type: file.type,
+        },
+      });
+      return response.data.url;
+    } catch (error) {
+      console.error('Error getting signed URL:', error);
+      message.error('Failed to get signed URL');
+      throw error;
+    }
+  };
+
+  const uploadToS3 = async (signedUrl, file) => {
+    try {
+      await axios.put(signedUrl, file, {
+        headers: {
+          'Content-Type': file.type,
+        },
+      });
+      return signedUrl.split('?')[0]; // Return the URL without query parameters
+    } catch (error) {
+      console.error('Error uploading to S3:', error);
+      message.error('Failed to upload image to S3');
+      throw error;
+    }
+  };
+
   const onFinish = async (values) => {
     const formData = new FormData();
     formData.append('title', values.title);
     if (fileList.length > 0 && fileList[0].originFileObj) {
-      formData.append('image', fileList[0].originFileObj);
+      try {
+        const signedUrl = await getSignedUrl(fileList[0].originFileObj);
+        const imageUrl = await uploadToS3(signedUrl, fileList[0].originFileObj);
+        formData.append('image', imageUrl);
+      } catch (error) {
+        console.error('Error processing image upload:', error);
+        return;
+      }
     }
     formData.append('date', values.date.format('YYYY-MM-DD'));
     formData.append('duration', values.duration);

@@ -32,7 +32,7 @@ const NowShowing = () => {
           {movies.length > 0 ? (
             movies.map(movie => (
               <div className="movie-card animate__animated animate__fadeInUp" key={movie.id}>
-                <img src={`http://127.0.0.1:8000/images/${movie.picture}`} alt={movie.title} />
+                <img src={movie.picture} alt={movie.title} />
                 <div className="movie-info">
                   <h3>{movie.title}</h3>
                   <p>{movie.genre} - {movie.director}</p>

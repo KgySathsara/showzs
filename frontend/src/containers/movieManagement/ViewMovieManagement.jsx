@@ -98,7 +98,7 @@ const ViewMovieManagement = () => {
         <div className="video-container">
           <h3>Trailer</h3>
           {trailerUrl && (
-            <video controls src={`http://localhost:8000/trailers/${trailerUrl}`} alt="Movie Trailer" />
+            <video controls src={trailerUrl} alt="Movie Trailer" />
           )}
         </div>
         <div className='movie-management-details'>
