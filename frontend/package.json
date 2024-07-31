@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "animate.css": "^4.1.1",
     "antd": "^5.19.0",
+    "aws-sdk": "^2.1665.0",
     "axios": "^1.7.2",
     "hover-carousel": "^1.1.0",
     "moment": "^2.30.1",
