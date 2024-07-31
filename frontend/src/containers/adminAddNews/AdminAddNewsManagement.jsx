@@ -3,9 +3,18 @@ import './adminAddNews.css';
 import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import AWS from 'aws-sdk';
 
 const { TextArea } = Input;
 const { Option } = Select;
+
+AWS.config.update({
+  accessKeyId: 'AKIAQE3RPBDKD6L2JC6P',
+  secretAccessKey: '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',
+  region: 'ap-south-1'
+});
+
+const s3 = new AWS.S3();
 
 const AdminAddNewManagement = () => {
   const [trailerList, setTrailerList] = useState([]);
@@ -13,28 +22,53 @@ const AdminAddNewManagement = () => {
   const onFinish = async (values) => {
     const formData = new FormData();
     formData.append('title', values.title);
-    formData.append('trailer', trailerList[0]?.originFileObj);
     formData.append('date', values.date.format('YYYY-MM-DD'));
     formData.append('duration', values.duration);
     formData.append('category', values.category);
     formData.append('description', values.description);
     formData.append('price', values.price);
 
-    try {
-      const response = await axios.post('http://localhost:8000/api/news', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      message.success('News added successfully!');
-      setTrailerList([]);
-    } catch (error) {
-      console.error('Error adding news:', error.response?.data || error.message);
-      message.error('Failed to add news. Please try again.');
+    if (trailerList.length > 0) {
+      const trailerFile = trailerList[0].originFileObj;
+      const params = {
+        Bucket: 'showzmovies',
+        Key: `trailers/${trailerFile.name}`,
+        Body: trailerFile,
+        ContentType: trailerFile.type
+      };
+
+      try {
+        // Upload the trailer to AWS S3
+        const uploadResponse = await s3.upload(params).promise();
+
+        // Add the trailer URL to the form data
+        formData.append('trailer', uploadResponse.Location);
+
+        // Add the news with the trailer URL
+        await axios.post('http://localhost:8000/api/news', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        message.success('News added successfully!');
+        setTrailerList([]);
+      } catch (error) {
+        console.error('Error uploading trailer:', error.message);
+        message.error('Failed to upload trailer. Please try again.');
+      }
+    } else {
+      message.error('Please upload a trailer.');
     }
   };
 
-  const handleFileChange = ({ fileList }) => setTrailerList(fileList);
+  const handleFileChange = ({ fileList }) => {
+    const isVideo = fileList.every(file => file.type.startsWith('video/'));
+    if (isVideo) {
+      setTrailerList(fileList);
+    } else {
+      message.error('Please upload only video files.');
+    }
+  };
 
   return (
     <section className='admin-upcoming-movies'>
