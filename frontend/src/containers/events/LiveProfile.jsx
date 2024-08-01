@@ -38,7 +38,7 @@ const LiveEventProfile = () => {
         <div className="video-container">
           <h3>Live Event</h3>
           {eventData && (
-            <img src={`http://localhost:8000/images/${eventData.coverImage}`} alt={eventData.title} />
+            <img src={eventData.coverImage} alt={eventData.title} />
           )}
         </div>
         <div className='movie-profile-management'>

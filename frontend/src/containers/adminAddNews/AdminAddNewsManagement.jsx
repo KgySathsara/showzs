@@ -3,18 +3,9 @@ import './adminAddNews.css';
 import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
-import AWS from 'aws-sdk';
 
 const { TextArea } = Input;
 const { Option } = Select;
-
-AWS.config.update({
-  accessKeyId: 'AKIAQE3RPBDKD6L2JC6P',
-  secretAccessKey: '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',
-  region: 'ap-south-1'
-});
-
-const s3 = new AWS.S3();
 
 const AdminAddNewManagement = () => {
   const [trailerList, setTrailerList] = useState([]);
@@ -30,26 +21,32 @@ const AdminAddNewManagement = () => {
 
     if (trailerList.length > 0) {
       const trailerFile = trailerList[0].originFileObj;
-      const params = {
-        Bucket: 'showzmovies',
-        Key: `trailers/${trailerFile.name}`,
-        Body: trailerFile,
-        ContentType: trailerFile.type
-      };
 
       try {
-        // Upload the trailer to AWS S3
-        const uploadResponse = await s3.upload(params).promise();
+        const response = await axios.get('http://localhost:8000/api/s3-Trailers', {
+          params: {
+            file_name: trailerFile.name,
+            file_type: trailerFile.type,
+          },
+        });
 
-        // Add the trailer URL to the form data
-        formData.append('trailer', uploadResponse.Location);
+        const signedUrl = response.data.url;
 
-        // Add the news with the trailer URL
+        await axios.put(signedUrl, trailerFile, {
+          headers: {
+            'Content-Type': trailerFile.type,
+          },
+        });
+
+        const trailerUrl = signedUrl.split('?')[0];
+        formData.append('trailer', trailerUrl);
+
         await axios.post('http://localhost:8000/api/news', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
+
         message.success('News added successfully!');
         setTrailerList([]);
       } catch (error) {

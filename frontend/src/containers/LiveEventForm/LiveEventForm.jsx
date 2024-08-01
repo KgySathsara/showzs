@@ -22,7 +22,7 @@ const LiveEventForm = ({ onSubmit }) => {
         password: values.password,
         full_name: values.fullName,
         phone_number: values.phoneNumber,
-        user_type: 4, 
+        user_type: 4,
       });
 
       if (userResponse.status === 201) {
@@ -33,9 +33,30 @@ const LiveEventForm = ({ onSubmit }) => {
         formData.append('date', movieValues.date.format('YYYY-MM-DD'));
         formData.append('time', movieValues.time.format('HH:mm'));
         formData.append('ticketPrice', movieValues.ticketPrice);
-        formData.append('coverImage', fileList[0]?.originFileObj);
         formData.append('category', movieValues.category);
         formData.append('streamLink', movieValues.streamLink);
+
+        if (fileList.length > 0) {
+          const coverFile = fileList[0].originFileObj;
+
+          const response = await axios.get('http://localhost:8000/api/s3-CoverImages', {
+            params: {
+              file_name: coverFile.name,
+              file_type: coverFile.type,
+            },
+          });
+
+          const signedUrl = response.data.url;
+
+          await axios.put(signedUrl, coverFile, {
+            headers: {
+              'Content-Type': coverFile.type,
+            },
+          });
+
+          const coverUrl = signedUrl.split('?')[0];
+          formData.append('coverImage', coverUrl);
+        }
 
         await axios.post('http://127.0.0.1:8000/api/live-events', formData);
         message.success('Live event created successfully');

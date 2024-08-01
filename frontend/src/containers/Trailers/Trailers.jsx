@@ -12,7 +12,7 @@ const Trailers = () => {
   const fetchTrailers = async () => {
     try {
       const response = await axios.get('http://localhost:8000/api/news');
-      console.log('API Response:', response.data); // Debugging line
+      console.log('API Response:', response.data); 
       setTrailers(response.data.news);
     } catch (error) {
       console.error('Error fetching trailers:', error);
@@ -26,7 +26,7 @@ const Trailers = () => {
         {trailers.map(news => (
           <div className='movie-card animate__animated animate__fadeInLeft' key={news.id}>
             {news.trailer && (
-              <video controls src={`http://localhost:8000/trailers/${news.trailer}`} alt="Movie Trailer" />
+              <video controls src={news.trailer} alt="Movie Trailer" />
             )}
             <div className='movie-info'>
               <h3>{news.title}</h3>

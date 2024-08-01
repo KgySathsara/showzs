@@ -36,7 +36,7 @@ const MovieDetails = () => {
       <div className='movie-poster'>
         <div className="poster-container">
           {movie.picture && (
-            <img src={`http://127.0.0.1:8000/images/${movie.picture}`} alt={movie.title} />
+            <img src={movie.picture} alt={movie.title} />
           )}
           <div className="movie-details-overlay">
             <h2>{`${movie.title} - The Movie`}</h2>
