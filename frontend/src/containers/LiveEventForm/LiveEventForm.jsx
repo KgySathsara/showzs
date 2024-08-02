@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, DatePicker, TimePicker, Upload, Select, message, Modal } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, DatePicker, TimePicker, Upload, Select, message, Modal, Spin, Progress } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -9,6 +9,8 @@ const LiveEventForm = ({ onSubmit }) => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [progressModalVisible, setProgressModalVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
   const [emailForm] = Form.useForm();
 
   const handleSubmit = async (values) => {
@@ -26,6 +28,8 @@ const LiveEventForm = ({ onSubmit }) => {
       });
 
       if (userResponse.status === 201) {
+        setProgressModalVisible(true);
+
         const movieValues = form.getFieldsValue();
         const formData = new FormData();
         formData.append('title', movieValues.title);
@@ -52,6 +56,10 @@ const LiveEventForm = ({ onSubmit }) => {
             headers: {
               'Content-Type': coverFile.type,
             },
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+              setProgress(percentCompleted);
+            },
           });
 
           const coverUrl = signedUrl.split('?')[0];
@@ -64,6 +72,7 @@ const LiveEventForm = ({ onSubmit }) => {
         emailForm.resetFields();
         setFileList([]);
         setModalVisible(false);
+        setProgressModalVisible(false);
         onSubmit({ ...movieValues, coverImage: fileList });
       }
     } catch (error) {
@@ -138,6 +147,32 @@ const LiveEventForm = ({ onSubmit }) => {
             <Button type="primary" htmlType="submit">Submit</Button>
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        visible={progressModalVisible}
+        onCancel={() => setProgressModalVisible(false)}
+        footer={null}
+        className="progress-modal"
+        closable={false}
+        maskClosable={false}
+      >
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 48,
+              }}
+              spin
+            />
+          }
+        />
+        <Progress percent={progress} style={{ marginTop: '20px' }} />
+        <div className="progress-modal-text">
+          Please wait, do not close the window
+          <br />
+          Event is still uploading...
+        </div>
       </Modal>
     </>
   );

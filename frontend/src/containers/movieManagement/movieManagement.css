@@ -60,6 +60,21 @@
   color: #333;
 }
 
+.progress-modal {
+  text-align: center;
+  
+}
+
+.progress-modal .ant-progress {
+  margin-bottom: 20px;
+  margin-top: 40px;
+}
+
+.progress-modal-text {
+  font-size: 16px;
+  color: #595959;
+}
+
 @media screen and (max-width: 480px) {
   .movie-profile-card {
     flex-direction: column;
