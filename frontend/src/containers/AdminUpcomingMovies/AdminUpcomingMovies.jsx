@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './AdminUpcomingMovies.css';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message, Modal, Spin, Progress } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { TextArea } = Input;
@@ -11,10 +11,10 @@ const AdminUpcomingMovies = () => {
   const [form] = Form.useForm();
   const [previewImage, setPreviewImage] = useState(null);
   const [fileList, setFileList] = useState([]);
+  const [progress, setProgress] = useState(0);
+  const [progressModalVisible, setProgressModalVisible] = useState(false);
 
   const handleImagePreview = (file) => {
-    console.log('File received for preview:', file);
-
     if (!(file instanceof Blob)) {
       console.error('Expected Blob or File but received:', file);
       return;
@@ -29,6 +29,7 @@ const AdminUpcomingMovies = () => {
 
   const getSignedUrl = async (file) => {
     try {
+      setProgress(0);
       const response = await axios.get('http://localhost:8000/api/s3-CoverImages', {
         params: {
           file_name: file.name,
@@ -49,8 +50,12 @@ const AdminUpcomingMovies = () => {
         headers: {
           'Content-Type': file.type,
         },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+        }
       });
-      return signedUrl.split('?')[0]; // Return the URL without query parameters
+      return signedUrl.split('?')[0]; 
     } catch (error) {
       console.error('Error uploading to S3:', error);
       message.error('Failed to upload image to S3');
@@ -59,6 +64,7 @@ const AdminUpcomingMovies = () => {
   };
 
   const onFinish = async (values) => {
+    setProgressModalVisible(true);
     const formData = new FormData();
     formData.append('title', values.title);
     if (fileList.length > 0 && fileList[0].originFileObj) {
@@ -68,6 +74,7 @@ const AdminUpcomingMovies = () => {
         formData.append('image', imageUrl);
       } catch (error) {
         console.error('Error processing image upload:', error);
+        setProgressModalVisible(false);
         return;
       }
     }
@@ -82,13 +89,19 @@ const AdminUpcomingMovies = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+        }
       });
       message.success('Movie added successfully');
       form.resetFields();
       setPreviewImage(null);
       setFileList([]);
+      setProgressModalVisible(false);
     } catch (error) {
       console.error('Error adding movie:', error);
+      setProgressModalVisible(false);
       if (error.response && error.response.data && error.response.data.errors) {
         const errors = error.response.data.errors;
         for (const key in errors) {
@@ -181,6 +194,31 @@ const AdminUpcomingMovies = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Modal
+        visible={progressModalVisible}
+        onCancel={() => setProgressModalVisible(false)}
+        footer={null}
+        className="progress-modal"
+        closable={false}
+        maskClosable={false}
+      >
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 48,
+              }}
+              spin
+            />
+          }
+        />
+        <Progress percent={progress} style={{ marginTop: '20px' }} />
+        <div className="progress-modal-text">
+          Please wait, do not close the window
+          <br />
+          Movie is uploading...
+        </div>
+      </Modal>
     </section>
   );
 }

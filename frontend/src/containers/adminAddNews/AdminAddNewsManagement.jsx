@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './adminAddNews.css';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message, Modal, Spin, Progress } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
 const { TextArea } = Input;
@@ -9,6 +9,8 @@ const { Option } = Select;
 
 const AdminAddNewManagement = () => {
   const [trailerList, setTrailerList] = useState([]);
+  const [progressModalVisible, setProgressModalVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
 
   const onFinish = async (values) => {
     const formData = new FormData();
@@ -23,6 +25,9 @@ const AdminAddNewManagement = () => {
       const trailerFile = trailerList[0].originFileObj;
 
       try {
+        setProgressModalVisible(true);
+        setProgress(0);
+
         const response = await axios.get('http://localhost:8000/api/s3-Trailers', {
           params: {
             file_name: trailerFile.name,
@@ -36,6 +41,10 @@ const AdminAddNewManagement = () => {
           headers: {
             'Content-Type': trailerFile.type,
           },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+          }
         });
 
         const trailerUrl = signedUrl.split('?')[0];
@@ -45,13 +54,19 @@ const AdminAddNewManagement = () => {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+          }
         });
 
         message.success('News added successfully!');
         setTrailerList([]);
+        setProgressModalVisible(false);
       } catch (error) {
         console.error('Error uploading trailer:', error.message);
         message.error('Failed to upload trailer. Please try again.');
+        setProgressModalVisible(false);
       }
     } else {
       message.error('Please upload a trailer.');
@@ -135,6 +150,31 @@ const AdminAddNewManagement = () => {
           </Button>
         </Form.Item>
       </Form>
+      <Modal
+        visible={progressModalVisible}
+        onCancel={() => setProgressModalVisible(false)}
+        footer={null}
+        className="progress-modal"
+        closable={false}
+        maskClosable={false}
+      >
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 48,
+              }}
+              spin
+            />
+          }
+        />
+        <Progress percent={progress} style={{ marginTop: '20px' }} />
+        <div className="progress-modal-text">
+          Please wait, do not close the window
+          <br />
+          News is uploading...
+        </div>
+      </Modal>
     </section>
   );
 };

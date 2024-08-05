@@ -61,6 +61,10 @@ const LiveStreamManagement = () => {
           'Content-Type': file.type,
         },
         body: file,
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+      }
       });
 
       return url.split('?')[0];
@@ -82,10 +86,15 @@ const LiveStreamManagement = () => {
       if (values.coverImage && values.coverImage.fileList.length > 0) {
         const coverImageFile = values.coverImage.fileList[0].originFileObj;
         updatedValues.coverImage = await handleUpload(coverImageFile, 'movieCoverImages');
-        setProgress((prev) => prev + 20);
       }
 
-      const response = await axios.put(`http://127.0.0.1:8000/api/live-events/${selectedEvent.id}`, updatedValues);
+      const response = await axios.put(`http://127.0.0.1:8000/api/live-events/${selectedEvent.id}`, updatedValues,{
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+      }
+      });
+      
       console.log('Event updated:', response.data);
       message.success('Event updated successfully');
       setIsEventSelected(false);
@@ -104,7 +113,12 @@ const LiveStreamManagement = () => {
     setProgress(0);
 
     try {
-      await axios.delete(`http://127.0.0.1:8000/api/live-events/${selectedEvent.id}`);
+      await axios.delete(`http://127.0.0.1:8000/api/live-events/${selectedEvent.id}`,{
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+      }
+      });
 
       if (selectedEvent.coverImage) {
         await axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
