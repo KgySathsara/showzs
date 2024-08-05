@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ViewMovieManagement.css';
-import { Form, Input, Button, Select, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Select, Upload, message, Modal, Spin, Progress } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
@@ -12,6 +12,9 @@ const ViewMovieManagement = () => {
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [trailerUrl, setTrailerUrl] = useState('');
   const [isMovieSelected, setIsMovieSelected] = useState(false);
+  const [progressModalVisible, setProgressModalVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [modalAction, setModalAction] = useState('');
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -74,55 +77,63 @@ const ViewMovieManagement = () => {
 
   const handleSubmit = async (values) => {
     if (selectedMovie) {
+      setModalAction('updating'); 
+      setProgressModalVisible(true);
+      setProgress(0);
+
       try {
         const updatedValues = { ...values };
 
         if (values.picture && values.picture.fileList.length > 0) {
           const pictureFile = values.picture.fileList[0].originFileObj;
           updatedValues.picture = await handleUpload(pictureFile, 'movieCoverImages');
+          setProgress((prev) => prev + 20);
         } else {
-          updatedValues.picture = null;
+          delete updatedValues.picture;
         }
 
         if (values.trailer && values.trailer.fileList.length > 0) {
           const trailerFile = values.trailer.fileList[0].originFileObj;
           updatedValues.trailer = await handleUpload(trailerFile, 'movieTrailers');
+          setProgress((prev) => prev + 20);
         } else {
-          updatedValues.trailer = null;
+          delete updatedValues.trailer;
         }
 
         if (values.movie && values.movie.fileList.length > 0) {
           const movieFile = values.movie.fileList[0].originFileObj;
           updatedValues.movie = await handleUpload(movieFile, 'movies');
+          setProgress((prev) => prev + 20);
         } else {
-          updatedValues.movie = null;
+          delete updatedValues.movie;
         }
 
         await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, updatedValues);
         message.success('Movie updated successfully');
         setIsMovieSelected(false);
+        setProgress(100);
       } catch (error) {
         console.error('Failed to update movie:', error);
         message.error('Failed to update movie');
+      } finally {
+        setTimeout(() => setProgressModalVisible(false), 500);
       }
     }
   };
 
-
-
   const handleDelete = async () => {
     if (selectedMovie) {
+      setModalAction('deleting'); 
+      setProgressModalVisible(true);
+      setProgress(0);
+
       try {
-        console.log('Selected Movie:', selectedMovie);
-  
-        // Delete the movie from the database
         await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`);
-  
-        // Delete the associated files from S3
+        setProgress(30);
+
         const deleteRequests = [];
-  
+
         if (selectedMovie.picture) {
-          console.log('Deleting Picture:', selectedMovie.picture);
           deleteRequests.push(
             axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
               object_type: 'movieCoverImages',
@@ -130,9 +141,8 @@ const ViewMovieManagement = () => {
             })
           );
         }
-  
+
         if (selectedMovie.trailer) {
-          console.log('Deleting Trailer:', selectedMovie.trailer);
           deleteRequests.push(
             axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
               object_type: 'movieTrailers',
@@ -140,9 +150,8 @@ const ViewMovieManagement = () => {
             })
           );
         }
-  
+
         if (selectedMovie.movie) {
-          console.log('Deleting Movie File:', selectedMovie.movie);
           deleteRequests.push(
             axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
               object_type: 'movies',
@@ -150,9 +159,10 @@ const ViewMovieManagement = () => {
             })
           );
         }
-  
+
         await Promise.all(deleteRequests);
-  
+        setProgress(100);
+
         message.success('Movie deleted successfully');
         setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
         setSelectedMovie(null);
@@ -162,10 +172,11 @@ const ViewMovieManagement = () => {
       } catch (error) {
         console.error('Failed to delete movie:', error);
         message.error('Failed to delete movie');
+      } finally {
+        setTimeout(() => setProgressModalVisible(false), 500);
       }
     }
   };
-  
 
   const handleMovieChange = (value) => {
     fetchMovie(value);
@@ -235,8 +246,33 @@ const ViewMovieManagement = () => {
           </Form>
         </div>
       </div>
+      <Modal
+        visible={progressModalVisible}
+        onCancel={() => setProgressModalVisible(false)}
+        footer={null}
+        className="progress-modal"
+        closable={false}
+        maskClosable={false}
+      >
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 48,
+              }}
+              spin
+            />
+          }
+        />
+        <Progress percent={progress} style={{ marginTop: '20px' }} />
+        <div className="progress-modal-text">
+          Please wait, do not close the window
+          <br />
+          {modalAction === 'updating' ? 'Movie is still updating...' : 'Movie is deleting...'}
+        </div>
+      </Modal>
     </section>
-  ); 
+  );
 };
 
 export default ViewMovieManagement;

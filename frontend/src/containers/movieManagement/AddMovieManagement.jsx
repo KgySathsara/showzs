@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Upload, message, Modal } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Upload, message, Modal, Progress, Spin } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './movieManagement.css';
 
@@ -10,7 +10,9 @@ const AddMovieManagement = ({ onSubmit }) => {
   const [trailerList, setTrailerList] = useState([]);
   const [movieList, setMovieList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
+  const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [emailForm] = Form.useForm();
+  const [progress, setProgress] = useState(0);
 
   const handleSubmit = async (values) => {
     setModalVisible(true);
@@ -27,6 +29,10 @@ const AddMovieManagement = ({ onSubmit }) => {
       });
 
       if (userResponse.status === 201) {
+        setModalVisible(false);
+        setProgressModalVisible(true);
+        setProgress(10);
+
         const movieValues = form.getFieldsValue();
         const formData = new FormData();
         formData.append('title', movieValues.title);
@@ -38,6 +44,7 @@ const AddMovieManagement = ({ onSubmit }) => {
 
         let coverImageUrl = '';
         if (fileList.length > 0) {
+          setProgress(30);
           const coverImage = fileList[0].originFileObj;
           const coverImageResponse = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
             params: {
@@ -57,6 +64,7 @@ const AddMovieManagement = ({ onSubmit }) => {
 
         let trailerUrl = '';
         if (trailerList.length > 0) {
+          setProgress(50);
           const trailer = trailerList[0].originFileObj;
           const trailerResponse = await axios.get('http://127.0.0.1:8000/api/s3-Trailers', {
             params: {
@@ -71,11 +79,12 @@ const AddMovieManagement = ({ onSubmit }) => {
             },
             body: trailer,
           });
-          trailerUrl = trailerResponse.data.url.split('?')[0]; 
+          trailerUrl = trailerResponse.data.url.split('?')[0];
         }
 
         let movieUrl = '';
         if (movieList.length > 0) {
+          setProgress(70);
           const movie = movieList[0].originFileObj;
           const movieResponse = await axios.get('http://127.0.0.1:8000/api/s3-Movies', {
             params: {
@@ -90,7 +99,7 @@ const AddMovieManagement = ({ onSubmit }) => {
             },
             body: movie,
           });
-          movieUrl = movieResponse.data.url.split('?')[0]; 
+          movieUrl = movieResponse.data.url.split('?')[0];
         }
 
         formData.append('picture', coverImageUrl);
@@ -98,17 +107,25 @@ const AddMovieManagement = ({ onSubmit }) => {
         formData.append('movie', movieUrl);
 
         await axios.post('http://127.0.0.1:8000/api/movies', formData);
+        setProgress(100);
         message.success('Movie added successfully');
         form.resetFields();
         emailForm.resetFields();
         setFileList([]);
         setTrailerList([]);
         setMovieList([]);
-        setModalVisible(false);
-        onSubmit({ ...movieValues, picture: coverImageUrl, trailer: trailerUrl });
+        setProgressModalVisible(false);
+        if (typeof onSubmit === 'function') {
+          onSubmit({ ...movieValues, picture: coverImageUrl, trailer: trailerUrl });
+        } else {
+          console.error('onSubmit is not a function');
+        }
+      } else {
+        message.error('Failed to add user. Please check the credentials and try again.');
       }
     } catch (error) {
       console.error('Error adding movie or user:', error);
+      message.error('Failed to add user or movie. Please check the credentials and try again.');
     }
   };
 
@@ -123,7 +140,6 @@ const AddMovieManagement = ({ onSubmit }) => {
   const handleMovieUpload = ({ fileList }) => {
     setMovieList(fileList);
   };
-
 
   return (
     <div className="admin-movie-container">
@@ -191,6 +207,32 @@ const AddMovieManagement = ({ onSubmit }) => {
             <Button type="primary" htmlType="submit">Submit</Button>
           </Form.Item>
         </Form>
+      </Modal>
+
+      <Modal
+        visible={progressModalVisible}
+        onCancel={() => setProgressModalVisible(false)}
+        footer={null}
+        className="progress-modal"
+        closable={false}
+        maskClosable={false}
+      >
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 48,
+              }}
+              spin
+            />
+          }
+        />
+        <Progress percent={progress} style={{ marginTop: '20px' }} />
+        <div className="progress-modal-text">
+          Please wait, do not close the window
+          <br />
+          Movie is still uploading...
+        </div>
       </Modal>
     </div>
   );
