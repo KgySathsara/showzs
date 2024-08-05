@@ -18,12 +18,19 @@ const Login = () => {
     setErrors({});
     
     try {
-      // eslint-disable-next-line no-unused-vars
       const response = await axios.post('http://localhost:8000/api/login', { email, password });
-      
+
       // Show success toast
       toast.success('User logged in successfully');
-      navigate('/'); // Redirect after successful login
+      
+      const role = response.data.role;
+
+      // Role-based redirection
+      if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
+        navigate('/admin');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       let errorMessage = 'An unexpected error occurred.';
       
