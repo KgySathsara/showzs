@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './AdminUpcomingMovies.css';
-import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, DatePicker, Select, InputNumber, Upload, message, Modal, Spin, Progress } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import moment from 'moment';
 
@@ -13,9 +13,11 @@ const AdminEditUpcomingMovie = () => {
   const [movies, setMovies] = useState([]);
   const [selectedMovie, setSelectedMovie] = useState(null);
   const [isMovieSelected, setIsMovieSelected] = useState(false);
+  const [progressModalVisible, setProgressModalVisible] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [modalAction, setModalAction] = useState('');
 
   useEffect(() => {
-
     const fetchMovies = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/upcoming-movies');
@@ -32,52 +34,105 @@ const AdminEditUpcomingMovie = () => {
   const fetchMovie = async (movieId) => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/upcoming-movies/${movieId}`);
-      const movieData = response.data;
-      setSelectedMovie(movieData);
       form.setFieldsValue({
-        title: movieData.title,
-        date: moment(movieData.date),
-        duration: movieData.duration,
-        category: movieData.category,
-        description: movieData.description,
-        price: movieData.price,
-        image: movieData.image ? [{ url: movieData.image }] : [],
+        title: response.data.title,
+        date: moment(response.data.date),
+        duration: response.data.duration,
+        category: response.data.category,
+        description: response.data.description,
+        price: response.data.price,
       });
+      setSelectedMovie(response.data);
       setIsMovieSelected(true);
     } catch (error) {
       console.error('Failed to fetch movie data:', error);
     }
   };
 
+  const handleUpload = async (file, type) => {
+    const formData = new FormData();
+    formData.append('file_name', file.name);
+    formData.append('file_type', file.type);
+    formData.append('object_type', type);
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
+      const { url } = response.data;
+
+      await axios.put(url, file, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': file.type,
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+        }
+      });
+
+      return url.split('?')[0];
+    } catch (error) {
+      console.error('Failed to upload file:', error);
+      message.error('Failed to upload file');
+    }
+  };
+
   const handleSubmit = async (values) => {
-    if (selectedMovie) {
-      try {
-        const formattedValues = {
-          ...values,
-          date: values.date ? moment(values.date).format('YYYY-MM-DD HH:mm:ss') : null,
-        };
-        const response = await axios.put(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, formattedValues);
-        console.log('Movie updated:', response.data);
-        message.success('Movie updated successfully');
-        setIsMovieSelected(false);
-      } catch (error) {
-        console.error('Failed to update movie:', error);
-        message.error('Failed to update movie');
+    setModalAction('updating');
+    setProgressModalVisible(true);
+    setProgress(0);
+    try {
+      const formattedValues = {
+        ...values,
+        date: values.date ? moment(values.date).format('YYYY-MM-DD HH:mm:ss') : null,
+      };
+
+      if (values.image && values.image.fileList.length > 0) {
+        const imageFile = values.image.fileList[0].originFileObj;
+        formattedValues.image = await handleUpload(imageFile);
       }
+
+      const response = await axios.put(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, formattedValues,{
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(percentCompleted);
+      }
+      });
+
+      console.log('Movie updated:', response.data);
+      message.success('Movie updated successfully');
+      setIsMovieSelected(false);
+      setProgressModalVisible(false);
+    } catch (error) {
+      console.error('Failed to update movie:', error);
+      message.error('Failed to update movie');
+      setProgressModalVisible(false);
     }
   };
 
   const handleDelete = async () => {
+    setModalAction('deleting');
+    setProgressModalVisible(true);
+    setProgress(0);
     if (selectedMovie) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`);
+        await axios.delete(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`,
+          {
+            onUploadProgress: (progressEvent) => {
+              const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+              setProgress(percentCompleted);
+          }
+          }
+        );
         message.success('Movie deleted successfully');
         setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
         setSelectedMovie(null);
         form.resetFields();
+        setProgressModalVisible(false);
       } catch (error) {
         console.error('Failed to delete movie:', error);
         message.error('Failed to delete movie');
+        setProgressModalVisible(false);
       }
     }
   };
@@ -91,7 +146,7 @@ const AdminEditUpcomingMovie = () => {
     <section className='admin-upcoming-movies'>
       <h2>Edit or Delete Upcoming Movie</h2>
       <div className="select-item-container">
-        <Form.Item name="category" label="Upcoming Movie" rules={[{ required: true, message: 'Please select a Upcoming Movie' }]}>
+        <Form.Item name="movieSelection" label="Upcoming Movie" rules={[{ required: true, message: 'Please select an Upcoming Movie' }]}>
           <Select onChange={handleMovieChange} placeholder="Select Upcoming Movie">
             {movies.map(movie => (
               <Option key={movie.id} value={movie.id}>{movie.title}</Option>
@@ -138,8 +193,8 @@ const AdminEditUpcomingMovie = () => {
         >
           <InputNumber min={0} placeholder='Ticket Price' />
         </Form.Item>
-        <Form.Item name="picture" label="Picture">
-          <Upload name="picture" listType="picture" beforeUpload={() => false}>
+        <Form.Item name="image" label="Picture">
+          <Upload name="image" listType="picture" beforeUpload={() => false}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
@@ -147,11 +202,36 @@ const AdminEditUpcomingMovie = () => {
           <Button type="primary" className='btn-movie-management' htmlType="submit">
             {isMovieSelected ? 'Submit Movie' : 'Edit Movie'}
           </Button>
-          <Button type="primary" className='btn-movie-management' htmlType="button" onClick={handleDelete}>
+          <Button type="primary" className='btn-movie-management' htmlType="button" onClick={handleDelete} >
             Delete Movie
           </Button>
         </div>
       </Form>
+      <Modal
+        visible={progressModalVisible}
+        onCancel={() => setProgressModalVisible(false)}
+        footer={null}
+        className="progress-modal"
+        closable={false}
+        maskClosable={false}
+      >
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{
+                fontSize: 48,
+              }}
+              spin
+            />
+          }
+        />
+        <Progress percent={progress} style={{ marginTop: '20px' }} />
+        <div className="progress-modal-text">
+          Please wait, do not close the window
+          <br />
+          {modalAction === 'updating' ? 'Movie is updating...' : 'Movie is deleting...'}
+        </div>
+      </Modal>
     </section>
   );
 };

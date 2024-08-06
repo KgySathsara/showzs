@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Form, Input, Button, Select, Upload, DatePicker, message } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Select, Upload, DatePicker, message, Modal, Spin, Progress } from 'antd';
+import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import moment from 'moment';
 
 const { TextArea } = Input;
@@ -12,6 +12,9 @@ const AdminEditNews = () => {
     const [newsList, setNewsList] = useState([]);
     const [selectedNews, setSelectedNews] = useState(null);
     const [isNewsSelected, setIsNewsSelected] = useState(false);
+    const [progressModalVisible, setProgressModalVisible] = useState(false);
+    const [progress, setProgress] = useState(0);
+    const [modalAction, setModalAction] = useState('');
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -46,43 +49,105 @@ const AdminEditNews = () => {
         }
     };
 
+    const handleUpload = async (file) => {
+        const formData = new FormData();
+        formData.append('file_name', file.name);
+        formData.append('file_type', file.type);
+        formData.append('object_type', 'newsTrailers');
+
+        try {
+            const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
+            const { url } = response.data;
+
+            await axios.put(url, file, {
+                headers: {
+                    'Content-Type': file.type,
+                },
+                onUploadProgress: (progressEvent) => {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    setProgress(percentCompleted);
+                }
+            });
+
+            return url.split('?')[0];
+        } catch (error) {
+            console.error('Failed to upload file:', error);
+            message.error('Failed to upload file');
+            throw error;
+        }
+    };
+
     const handleSubmit = async (values) => {
+        setModalAction('updating');
+        setProgressModalVisible(true);
+        setProgress(0);
         if (selectedNews) {
             try {
                 const formattedValues = {
                     ...values,
                     date: values.date ? moment(values.date).format('YYYY-MM-DD HH:mm:ss') : null,
-                  };
-                await axios.put(`http://127.0.0.1:8000/api/news/${selectedNews.id}`, formattedValues);
+                };
+
+                if (values.trailer && values.trailer.fileList.length > 0) {
+                    const trailerFile = values.trailer.fileList[0].originFileObj;
+                    formattedValues.trailer = await handleUpload(trailerFile);
+                }
+
+                await axios.put(`http://127.0.0.1:8000/api/news/${selectedNews.id}`, formattedValues, {
+                    onUploadProgress: (progressEvent) => {
+                        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                        setProgress(percentCompleted);
+                    }
+                });
+
                 message.success('News updated successfully');
                 setIsNewsSelected(false);
+                setProgressModalVisible(false);
             } catch (error) {
                 console.error('Failed to update news:', error);
                 message.error('Failed to update news');
+                setProgressModalVisible(false);
             }
         }
     };
 
     const handleDelete = async () => {
+        setModalAction('deleting');
+        setProgressModalVisible(true);
+        setProgress(0);
         if (selectedNews) {
             try {
-                await axios.delete(`http://127.0.0.1:8000/api/news/${selectedNews.id}`);
+                await axios.delete(`http://127.0.0.1:8000/api/news/${selectedNews.id}`, {
+                    onDownloadProgress: (progressEvent) => {
+                        const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                        setProgress(percentCompleted);
+                    }
+                });
+
+                if (selectedNews.trailer) {
+                    await axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
+                        object_type: 'newsTrailers',
+                        file_name: selectedNews.trailer,
+                    });
+                }
+
                 message.success('News deleted successfully');
                 setNewsList(newsList.filter(news => news.id !== selectedNews.id));
                 setSelectedNews(null);
                 form.resetFields();
                 setIsNewsSelected(false);
+                setProgressModalVisible(false);
             } catch (error) {
                 console.error('Failed to delete news:', error);
                 message.error('Failed to delete news');
+                setProgressModalVisible(false);
             }
         }
     };
 
-    const handleNewsSelect =(value) => {
-        console.log('Selected news:', value);
+    const handleNewsSelect = (value) => {
         fetchNewsDetails(value);
-    }
+    };
 
     return (
         <section className='admin-edit-news'>
@@ -105,8 +170,8 @@ const AdminEditNews = () => {
                         <Form.Item name="date" label="Date" rules={[{ required: true, message: 'Please select the date' }]}>
                             <DatePicker />
                         </Form.Item>
-                        <Form.Item name="duration" label="Duration"  rules={[{ required: true, message: 'Please enter the duration' }]}>
-                            <Input placeholder='e.g., 2h 30m'/>
+                        <Form.Item name="duration" label="Duration" rules={[{ required: true, message: 'Please enter the duration' }]}>
+                            <Input placeholder='e.g., 2h 30m' />
                         </Form.Item>
                         <Form.Item name="category" label="Category" rules={[{ required: true, message: 'Please select the category' }]}>
                             <Select placeholder='Select Category'>
@@ -122,8 +187,8 @@ const AdminEditNews = () => {
                         <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please enter the price' }]}>
                             <Input />
                         </Form.Item>
-                        <Form.Item name="image" label="Image or Video">
-                            <Upload name="image" listType="picture">
+                        <Form.Item name="trailer" label="Image or Video">
+                            <Upload name="trailer" listType="picture" beforeUpload={() => false}>
                                 <Button icon={<UploadOutlined />}>Upload Media</Button>
                             </Upload>
                         </Form.Item>
@@ -136,6 +201,31 @@ const AdminEditNews = () => {
                     </Form>
                 </div>
             </div>
+            <Modal
+                visible={progressModalVisible}
+                onCancel={() => setProgressModalVisible(false)}
+                footer={null}
+                className="progress-modal"
+                closable={false}
+                maskClosable={false}
+            >
+                <Spin
+                    indicator={
+                        <LoadingOutlined
+                            style={{
+                                fontSize: 48,
+                            }}
+                            spin
+                        />
+                    }
+                />
+                <Progress percent={progress} style={{ marginTop: '20px' }} />
+                <div className="progress-modal-text">
+                    Please wait, do not close the window
+                    <br />
+                    {modalAction === 'updating' ? 'News is updating...' : 'News is deleting...'}
+                </div>
+            </Modal>
         </section>
     );
 };
