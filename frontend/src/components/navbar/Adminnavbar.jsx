@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Button } from 'antd';
 import {
   VideoCameraOutlined,
   CalendarOutlined,
@@ -10,7 +10,7 @@ import {
   SettingOutlined,
   ForwardOutlined,
 } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
 import logo from '../../assest/logo.png';
 import './AdminNavBar.css';
@@ -21,11 +21,15 @@ const { SubMenu } = Menu;
 const AdminNavBar = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [role, setRole] = useState('');
+  const [full_Name, setFullName] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userRole = sessionStorage.getItem('userRole');
+    const storedFullName = sessionStorage.getItem('fullName'); // Retrieve fullName from sessionStorage
     setRole(userRole);
-  }, []);
+    setFullName(storedFullName);
+  }, []); // Empty dependency array means this effect runs once when the component mounts
 
   const handleSwipe = (eventData) => {
     if (eventData.dir === 'Right') {
@@ -40,16 +44,21 @@ const AdminNavBar = () => {
     onSwipedRight: () => handleSwipe({ dir: 'Right' }),
   });
 
+  const handleSignOut = () => {
+    sessionStorage.clear(); // Clear session storage
+    navigate('/login'); // Redirect to login page
+  };
+
   return (
     <Sider collapsible collapsed={collapsed} onCollapse={(collapsed) => setCollapsed(collapsed)} {...swipeHandlers}>
       <div className="logo">
-        <img src={logo} alt='logo' />
+        <img src={logo} alt="logo" />
       </div>
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="sub1" icon={<DashboardOutlined />} title="Dashboard">
           <Link to="/Admin">Dashboard</Link>
         </Menu.Item>
-        
+
         {(role === 'admin' || role === 'editor') && (
           <SubMenu key="sub3" icon={<VideoCameraOutlined />} title="Movie Management">
             <Menu.Item key="10"><Link to="/MovieProfile">Movie Profile</Link></Menu.Item>
@@ -57,7 +66,7 @@ const AdminNavBar = () => {
             <Menu.Item key="12"><Link to="/AddMovie">Add New Movie</Link></Menu.Item>
           </SubMenu>
         )}
-        
+
         {(role === 'admin' || role === 'editor') && (
           <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">
             <Menu.Item key="50"><Link to="/LiveEventProfile">Live Event Profile</Link></Menu.Item>
@@ -65,7 +74,7 @@ const AdminNavBar = () => {
             <Menu.Item key="22"><Link to="/AdminStreamLiveEvents">Stream Management</Link></Menu.Item>
           </SubMenu>
         )}
-        
+
         {(role === 'admin' || role === 'contect_owner') && (
           <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
             <Menu.Item key="24">
@@ -76,7 +85,7 @@ const AdminNavBar = () => {
             </Menu.Item>
           </SubMenu>
         )}
-        
+
         {(role === 'admin' || role === 'contect_owner') && (
           <SubMenu key="sub9" icon={<ForwardOutlined />} title="Upcoming Movie Management">
             <Menu.Item key="25">
@@ -95,7 +104,7 @@ const AdminNavBar = () => {
             </Menu.Item>
           </SubMenu>
         )}
-        
+
         {role === 'admin' && (
           <SubMenu key="sub14" icon={<AppstoreOutlined />} title="Additional Section">
             <Menu.Item key="39">
@@ -111,7 +120,7 @@ const AdminNavBar = () => {
             </SubMenu>
           </SubMenu>
         )}
-        
+
         {role === 'admin' && (
           <SubMenu key="sub16" icon={<SettingOutlined />} title="Setting Section">
             <Menu.Item key="42">
@@ -128,6 +137,10 @@ const AdminNavBar = () => {
           </SubMenu>
         )}
       </Menu>
+      <div className="user-info" style={{ padding: '20px', textAlign: 'center' }}>
+        <p style={{ color: '#fff' }}>Hello, {full_Name}</p> {/* Display fullName */}
+        <Button type="primary" onClick={handleSignOut}>Sign Out</Button>
+      </div>
     </Sider>
   );
 };
