@@ -50,7 +50,7 @@ const ViewMovieManagement = () => {
     }
   };
 
-  const handleUpload = async (file, type) => {
+  const handleUpload = async (file, type, baseProgress) => {
     const formData = new FormData();
     formData.append('file_name', file.name);
     formData.append('file_type', file.type);
@@ -60,12 +60,14 @@ const ViewMovieManagement = () => {
       const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
       const { url } = response.data;
 
-      await fetch(url, {
-        method: 'PUT',
+      await axios.put(url, file, {
         headers: {
           'Content-Type': file.type,
         },
-        body: file,
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setProgress(baseProgress + percentCompleted * 0.2);
+        },
       });
 
       return url.split('?')[0];
@@ -77,7 +79,7 @@ const ViewMovieManagement = () => {
 
   const handleSubmit = async (values) => {
     if (selectedMovie) {
-      setModalAction('updating'); 
+      setModalAction('updating');
       setProgressModalVisible(true);
       setProgress(0);
 
@@ -86,24 +88,40 @@ const ViewMovieManagement = () => {
 
         if (values.picture && values.picture.fileList.length > 0) {
           const pictureFile = values.picture.fileList[0].originFileObj;
-          updatedValues.picture = await handleUpload(pictureFile, 'movieCoverImages');
-          setProgress((prev) => prev + 20);
+          if (pictureFile.type.startsWith('image/')) {
+            updatedValues.picture = await handleUpload(pictureFile, 'movieCoverImages', 10);
+          } else {
+            message.error('You can only upload image files!');
+            setProgressModalVisible(false);
+            return;
+          }
         } else {
           delete updatedValues.picture;
         }
 
         if (values.trailer && values.trailer.fileList.length > 0) {
           const trailerFile = values.trailer.fileList[0].originFileObj;
-          updatedValues.trailer = await handleUpload(trailerFile, 'movieTrailers');
-          setProgress((prev) => prev + 20);
+          if (trailerFile.type.startsWith('video/')) {
+            updatedValues.trailer = await handleUpload(trailerFile, 'movieTrailers', 30);
+          } else {
+            message.error('You can only upload video files!');
+            setProgressModalVisible(false);
+            return;
+          }
         } else {
           delete updatedValues.trailer;
         }
 
         if (values.movie && values.movie.fileList.length > 0) {
           const movieFile = values.movie.fileList[0].originFileObj;
-          updatedValues.movie = await handleUpload(movieFile, 'movies');
-          setProgress((prev) => prev + 20);
+          if (movieFile.type.startsWith('video/')) {
+            updatedValues.movie = await handleUpload(movieFile, 'movies', 60);
+          } else {
+            message.error('You can only upload video files!');
+            setProgressModalVisible(false);
+            return;
+          }
+          setProgress(90);
         } else {
           delete updatedValues.movie;
         }
@@ -123,7 +141,7 @@ const ViewMovieManagement = () => {
 
   const handleDelete = async () => {
     if (selectedMovie) {
-      setModalAction('deleting'); 
+      setModalAction('deleting');
       setProgressModalVisible(true);
       setProgress(0);
 
@@ -182,6 +200,22 @@ const ViewMovieManagement = () => {
     fetchMovie(value);
   };
 
+  const beforeUploadPicture = (file) => {
+    const isImage = file.type.startsWith('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+    }
+    return isImage;
+  };
+
+  const beforeUploadVideo = (file) => {
+    const isVideo = file.type.startsWith('video/');
+    if (!isVideo) {
+      message.error('You can only upload video files!');
+    }
+    return isVideo;
+  };
+
   return (
     <section className='admin-movie-management'>
       <h2>View/Update/Delete Movie</h2>
@@ -222,17 +256,17 @@ const ViewMovieManagement = () => {
               <Input />
             </Form.Item>
             <Form.Item name="picture" label="Picture">
-              <Upload name="picture" listType="picture" beforeUpload={() => false}>
+              <Upload name="picture" listType="picture" beforeUpload={beforeUploadPicture}>
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>
             <Form.Item name="trailer" label="Trailer">
-              <Upload name="trailer" listType="picture" beforeUpload={() => false}>
+              <Upload name="trailer" listType="picture" beforeUpload={beforeUploadVideo}>
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>
             <Form.Item name="movie" label="Movie">
-              <Upload name="movie" listType="picture" beforeUpload={() => false}>
+              <Upload name="movie" listType="picture" beforeUpload={beforeUploadVideo}>
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>

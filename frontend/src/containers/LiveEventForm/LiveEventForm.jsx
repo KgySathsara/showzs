@@ -14,6 +14,10 @@ const LiveEventForm = ({ onSubmit }) => {
   const [emailForm] = Form.useForm();
 
   const handleSubmit = async (values) => {
+    if (fileList.length === 0) {
+      message.error('Please upload a cover image for the event.');
+      return;
+    }
     setModalVisible(true);
   };
 
@@ -28,8 +32,6 @@ const LiveEventForm = ({ onSubmit }) => {
       });
 
       if (userResponse.status === 201) {
-        setProgressModalVisible(true);
-
         const movieValues = form.getFieldsValue();
         const formData = new FormData();
         formData.append('title', movieValues.title);
@@ -43,46 +45,79 @@ const LiveEventForm = ({ onSubmit }) => {
         if (fileList.length > 0) {
           const coverFile = fileList[0].originFileObj;
 
-          const response = await axios.get('http://localhost:8000/api/s3-CoverImages', {
-            params: {
-              file_name: coverFile.name,
-              file_type: coverFile.type,
-            },
-          });
+          if (!coverFile.type.startsWith('image/')) {
+            message.error('Please upload only image files.');
+            return;
+          }
 
-          const signedUrl = response.data.url;
+          try {
+            setProgressModalVisible(true);
+            setProgress(0);
 
-          await axios.put(signedUrl, coverFile, {
-            headers: {
-              'Content-Type': coverFile.type,
-            },
-            onUploadProgress: (progressEvent) => {
-              const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-              setProgress(percentCompleted);
-            },
-          });
+            const response = await axios.get('http://localhost:8000/api/s3-CoverImages', {
+              params: {
+                file_name: coverFile.name,
+                file_type: coverFile.type,
+              },
+            });
 
-          const coverUrl = signedUrl.split('?')[0];
-          formData.append('coverImage', coverUrl);
+            const signedUrl = response.data.url;
+
+            await axios.put(signedUrl, coverFile, {
+              headers: {
+                'Content-Type': coverFile.type,
+              },
+              onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+              },
+            });
+
+            const coverUrl = signedUrl.split('?')[0];
+            formData.append('coverImage', coverUrl);
+
+            await axios.post('http://127.0.0.1:8000/api/live-events', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+              },
+            });
+
+            message.success('Live event created successfully');
+            form.resetFields();
+            emailForm.resetFields();
+            setFileList([]);
+            setModalVisible(false);
+            setProgressModalVisible(false);
+            onSubmit({ ...movieValues, coverImage: fileList });
+          } catch (error) {
+            message.error('Failed to create live event');
+            console.error('Error adding user or event:', error);
+            setProgressModalVisible(false);
+          }
+        } else {
+          message.error('Please upload an image.');
         }
-
-        await axios.post('http://127.0.0.1:8000/api/live-events', formData);
-        message.success('Live event created successfully');
-        form.resetFields();
-        emailForm.resetFields();
-        setFileList([]);
-        setModalVisible(false);
-        setProgressModalVisible(false);
-        onSubmit({ ...movieValues, coverImage: fileList });
       }
     } catch (error) {
       message.error('Failed to create live event');
-      console.error('Error adding user or event:', error);
+      console.error('Error adding user:', error);
     }
   };
 
   const handleUpload = ({ fileList }) => {
     setFileList(fileList);
+  };
+
+  const beforeUpload = (file) => {
+    const isImage = file.type.startsWith('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+    }
+    return isImage || Upload.LIST_IGNORE;
   };
 
   return (
@@ -104,7 +139,7 @@ const LiveEventForm = ({ onSubmit }) => {
           <Input type="number" />
         </Form.Item>
         <Form.Item name="coverImage" label="Cover Image" valuePropName="fileList" getValueFromEvent={(e) => e.fileList}>
-          <Upload name="logo" listType="picture" beforeUpload={() => false} onChange={handleUpload}>
+          <Upload name="logo" listType="picture" beforeUpload={beforeUpload} onChange={handleUpload}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>

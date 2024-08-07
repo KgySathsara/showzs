@@ -15,6 +15,7 @@ const AdminEditNews = () => {
     const [progressModalVisible, setProgressModalVisible] = useState(false);
     const [progress, setProgress] = useState(0);
     const [modalAction, setModalAction] = useState('');
+    const [trailerList, setTrailerList] = useState([]);
 
     useEffect(() => {
         const fetchNews = async () => {
@@ -53,7 +54,7 @@ const AdminEditNews = () => {
         const formData = new FormData();
         formData.append('file_name', file.name);
         formData.append('file_type', file.type);
-        formData.append('object_type', 'newsTrailers');
+        formData.append('object_type', 'movieTrailers');
 
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
@@ -88,8 +89,15 @@ const AdminEditNews = () => {
                     date: values.date ? moment(values.date).format('YYYY-MM-DD HH:mm:ss') : null,
                 };
 
-                if (values.trailer && values.trailer.fileList.length > 0) {
-                    const trailerFile = values.trailer.fileList[0].originFileObj;
+                if (trailerList.length > 0) {
+                    const trailerFile = trailerList[0].originFileObj;
+
+                    // Check for correct file type
+                    if (!trailerFile.type.startsWith('video/')) {
+                        message.error('Please upload only video files.');
+                        return;
+                    }
+
                     formattedValues.trailer = await handleUpload(trailerFile);
                 }
 
@@ -126,7 +134,7 @@ const AdminEditNews = () => {
 
                 if (selectedNews.trailer) {
                     await axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
-                        object_type: 'newsTrailers',
+                        object_type: 'movieTrailers',
                         file_name: selectedNews.trailer,
                     });
                 }
@@ -147,6 +155,16 @@ const AdminEditNews = () => {
 
     const handleNewsSelect = (value) => {
         fetchNewsDetails(value);
+    };
+
+    const handleFileChange = ({ fileList }) => {
+        const isVideo = fileList.every(file => file.type.startsWith('video/'));
+        if (isVideo) {
+            setTrailerList(fileList);
+        } else {
+            message.error('Please upload only video files.');
+            setTrailerList([]);
+        }
     };
 
     return (
@@ -187,13 +205,14 @@ const AdminEditNews = () => {
                         <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please enter the price' }]}>
                             <Input />
                         </Form.Item>
-                        <Form.Item name="trailer" label="Image or Video">
-                            <Upload name="trailer" listType="picture" beforeUpload={() => false}>
+                        <Form.Item name="trailer" label="Trailer">
+                            <Upload name="trailer" listType="picture" beforeUpload={() => false}
+                                onChange={handleFileChange}>
                                 <Button icon={<UploadOutlined />}>Upload Media</Button>
                             </Upload>
                         </Form.Item>
                         <div className="form-buttons">
-                            <Button type="primary" className='btn-news-management' htmlType="submit" >
+                            <Button type="primary" className='btn-news-management' htmlType="submit">
                                 {isNewsSelected ? 'Submit News' : 'Edit News'}
                             </Button>
                             <Button type="primary" className='btn-news-management' htmlType="button" onClick={handleDelete}>Delete News</Button>
