@@ -1,3 +1,4 @@
+// Import necessary dependencies
 import React, { useState } from 'react';
 import background from '../../assest/banner.jpg';
 import './login.css';
@@ -24,6 +25,7 @@ const Login = () => {
       toast.success('User logged in successfully');
       
       const role = response.data.role;
+      sessionStorage.setItem('userRole', role); // Store the user role in session storage
 
       // Role-based redirection
       if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
