@@ -49,7 +49,7 @@ root.render(
 
       <Route path='/Admin' element={
         <ProtectedRoute allowedRoles={['admin', 'editor','contect_owner']}>
-          <AdminAddLiveEvents />
+          <Admin />
         </ProtectedRoute>
       } />
 
