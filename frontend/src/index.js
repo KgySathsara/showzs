@@ -46,7 +46,12 @@ root.render(
       <Route path='/Contactus' element={<Contactus />} />
       <Route path='/Login' element={<Login />} />
       <Route path='/Register' element={<Register />} />
-      <Route path='/Admin' element={<Admin />} />
+
+      <Route path='/Admin' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor','contect_owner']}>
+          <AdminAddLiveEvents />
+        </ProtectedRoute>
+      } />
 
       <Route path='/AdminAddLiveEvents' element={
         <ProtectedRoute allowedRoles={['admin', 'editor']}>
