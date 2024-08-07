@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import App from './App';
 import './index.css';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import LiveEvents from './pages/LiveEvents/LiveEvents';
 import Movies from './pages/Movies/Movies';
 import News from './pages/News/News';
@@ -31,6 +31,8 @@ import AdminLoginOnly from './pages/AdminLoginOnly/AdminLoginOnly';
 import AdminEditUpcomingMovie from './pages/AdminNewsManagement/AdminEditUpcomingMovie';
 import AdminEditNews from './pages/AdminNewsManagement/AdminEditNews';
 import PhoneNumber from './pages/AdminSetting/PhoneNumber';
+import NotAuthorized from './pages/NotAuthorized/NotAuthorized'; 
+import ProtectedRoute from './components/ProtectedRoute';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -45,27 +47,107 @@ root.render(
       <Route path='/Login' element={<Login />} />
       <Route path='/Register' element={<Register />} />
       <Route path='/Admin' element={<Admin />} />
-      <Route path='/AdminAddLiveEvents' element={<AdminAddLiveEvents />} />
-      <Route path='/AdminViewLiveEvents' element={<AdminViewLiveEvents />} />
-      <Route path='/AddMovie' element={<AddMovie />} />
-      <Route path='/ViewMovie' element={<ViewMovie />} />
-      <Route path='/AdminContactUs' element={<AdminContactUs />} />
-      <Route path='/AdminAddNews' element={<AdminAddNews />} />
-      <Route path='/MovieProfile' element={<MovieProfile />} />
-      <Route path='/LiveEventProfile' element={<LiveEventProfile />} />
-      <Route path='/AdminStreamLiveEvents' element={<AdminStreamLiveEvents />} />
-      <Route path='/LiveEventPay' element={<LiveEventPay />} />
-      <Route path='/MoviePay' element={<MoviePay />} />
-      <Route path='/UsersManagement' element={<UsersManagement />} />
-      <Route path='/AdminAddUpcomingMovie' element={<AdminAddUpcomingMovie />} />
+
+      <Route path='/AdminAddLiveEvents' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <AdminAddLiveEvents />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminViewLiveEvents' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <AdminViewLiveEvents />
+        </ProtectedRoute>
+      } />
+      <Route path='/AddMovie' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <AddMovie />
+        </ProtectedRoute>
+      } />
+      <Route path='/ViewMovie' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <ViewMovie />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminContactUs' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <AdminContactUs />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminAddNews' element={
+        <ProtectedRoute allowedRoles={['admin', 'contect_owner']}>
+          <AdminAddNews />
+        </ProtectedRoute>
+      } />
+      <Route path='/MovieProfile' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <MovieProfile />
+        </ProtectedRoute>
+      } />
+      <Route path='/LiveEventProfile' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <LiveEventProfile />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminStreamLiveEvents' element={
+        <ProtectedRoute allowedRoles={['admin', 'editor']}>
+          <AdminStreamLiveEvents />
+        </ProtectedRoute>
+      } />
+      <Route path='/LiveEventPay' element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <LiveEventPay />
+        </ProtectedRoute>
+      } />
+      <Route path='/MoviePay' element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <MoviePay />
+        </ProtectedRoute>
+      } />
+      <Route path='/UsersManagement' element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <UsersManagement />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminAddUpcomingMovie' element={
+        <ProtectedRoute allowedRoles={['admin', 'contect_owner']}>
+          <AdminAddUpcomingMovie />
+        </ProtectedRoute>
+      } />
+
       <Route path='/WatchMovie' element={<WatchMovie />} />
       <Route path='/WatchLive' element={<WatchLive />} />
-      <Route path='/EditorAccount' element={<EditorAccount />} />
-      <Route path='/PasswordManagement' element={<PasswordManagement />} />
-      <Route path='/AdminLoginOnly' element={<AdminLoginOnly />} />
-      <Route path='/AdminEditUpcomingMovie' element={<AdminEditUpcomingMovie />} />
-      <Route path='/AdminEditNews' element={<AdminEditNews />} />
-      <Route path='/PhoneNumber' element={<PhoneNumber />} />
+
+      <Route path='/EditorAccount' element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <EditorAccount />
+        </ProtectedRoute>
+      } />
+      <Route path='/PasswordManagement' element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <PasswordManagement />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminLoginOnly' element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <AdminLoginOnly />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminEditUpcomingMovie' element={
+        <ProtectedRoute allowedRoles={['admin', 'contect_owner']}>
+          <AdminEditUpcomingMovie />
+        </ProtectedRoute>
+      } />
+      <Route path='/AdminEditNews' element={
+        <ProtectedRoute allowedRoles={['admin', 'contect_owner']}>
+          <AdminEditNews />
+        </ProtectedRoute>
+      } />
+      <Route path='/PhoneNumber' element={
+        <ProtectedRoute allowedRoles={['admin']}>
+          <PhoneNumber />
+        </ProtectedRoute>
+      } />
+      <Route path='/not-authorized' element={<NotAuthorized />} />
     </Routes>
   </BrowserRouter>
 );
