@@ -1,9 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 // src/pages/NotFound/NotFound.js
 import React from 'react';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
-const NotAuthorized = () => {
+const error500 = () => {
   const navigate = useNavigate();
 
   const goHome = () => {
@@ -12,7 +13,7 @@ const NotAuthorized = () => {
 
   return (
     <div style={styles.container}>
-      <h1 style={styles.heading}>404 - Page Not Found</h1>
+      <h1 style={styles.heading}>500 - Page Not Found</h1>
       <p style={styles.message}>The page you are looking for does not exist.</p>
       <Button type="primary" onClick={goHome}>Go Home</Button>
     </div>
@@ -35,4 +36,4 @@ const styles = {
   },
 };
 
-export default NotAuthorized;
+export default error500;
