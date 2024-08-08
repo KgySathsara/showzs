@@ -13,9 +13,12 @@ const AddMovieManagement = ({ onSubmit }) => {
   const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [emailForm] = Form.useForm();
   const [progress, setProgress] = useState(0);
+  const [fileError, setFileError] = useState(false);
 
   const handleSubmit = async (values) => {
-    setModalVisible(true);
+    if (!fileError) {
+      setModalVisible(true);
+    }
   };
 
   const handleModalSubmit = async (values) => {
@@ -115,6 +118,7 @@ const AddMovieManagement = ({ onSubmit }) => {
         setTrailerList([]);
         setMovieList([]);
         setProgressModalVisible(false);
+        setModalVisible(false);
         if (typeof onSubmit === 'function') {
           onSubmit({ ...movieValues, picture: coverImageUrl, trailer: trailerUrl });
         } else {
@@ -141,6 +145,28 @@ const AddMovieManagement = ({ onSubmit }) => {
     setMovieList(fileList);
   };
 
+  const beforeUploadImage = (file) => {
+    const isImage = file.type.startsWith('image/');
+    if (!isImage) {
+      message.error('You can only upload image files!');
+      setFileError(true);
+    } else {
+      setFileError(false);
+    }
+    return isImage;
+  };
+
+  const beforeUploadVideo = (file) => {
+    const isVideo = fileList.every(file => file.type.startsWith('video/'));
+    if (!isVideo) {
+      message.error('You can only upload video files!');
+      setFileError(true);
+    } else {
+      setFileError(false);
+    }
+    return isVideo;
+  };
+
   return (
     <div className="admin-movie-container">
       <h2>Add New Movie</h2>
@@ -164,17 +190,32 @@ const AddMovieManagement = ({ onSubmit }) => {
           <Input />
         </Form.Item>
         <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload}>
-          <Upload name="picture" listType="picture" beforeUpload={() => false} onChange={handleUpload}>
+          <Upload
+            name="picture"
+            listType="picture"
+            beforeUpload={beforeUploadImage}
+            onChange={handleUpload}
+          >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
         <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleTrailerUpload}>
-          <Upload name="trailer" listType="picture" beforeUpload={() => false} onChange={handleTrailerUpload}>
+          <Upload
+            name="trailer"
+            listType="picture"
+            beforeUpload={beforeUploadVideo}
+            onChange={handleTrailerUpload}
+          >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
         <Form.Item name="movie" label="Movie" valuePropName="fileList" getValueFromEvent={handleMovieUpload}>
-          <Upload name="movie" listType="picture" beforeUpload={() => false} onChange={handleMovieUpload}>
+          <Upload
+            name="movie"
+            listType="picture"
+            beforeUpload={beforeUploadVideo}
+            onChange={handleMovieUpload}
+          >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
@@ -197,10 +238,10 @@ const AddMovieManagement = ({ onSubmit }) => {
           <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
             <Input.Password />
           </Form.Item>
-          <Form.Item name="fullName" label="Full Name">
+          <Form.Item name="fullName" label="Full Name" rules={[{ required: true, message: 'Please enter your full name' }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="phoneNumber" label="Phone Number">
+          <Form.Item name="phoneNumber" label="Phone Number" rules={[{ required: true, message: 'Please enter your phone number' }]}>
             <Input />
           </Form.Item>
           <Form.Item>

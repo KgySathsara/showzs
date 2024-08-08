@@ -24,6 +24,12 @@ const AdminAddNewManagement = () => {
     if (trailerList.length > 0) {
       const trailerFile = trailerList[0].originFileObj;
 
+      // Check for correct file type
+      if (!trailerFile.type.startsWith('video/')) {
+        message.error('Please upload only video files.');
+        return;
+      }
+
       try {
         setProgressModalVisible(true);
         setProgress(0);
@@ -44,7 +50,7 @@ const AdminAddNewManagement = () => {
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setProgress(percentCompleted);
-          }
+          },
         });
 
         const trailerUrl = signedUrl.split('?')[0];
@@ -57,7 +63,7 @@ const AdminAddNewManagement = () => {
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setProgress(percentCompleted);
-          }
+          },
         });
 
         message.success('News added successfully!');
@@ -79,6 +85,7 @@ const AdminAddNewManagement = () => {
       setTrailerList(fileList);
     } else {
       message.error('Please upload only video files.');
+      setTrailerList([]);
     }
   };
 

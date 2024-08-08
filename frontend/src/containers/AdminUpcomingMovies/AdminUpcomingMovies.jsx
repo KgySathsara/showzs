@@ -15,11 +15,6 @@ const AdminUpcomingMovies = () => {
   const [progressModalVisible, setProgressModalVisible] = useState(false);
 
   const handleImagePreview = (file) => {
-    if (!(file instanceof Blob)) {
-      console.error('Expected Blob or File but received:', file);
-      return;
-    }
-
     const reader = new FileReader();
     reader.onload = () => {
       setPreviewImage(reader.result);
@@ -116,6 +111,13 @@ const AdminUpcomingMovies = () => {
   };
 
   const handleChange = ({ file, fileList }) => {
+    const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (!isJpgOrPng) {
+      message.error('You can only upload JPG/PNG file!');
+      setFileList([]);
+      return;
+    }
+
     if (file.status !== 'uploading' && file.originFileObj) {
       handleImagePreview(file.originFileObj);
     }

@@ -16,6 +16,7 @@ const AdminEditUpcomingMovie = () => {
   const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const [modalAction, setModalAction] = useState('');
+  const [isValidFile, setIsValidFile] = useState([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -27,40 +28,39 @@ const AdminEditUpcomingMovie = () => {
         console.error('Failed to fetch movies:', error);
       }
     };
-
     fetchMovies();
   }, []);
 
   const fetchMovie = async (movieId) => {
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/upcoming-movies/${movieId}`);
-      form.setFieldsValue({
+      const formData = {
         title: response.data.title,
         date: moment(response.data.date),
         duration: response.data.duration,
         category: response.data.category,
         description: response.data.description,
         price: response.data.price,
-      });
+      };
       setSelectedMovie(response.data);
+      form.setFieldsValue(formData);
       setIsMovieSelected(true);
     } catch (error) {
       console.error('Failed to fetch movie data:', error);
     }
   };
 
-  const handleUpload = async (file, type) => {
+  const handleUpload = async (file) => {
     const formData = new FormData();
     formData.append('file_name', file.name);
     formData.append('file_type', file.type);
-    formData.append('object_type', type);
+    formData.append('object_type', 'movieCoverImages');
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
       const { url } = response.data;
 
       await axios.put(url, file, {
-        method: 'PUT',
         headers: {
           'Content-Type': file.type,
         },
@@ -74,6 +74,7 @@ const AdminEditUpcomingMovie = () => {
     } catch (error) {
       console.error('Failed to upload file:', error);
       message.error('Failed to upload file');
+      throw error;
     }
   };
 
@@ -81,32 +82,38 @@ const AdminEditUpcomingMovie = () => {
     setModalAction('updating');
     setProgressModalVisible(true);
     setProgress(0);
-    try {
-      const formattedValues = {
-        ...values,
-        date: values.date ? moment(values.date).format('YYYY-MM-DD HH:mm:ss') : null,
-      };
+    if (selectedMovie) {
+      try {
+        const formattedValues = {
+          ...values,
+          date: values.date ? moment(values.date).format('YYYY-MM-DD HH:mm:ss') : null,
+        };
 
-      if (values.image && values.image.fileList.length > 0) {
-        const imageFile = values.image.fileList[0].originFileObj;
-        formattedValues.image = await handleUpload(imageFile);
+        if (isValidFile.length > 0) {
+          const imageFile = isValidFile[0].originFileObj;
+
+          if (!imageFile.type.startsWith('image/')) {
+            message.error('Please upload only image files.');
+            return;
+          }
+
+          formattedValues.image = await handleUpload(imageFile);
+        }
+
+        await axios.put(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, formattedValues, {
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+          }
+        });
+        message.success('Movie updated successfully');
+        setIsMovieSelected(false);
+        setProgressModalVisible(false);
+      } catch (error) {
+        console.error('Failed to update movie:', error);
+        message.error('Failed to update movie');
+        setProgressModalVisible(false);
       }
-
-      const response = await axios.put(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, formattedValues,{
-        onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setProgress(percentCompleted);
-      }
-      });
-
-      console.log('Movie updated:', response.data);
-      message.success('Movie updated successfully');
-      setIsMovieSelected(false);
-      setProgressModalVisible(false);
-    } catch (error) {
-      console.error('Failed to update movie:', error);
-      message.error('Failed to update movie');
-      setProgressModalVisible(false);
     }
   };
 
@@ -116,18 +123,25 @@ const AdminEditUpcomingMovie = () => {
     setProgress(0);
     if (selectedMovie) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`,
-          {
-            onUploadProgress: (progressEvent) => {
-              const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-              setProgress(percentCompleted);
+        await axios.delete(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, {
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
           }
-          }
-        );
+        });
+
+        if (selectedMovie.image) {
+          await axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
+              object_type: 'movieCoverImages',
+              file_name: selectedMovie.image,
+          });
+      }
+
         message.success('Movie deleted successfully');
         setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
         setSelectedMovie(null);
         form.resetFields();
+        setIsMovieSelected(false);
         setProgressModalVisible(false);
       } catch (error) {
         console.error('Failed to delete movie:', error);
@@ -140,6 +154,16 @@ const AdminEditUpcomingMovie = () => {
   const handleMovieChange = (value) => {
     console.log('Selected movie:', value);
     fetchMovie(value);
+  };
+
+  const validateFile = ({ fileList }) => {
+    const isValidType = fileList.every(file => file.type.startsWith('image/'));
+    if (isValidType) {
+      setIsValidFile(fileList);
+    } else {
+      message.error('You can only upload JPG/PNG file!');
+      setIsValidFile([]);
+    }
   };
 
   return (
@@ -194,17 +218,23 @@ const AdminEditUpcomingMovie = () => {
           <InputNumber min={0} placeholder='Ticket Price' />
         </Form.Item>
         <Form.Item name="image" label="Picture">
-          <Upload name="image" listType="picture" beforeUpload={() => false}>
+          <Upload
+            name="image"
+            listType="picture"
+            beforeUpload={() => false}
+            onChange={validateFile}
+            maxCount={1}
+          >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
         <div className="form-buttons">
           <Button type="primary" className='btn-movie-management' htmlType="submit">
-            {isMovieSelected ? 'Submit Movie' : 'Edit Movie'}
+            {isMovieSelected ? 'Edit Movie' : 'Submit Movie'}
           </Button>
-          <Button type="primary" className='btn-movie-management' htmlType="button" onClick={handleDelete} >
-            Delete Movie
-          </Button>
+            <Button type="primary" className='btn-movie-management' htmlType="button" onClick={handleDelete}>
+              Delete Movie
+            </Button>
         </div>
       </Form>
       <Modal
