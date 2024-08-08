@@ -92,7 +92,6 @@ const LiveEventForm = ({ onSubmit }) => {
             setFileList([]);
             setModalVisible(false);
             setProgressModalVisible(false);
-            onSubmit({ ...movieValues, coverImage: fileList });
           } catch (error) {
             message.error('Failed to create live event');
             console.error('Error adding user or event:', error);
@@ -109,15 +108,13 @@ const LiveEventForm = ({ onSubmit }) => {
   };
 
   const handleUpload = ({ fileList }) => {
-    setFileList(fileList);
-  };
-
-  const beforeUpload = (file) => {
-    const isImage = file.type.startsWith('image/');
-    if (!isImage) {
-      message.error('You can only upload image files!');
+    const isImage = fileList.every(file => file.type.startsWith('image/'));
+    if (isImage) {
+      setFileList(fileList);
+    }else {
+    message.error('You can only upload image files!');
+    setFileList([]);
     }
-    return isImage || Upload.LIST_IGNORE;
   };
 
   return (
@@ -139,7 +136,7 @@ const LiveEventForm = ({ onSubmit }) => {
           <Input type="number" />
         </Form.Item>
         <Form.Item name="coverImage" label="Cover Image" valuePropName="fileList" getValueFromEvent={(e) => e.fileList}>
-          <Upload name="logo" listType="picture" beforeUpload={beforeUpload} onChange={handleUpload}>
+          <Upload name="logo" listType="picture" beforeUpload={() => false} onChange={handleUpload}>
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
