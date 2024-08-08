@@ -15,6 +15,9 @@ const ViewMovieManagement = () => {
   const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
   const [modalAction, setModalAction] = useState('');
+  const [imageList, setImageList] = useState([]);
+  const [trailerList, setTrailerList] = useState([]);
+  const [movieList, setMovieList] = useState([]);
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -50,7 +53,7 @@ const ViewMovieManagement = () => {
     }
   };
 
-  const handleUpload = async (file, type, baseProgress) => {
+  const handleUpload = async (file, type, baseProgress = 0) => {
     const formData = new FormData();
     formData.append('file_name', file.name);
     formData.append('file_type', file.type);
@@ -74,112 +77,85 @@ const ViewMovieManagement = () => {
     } catch (error) {
       console.error('Failed to upload file:', error);
       message.error('Failed to upload file');
+      throw error;
     }
   };
 
   const handleSubmit = async (values) => {
-    if (selectedMovie) {
-      setModalAction('updating');
-      setProgressModalVisible(true);
-      setProgress(0);
+    setModalAction('updating');
+    setProgressModalVisible(true);
+    setProgress(0);
 
+    if (selectedMovie) {
       try {
         const updatedValues = { ...values };
 
-        if (values.picture && values.picture.fileList.length > 0) {
-          const pictureFile = values.picture.fileList[0].originFileObj;
-          if (pictureFile.type.startsWith('image/')) {
-            updatedValues.picture = await handleUpload(pictureFile, 'movieCoverImages', 10);
-          } else {
+        if (imageList.length > 0) {
+          const pictureFile = imageList[0].originFileObj;
+
+          if (!pictureFile.type.startsWith('image/')) {
             message.error('You can only upload image files!');
-            setProgressModalVisible(false);
             return;
           }
-        } else {
-          delete updatedValues.picture;
+          updatedValues.picture = await handleUpload(pictureFile, 'movieCoverImages');
         }
 
-        if (values.trailer && values.trailer.fileList.length > 0) {
-          const trailerFile = values.trailer.fileList[0].originFileObj;
-          if (trailerFile.type.startsWith('video/')) {
-            updatedValues.trailer = await handleUpload(trailerFile, 'movieTrailers', 30);
-          } else {
+        if (trailerList.length > 0) {
+          const trailerFile = trailerList[0].originFileObj;
+
+          if (!trailerFile.type.startsWith('video/')) {
             message.error('You can only upload video files!');
-            setProgressModalVisible(false);
             return;
           }
-        } else {
-          delete updatedValues.trailer;
+          updatedValues.trailer = await handleUpload(trailerFile, 'movieTrailers');
         }
 
-        if (values.movie && values.movie.fileList.length > 0) {
-          const movieFile = values.movie.fileList[0].originFileObj;
-          if (movieFile.type.startsWith('video/')) {
-            updatedValues.movie = await handleUpload(movieFile, 'movies', 60);
-          } else {
+        if (movieList.length > 0) {
+          const movieFile = movieList[0].originFileObj;
+
+          if (!movieFile.type.startsWith('video/')) {
             message.error('You can only upload video files!');
-            setProgressModalVisible(false);
             return;
           }
-          setProgress(90);
-        } else {
-          delete updatedValues.movie;
+          updatedValues.movie = await handleUpload(movieFile, 'movies');
         }
 
-        await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, updatedValues);
+        await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, updatedValues, {
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+          }
+        });
+
         message.success('Movie updated successfully');
         setIsMovieSelected(false);
-        setProgress(100);
+        setProgressModalVisible(false);
       } catch (error) {
         console.error('Failed to update movie:', error);
         message.error('Failed to update movie');
-      } finally {
-        setTimeout(() => setProgressModalVisible(false), 500);
+        setProgressModalVisible(false);
       }
     }
   };
 
   const handleDelete = async () => {
+    setModalAction('deleting');
+    setProgressModalVisible(true);
+    setProgress(0);
+
     if (selectedMovie) {
-      setModalAction('deleting');
-      setProgressModalVisible(true);
-      setProgress(0);
-
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`);
-        setProgress(30);
-
-        const deleteRequests = [];
-
-        if (selectedMovie.picture) {
-          deleteRequests.push(
-            axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
-              object_type: 'movieCoverImages',
-              file_name: selectedMovie.picture,
-            })
-          );
-        }
-
-        if (selectedMovie.trailer) {
-          deleteRequests.push(
-            axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
-              object_type: 'movieTrailers',
-              file_name: selectedMovie.trailer,
-            })
-          );
-        }
-
-        if (selectedMovie.movie) {
-          deleteRequests.push(
-            axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
-              object_type: 'movies',
-              file_name: selectedMovie.movie,
-            })
-          );
-        }
-
-        await Promise.all(deleteRequests);
-        setProgress(100);
+        await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, {
+          data: {
+            picture: selectedMovie.picture,
+            trailer: selectedMovie.trailer,
+            movie: selectedMovie.movie,
+          },
+          onUploadProgress: (progressEvent) => {
+            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+            setProgress(percentCompleted);
+          }
+        });
 
         message.success('Movie deleted successfully');
         setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
@@ -187,11 +163,11 @@ const ViewMovieManagement = () => {
         form.resetFields();
         setTrailerUrl('');
         setIsMovieSelected(false);
+        setProgressModalVisible(false);
       } catch (error) {
         console.error('Failed to delete movie:', error);
         message.error('Failed to delete movie');
-      } finally {
-        setTimeout(() => setProgressModalVisible(false), 500);
+        setProgressModalVisible(false);
       }
     }
   };
@@ -200,18 +176,35 @@ const ViewMovieManagement = () => {
     fetchMovie(value);
   };
 
-  const beforeUploadPicture = (file) => {
-    const isImage = file.type.startsWith('image/');
-    if (!isImage) {
+  const handleImageUpload = ({ fileList }) => {
+    const isImage = fileList.every(file => file.type.startsWith('image/'));
+    if (isImage) {
+      setImageList(fileList);
+    } else {
       message.error('You can only upload image files!');
+      setImageList([]);
     }
     return isImage;
   };
 
-  const beforeUploadVideo = (file) => {
-    const isVideo = file.type.startsWith('video/');
-    if (!isVideo) {
+  const handleTrailerUpload = ({ fileList }) => {
+    const isVideo = fileList.every(file => file.type.startsWith('video/'));
+    if (isVideo) {
+      setTrailerList(fileList);
+    } else {
       message.error('You can only upload video files!');
+      setTrailerList([]);
+    }
+    return isVideo;
+  };
+
+  const handleMovieUpload = ({ fileList }) => {
+    const isVideo = fileList.every(file => file.type.startsWith('video/'));
+    if (isVideo) {
+      setMovieList(fileList);
+    } else {
+      message.error('You can only upload video files!');
+      setMovieList([]);
     }
     return isVideo;
   };
@@ -256,17 +249,17 @@ const ViewMovieManagement = () => {
               <Input />
             </Form.Item>
             <Form.Item name="picture" label="Picture">
-              <Upload name="picture" listType="picture" beforeUpload={beforeUploadPicture}>
+              <Upload name="picture" listType="picture" beforeUpload={() => false} onChange={handleImageUpload} maxCount={1}>
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>
             <Form.Item name="trailer" label="Trailer">
-              <Upload name="trailer" listType="picture" beforeUpload={beforeUploadVideo}>
+              <Upload name="trailer" listType="picture" beforeUpload={() => false} onChange={handleTrailerUpload} maxCount={1}>
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>
             <Form.Item name="movie" label="Movie">
-              <Upload name="movie" listType="picture" beforeUpload={beforeUploadVideo}>
+              <Upload name="movie" listType="picture" beforeUpload={() => false} onChange={handleMovieUpload} maxCount={1}>
                 <Button icon={<UploadOutlined />}>Click to upload</Button>
               </Upload>
             </Form.Item>

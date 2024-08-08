@@ -13,12 +13,13 @@ const AddMovieManagement = ({ onSubmit }) => {
   const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [emailForm] = Form.useForm();
   const [progress, setProgress] = useState(0);
-  const [fileError, setFileError] = useState(false);
 
   const handleSubmit = async (values) => {
-    if (!fileError) {
-      setModalVisible(true);
+    if (fileList.length === 0) {
+      message.error('Please upload a cover image for the event.');
+      return;
     }
+    setModalVisible(true);
   };
 
   const handleModalSubmit = async (values) => {
@@ -32,10 +33,6 @@ const AddMovieManagement = ({ onSubmit }) => {
       });
 
       if (userResponse.status === 201) {
-        setModalVisible(false);
-        setProgressModalVisible(true);
-        setProgress(10);
-
         const movieValues = form.getFieldsValue();
         const formData = new FormData();
         formData.append('title', movieValues.title);
@@ -45,84 +42,144 @@ const AddMovieManagement = ({ onSubmit }) => {
         formData.append('price', movieValues.price);
         formData.append('stream_link', movieValues.streamLink);
 
-        let coverImageUrl = '';
         if (fileList.length > 0) {
-          setProgress(30);
           const coverImage = fileList[0].originFileObj;
-          const coverImageResponse = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
-            params: {
-              file_name: coverImage.name,
-              file_type: coverImage.type,
-            },
-          });
-          await fetch(coverImageResponse.data.url, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': coverImage.type,
-            },
-            body: coverImage,
-          });
-          coverImageUrl = coverImageResponse.data.url.split('?')[0];
+
+          if (!coverImage.type.startsWith('image/')) {
+            message.error('Please upload only image files.');
+            return;
+          }
+
+          try {
+            setProgressModalVisible(true);
+            setProgress(0);
+
+            const coverImageResponse = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
+              params: {
+                file_name: coverImage.name,
+                file_type: coverImage.type,
+              },
+            });
+
+            const signedUrl = coverImageResponse.data.url;
+
+            await axios.put(signedUrl, coverImage, {
+              headers: {
+                'Content-Type': coverImage.type,
+              },
+              onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+              },
+            });
+
+            const coverImageUrl = signedUrl.split('?')[0];
+            formData.append('picture', coverImageUrl);
+          } catch (error) {
+            message.error('Failed to upload cover image.');
+            setProgressModalVisible(false);
+            return;
+          }
         }
 
-        let trailerUrl = '';
         if (trailerList.length > 0) {
-          setProgress(50);
           const trailer = trailerList[0].originFileObj;
-          const trailerResponse = await axios.get('http://127.0.0.1:8000/api/s3-Trailers', {
-            params: {
-              file_name: trailer.name,
-              file_type: trailer.type,
-            },
-          });
-          await fetch(trailerResponse.data.url, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': trailer.type,
-            },
-            body: trailer,
-          });
-          trailerUrl = trailerResponse.data.url.split('?')[0];
+
+          if (!trailer.type.startsWith('video/')) {
+            message.error('Please upload only video files.');
+            return;
+          }
+
+          try {
+            setProgressModalVisible(true);
+            setProgress(0);
+
+            const trailerResponse = await axios.get('http://127.0.0.1:8000/api/s3-Trailers', {
+              params: {
+                file_name: trailer.name,
+                file_type: trailer.type,
+              },
+            });
+
+            const signedUrl = trailerResponse.data.url;
+
+            await axios.put(signedUrl, trailer, {
+              headers: {
+                'Content-Type': trailer.type,
+              },
+              onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+              },
+            });
+
+            const trailerUrl = signedUrl.split('?')[0];
+            formData.append('trailer', trailerUrl);
+          } catch (error) {
+            message.error('Failed to upload trailer.');
+            setProgressModalVisible(false);
+            return;
+          }
         }
 
-        let movieUrl = '';
         if (movieList.length > 0) {
-          setProgress(70);
           const movie = movieList[0].originFileObj;
-          const movieResponse = await axios.get('http://127.0.0.1:8000/api/s3-Movies', {
-            params: {
-              file_name: movie.name,
-              file_type: movie.type,
-            },
-          });
-          await fetch(movieResponse.data.url, {
-            method: 'PUT',
-            headers: {
-              'Content-Type': movie.type,
-            },
-            body: movie,
-          });
-          movieUrl = movieResponse.data.url.split('?')[0];
-        }
 
-        formData.append('picture', coverImageUrl);
-        formData.append('trailer', trailerUrl);
-        formData.append('movie', movieUrl);
+          if (!movie.type.startsWith('video/')) {
+            message.error('Please upload only video files.');
+            return;
+          }
 
-        await axios.post('http://127.0.0.1:8000/api/movies', formData);
-        setProgress(100);
-        message.success('Movie added successfully');
-        form.resetFields();
-        emailForm.resetFields();
-        setFileList([]);
-        setTrailerList([]);
-        setMovieList([]);
-        setProgressModalVisible(false);
-        setModalVisible(false);
-        if (typeof onSubmit === 'function') {
-          onSubmit({ ...movieValues, picture: coverImageUrl, trailer: trailerUrl });
+          try {
+            setProgressModalVisible(true);
+            setProgress(0);
+
+            const movieResponse = await axios.get('http://127.0.0.1:8000/api/s3-Movies', {
+              params: {
+                file_name: movie.name,
+                file_type: movie.type,
+              },
+            });
+
+            const signedUrl = movieResponse.data.url;
+
+            await axios.put(signedUrl, movie, {
+              headers: {
+                'Content-Type': movie.type,
+              },
+              onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+              },
+            });
+
+            const movieUrl = signedUrl.split('?')[0];
+            formData.append('movie', movieUrl);
+
+            await axios.post('http://127.0.0.1:8000/api/movies', formData, {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: (progressEvent) => {
+                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                setProgress(percentCompleted);
+              },
+            });
+
+            message.success('Movie added successfully');
+            form.resetFields();
+            emailForm.resetFields();
+            setFileList([]);
+            setTrailerList([]);
+            setMovieList([]);
+            setProgressModalVisible(false);
+            setModalVisible(false);
+          } catch (error) {
+            message.error('Failed to add movie.');
+            setProgressModalVisible(false);
+          }
         } else {
-          console.error('onSubmit is not a function');
+          message.error('Please upload a movie.');
         }
       } else {
         message.error('Failed to add user. Please check the credentials and try again.');
@@ -134,35 +191,34 @@ const AddMovieManagement = ({ onSubmit }) => {
   };
 
   const handleUpload = ({ fileList }) => {
-    setFileList(fileList);
-  };
-
-  const handleTrailerUpload = ({ fileList }) => {
-    setTrailerList(fileList);
-  };
-
-  const handleMovieUpload = ({ fileList }) => {
-    setMovieList(fileList);
-  };
-
-  const beforeUploadImage = (file) => {
-    const isImage = file.type.startsWith('image/');
-    if (!isImage) {
-      message.error('You can only upload image files!');
-      setFileError(true);
+    const isImage = fileList.every(file => file.type.startsWith('image/'));
+    if (isImage) {
+      setFileList(fileList);
     } else {
-      setFileError(false);
+      message.error('You can only upload image files!');
+      setFileList([]);
     }
     return isImage;
   };
 
-  const beforeUploadVideo = (file) => {
+  const handleTrailerUpload = ({ fileList }) => {
     const isVideo = fileList.every(file => file.type.startsWith('video/'));
-    if (!isVideo) {
-      message.error('You can only upload video files!');
-      setFileError(true);
+    if (isVideo) {
+      setTrailerList(fileList);
     } else {
-      setFileError(false);
+      message.error('You can only upload video files!');
+      setTrailerList([]);
+    }
+    return isVideo;
+  };
+
+  const handleMovieUpload = ({ fileList }) => {
+    const isVideo = fileList.every(file => file.type.startsWith('video/'));
+    if (isVideo) {
+      setMovieList(fileList);
+    } else {
+      message.error('You can only upload video files!');
+      setMovieList([]);
     }
     return isVideo;
   };
@@ -189,31 +245,31 @@ const AddMovieManagement = ({ onSubmit }) => {
         <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={handleUpload}>
+        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={(e) => e && e.fileList} rules={[{ required: true, message: 'Please upload a cover image' }]}>
           <Upload
             name="picture"
             listType="picture"
-            beforeUpload={beforeUploadImage}
+            beforeUpload={() => false}
             onChange={handleUpload}
           >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={handleTrailerUpload}>
+        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={(e) => e && e.fileList}>
           <Upload
             name="trailer"
             listType="picture"
-            beforeUpload={beforeUploadVideo}
+            beforeUpload={() => false}
             onChange={handleTrailerUpload}
           >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-        <Form.Item name="movie" label="Movie" valuePropName="fileList" getValueFromEvent={handleMovieUpload}>
+        <Form.Item name="movie" label="Movie" valuePropName="fileList" getValueFromEvent={(e) => e && e.fileList}>
           <Upload
             name="movie"
             listType="picture"
-            beforeUpload={beforeUploadVideo}
+            beforeUpload={() => false}
             onChange={handleMovieUpload}
           >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
