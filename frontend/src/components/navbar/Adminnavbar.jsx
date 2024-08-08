@@ -21,7 +21,7 @@ const { SubMenu } = Menu;
 const AdminNavBar = () => {
   const [collapsed, setCollapsed] = useState(true);
   const [role, setRole] = useState('');
-  const [full_Name, setFullName] = useState('');
+  const [role_name, setFullName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -46,7 +46,7 @@ const AdminNavBar = () => {
 
   const handleSignOut = () => {
     sessionStorage.clear(); // Clear session storage
-    navigate('/login'); // Redirect to login page
+    navigate('/'); // Redirect to login page
   };
 
   return (
@@ -54,6 +54,12 @@ const AdminNavBar = () => {
       <div className="logo">
         <img src={logo} alt="logo" />
       </div>
+
+      <div className="user-info" style={{ padding: '5px', textAlign: 'center' }}>
+        <p style={{ color: '#fff' }}>Hello, {role_name}</p><br />
+        <Button type="primary" onClick={handleSignOut}>Sign Out</Button>
+      </div><br /><br />
+
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="sub1" icon={<DashboardOutlined />} title="Dashboard">
           <Link to="/Admin">Dashboard</Link>
@@ -136,11 +142,8 @@ const AdminNavBar = () => {
             </SubMenu>
           </SubMenu>
         )}
+
       </Menu>
-      <div className="user-info" style={{ padding: '20px', textAlign: 'center' }}>
-        <p style={{ color: '#fff' }}>Hello, {full_Name}</p> {/* Display fullName */}
-        <Button type="primary" onClick={handleSignOut}>Sign Out</Button>
-      </div>
     </Sider>
   );
 };
