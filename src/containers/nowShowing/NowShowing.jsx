@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import './nowShowing.css'
+import './nowShowing.css';
 
 const NowShowing = () => {
   const [movies, setMovies] = useState([]);
@@ -32,7 +32,11 @@ const NowShowing = () => {
           {movies.length > 0 ? (
             movies.map(movie => (
               <div className="movie-card animate__animated animate__fadeInUp" key={movie.id}>
-                <img src={movie.picture} alt={movie.title} />
+                <img 
+                  src={movie.picture} 
+                  alt={movie.title} 
+                  className={movies.length === 1 ? 'single-movie' : 'multiple-movies'} 
+                />
                 <div className="movie-info">
                   <h3>{movie.title}</h3>
                   <p>{movie.genre} - {movie.director}</p>
