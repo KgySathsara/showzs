@@ -29,6 +29,14 @@
   flex-direction: column;
 }
 
+.single-movie {
+  max-height: 400px;
+}
+
+.multiple-movies {
+  max-height: 600px;
+}
+
 .movie-card img {
   width: 100%;
   height: auto;

@@ -19,10 +19,10 @@ const UpCommingMovies = () => {
   };
 
   return (
-    <section className='now-showing'>
+    <section className='upcoming-movies'>
       <h2>Upcoming Movies</h2>
-      <div className='now-showing-container'>
-        {upcomingMovies.map(movie => (
+      <div className={`upcoming-movies-container ${upcomingMovies.length === 1 ? 'single-movie' : ''}`}>
+        {upcomingMovies.slice(0, 2).map(movie => (
           <div key={movie.id} className='movie-card animate__animated animate__fadeInUp'>
             <img src={movie.image} alt={movie.title} />
             <div className='movie-info'>

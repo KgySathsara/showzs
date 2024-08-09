@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu, Button } from 'antd';
+import { Layout, Menu } from 'antd';
 import {
   VideoCameraOutlined,
   CalendarOutlined,
@@ -9,6 +9,7 @@ import {
   DashboardOutlined,
   SettingOutlined,
   ForwardOutlined,
+  LogoutOutlined,
 } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSwipeable } from 'react-swipeable';
@@ -19,17 +20,17 @@ const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const AdminNavBar = () => {
-  const [collapsed, setCollapsed] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
   const [role, setRole] = useState('');
-  const [role_name, setFullName] = useState('');
+  const [roleName, setRoleName] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
     const userRole = sessionStorage.getItem('userRole');
-    const storedFullName = sessionStorage.getItem('fullName'); // Retrieve fullName from sessionStorage
+    const roleType = sessionStorage.getItem('roleType');
     setRole(userRole);
-    setFullName(storedFullName);
-  }, []); // Empty dependency array means this effect runs once when the component mounts
+    setRoleName(roleType);
+  }, []);
 
   const handleSwipe = (eventData) => {
     if (eventData.dir === 'Right') {
@@ -45,19 +46,26 @@ const AdminNavBar = () => {
   });
 
   const handleSignOut = () => {
-    sessionStorage.clear(); // Clear session storage
-    navigate('/'); // Redirect to login page
+    sessionStorage.clear();
+    navigate('/');
   };
 
   return (
-    <Sider collapsible collapsed={collapsed} onCollapse={(collapsed) => setCollapsed(collapsed)} {...swipeHandlers}>
+    <Sider
+      width={250}
+      collapsible
+      collapsed={collapsed}
+      onCollapse={(collapsed) => setCollapsed(collapsed)}
+      {...swipeHandlers}
+      className="custom-sider"
+    >
       <div className="logo">
         <img src={logo} alt="logo" />
       </div>
 
       <div className="user-info" style={{ padding: '5px', textAlign: 'center' }}>
-        <p style={{ color: '#fff' }}>Hello, {role_name}</p><br />
-        <Button type="primary" onClick={handleSignOut}>Sign Out</Button>
+        <p style={{ color: '#fff' }}>Hello, {roleName}</p>
+        <p style={{ color: '#fff' }}>{role}</p>
       </div><br /><br />
 
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
@@ -68,16 +76,16 @@ const AdminNavBar = () => {
         {(role === 'admin' || role === 'editor') && (
           <SubMenu key="sub3" icon={<VideoCameraOutlined />} title="Movie Management">
             <Menu.Item key="10"><Link to="/MovieProfile">Movie Profile</Link></Menu.Item>
-            <Menu.Item key="11"><Link to="/ViewMovie">View/Update/Delete Movies</Link></Menu.Item>
             <Menu.Item key="12"><Link to="/AddMovie">Add New Movie</Link></Menu.Item>
+            <Menu.Item key="11"><Link to="/ViewMovie">Movie Management</Link></Menu.Item>
           </SubMenu>
         )}
 
         {(role === 'admin' || role === 'editor') && (
           <SubMenu key="sub5" icon={<CalendarOutlined />} title="Live Events Management">
-            <Menu.Item key="50"><Link to="/LiveEventProfile">Live Event Profile</Link></Menu.Item>
+            <Menu.Item key="50"><Link to="/LiveEventProfile">Event Profile</Link></Menu.Item>
             <Menu.Item key="14"><Link to="/AdminAddLiveEvents">Add Event</Link></Menu.Item>
-            <Menu.Item key="22"><Link to="/AdminStreamLiveEvents">Stream Management</Link></Menu.Item>
+            <Menu.Item key="22"><Link to="/AdminStreamLiveEvents">Event Management</Link></Menu.Item>
           </SubMenu>
         )}
 
@@ -142,8 +150,11 @@ const AdminNavBar = () => {
             </SubMenu>
           </SubMenu>
         )}
-
       </Menu>
+
+      <div className="logout-container">
+        <LogoutOutlined style={{ color: '#fff', fontSize: '20px', cursor: 'pointer', marginTop: '15px' }} onClick={handleSignOut} />
+      </div>
     </Sider>
   );
 };

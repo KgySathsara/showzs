@@ -1,19 +1,20 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
-.now-showing {
+.upcoming-movies {
   padding: 20px;
   background-color: #003366;
   color: #ffffff;
   font-family: 'DM Sans', sans-serif;
+  height: 850px;
 }
 
-.now-showing h2 {
+.upcoming-movies h2 {
   text-align: left;
   margin-bottom: 20px;
   font-size: 24px;
 }
 
-.now-showing-container {
+.upcoming-movies-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
@@ -55,4 +56,12 @@
 
 .movie-info a:hover {
   text-decoration: underline;
+}
+
+.upcoming-movies-container.single-movie {
+  display: flex;
+}
+
+.upcoming-movies-container.single-movie .movie-card {
+  max-width: 49%;
 }
