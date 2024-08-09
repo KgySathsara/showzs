@@ -33,8 +33,6 @@ import AdminEditNews from './pages/AdminNewsManagement/AdminEditNews';
 import PhoneNumber from './pages/AdminSetting/PhoneNumber';
 import NotAuthorized from './pages/NotAuthorized/NotAuthorized'; 
 import ProtectedRoute from './components/ProtectedRoute';
-import TermsAndConditions from './pages/FooterPages/TermsAndConditions';
-import PrivacyPolicy from './pages/FooterPages/PrivacyPolicy';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -48,8 +46,6 @@ root.render(
       <Route path='/Contactus' element={<Contactus />} />
       <Route path='/Login' element={<Login />} />
       <Route path='/Register' element={<Register />} />
-      <Route path='/TermsAndConditions' element={<TermsAndConditions />} />
-      <Route path='/PrivacyPolicy' element={<PrivacyPolicy />} />
 
       <Route path='/Admin' element={
         <ProtectedRoute allowedRoles={['admin', 'editor','contect_owner']}>

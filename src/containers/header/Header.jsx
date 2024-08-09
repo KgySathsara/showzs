@@ -9,8 +9,6 @@ import ticket from '../../assest/ticket.jpg';
 const Header = () => {
   const [movie, setMovie] = useState(null);
   const [event, setEvent] = useState(null);
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,18 +35,11 @@ const Header = () => {
   };
 
   const handleWatchNowMovie = () => {
-    setSelectedItem(movie);
-    setIsPopupOpen(true);
+    navigate('/WatchMovie');
   };
 
   const handleWatchNowEvent = () => {
-    setSelectedItem(event);
-    setIsPopupOpen(true);
-  };
-
-  const closePopup = () => {
-    setIsPopupOpen(false);
-    setSelectedItem(null);
+    navigate('/WatchLive');
   };
 
   return (
@@ -97,19 +88,6 @@ const Header = () => {
           </div>
         </div>
       </div>
-
-      {/* Popup Box */}
-      {isPopupOpen && selectedItem && (
-        <div className="popup-overlay">
-          <div className="popup-box">
-            <h2>{selectedItem.title}</h2>
-            <p>{selectedItem.description}</p>
-            <p>Category: {selectedItem.category}</p>
-            <p>Ticket Price: {selectedItem.ticketPrice}</p>
-            <button onClick={closePopup} className="close-popup">Buy Ticket</button>
-          </div>
-        </div>
-      )}
     </section>
   );
 }
