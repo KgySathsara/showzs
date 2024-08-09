@@ -4,6 +4,8 @@ import './events.css';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState(null);
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/live-events/showEvent')
@@ -24,6 +26,15 @@ const Events = () => {
       });
   }, []);
 
+  const handleWatchNowClick = (event) => {
+    setSelectedEvent(event);
+    setIsPopupOpen(true);
+  }; 
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
   return (
     <section className="live-events">
       <div className="live-events-container">
@@ -31,7 +42,7 @@ const Events = () => {
         <div className="event-container">
           {events.length > 0 ? (
             events.map(event => (
-              <div className="event animate__animated animate__fadeInUp" key={event.id}>
+              <div className="event animate_animated animate_fadeInUp" key={event.id}>
                 <img src={event.coverImage} alt={event.title} />
                 <div className="movie-info">
                   <h3>{event.title}</h3>
@@ -39,7 +50,11 @@ const Events = () => {
                   <p>Category: {event.category}</p>
                   <p>Ticket Price: {event.ticketPrice}</p>
                 </div>
-                <button className="watch-now">Watch Now</button>
+                <button 
+                  className="watch-now" 
+                  onClick={() => handleWatchNowClick(event)}>
+                  Watch Now
+                </button>
               </div>
             ))
           ) : (
@@ -47,6 +62,18 @@ const Events = () => {
           )}
         </div>
       </div>
+
+      {isPopupOpen && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <h2>{selectedEvent.title}</h2>
+            <p>Name : {selectedEvent.description}</p>
+            <p>Category: {selectedEvent.category}</p>
+            <p>Ticket Price: {selectedEvent.ticketPrice}</p>
+            <button onClick={closePopup} className="close-popup">Buy Ticket</button>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
