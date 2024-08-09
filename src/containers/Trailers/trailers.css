@@ -58,6 +58,15 @@
   text-decoration: underline;
 }
 
+.single-trailer .movie-card {
+  flex: 0 1 60%; 
+  max-width: 900px;
+  margin: 5px 0;
+}
+
+.single-trailer .movie-card video {
+  height: 500px;
+}
 
 /* Responsive adjustments */
 

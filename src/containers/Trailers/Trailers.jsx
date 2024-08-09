@@ -22,8 +22,8 @@ const Trailers = () => {
   return (
     <section className='now-showing'>
       <h2>Trailers</h2>
-      <div className='now-showing-container'>
-        {trailers.map(news => (
+      <div className={`now-showing-container ${trailers.length === 1 ? 'single-trailer' : ''}`}>
+        {trailers.slice(0, 2).map(news => (
           <div className='movie-card animate__animated animate__fadeInLeft' key={news.id}>
             {news.trailer && (
               <video controls src={news.trailer} alt="Movie Trailer" />
