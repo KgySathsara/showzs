@@ -283,5 +283,3 @@ root.render(
       </Routes>
     </BrowserRouter>
   </GoogleOAuthProvider>
-);
-
