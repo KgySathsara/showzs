@@ -4,6 +4,7 @@ import background from '../../assest/banner.jpg';
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -39,8 +40,7 @@ const Register = () => {
     }
 
     try {
-      // eslint-disable-next-line no-unused-vars
-      const response = await axios.post('http://127.0.0.1:8000/api/register', formData);
+      await axios.post('http://127.0.0.1:8000/api/register', formData);
       alert('Registration successful!');
       navigate('/login');
     } catch (error) {
@@ -49,6 +49,24 @@ const Register = () => {
     }
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        await axios.post('http://127.0.0.1:8000/api/google-login', {
+          token: tokenResponse.credential,
+        });
+        alert('Google Sign-In successful!');
+        navigate('/');
+      } catch (error) {
+        console.error(error);
+        alert('Google Sign-In failed!');
+      }
+    },
+    onError: () => {
+      alert('Google Sign-In failed!');
+    },
+  });
+
   return (
     <section className="registration">
       <img src={background} alt="register-background" />
@@ -56,7 +74,7 @@ const Register = () => {
       <div className="registration-box">
         <h2 style={{ textAlign: 'center' }} className="registration-heading">Registration</h2>
         <div className='signin-container'>
-          <button className="google-signin">
+          <button className="google-signin" onClick={() => googleLogin()}>
             <FcGoogle className="icon" /> Sign in with Google
           </button>
         </div>
