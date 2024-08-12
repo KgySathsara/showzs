@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Button } from 'antd';
+import { DeleteOutlined } from '@ant-design/icons';
 import './events.css';
 
 const Events = () => {
@@ -29,10 +31,15 @@ const Events = () => {
   const handleWatchNowClick = (event) => {
     setSelectedEvent(event);
     setIsPopupOpen(true);
-  }; 
+  };
 
   const closePopup = () => {
     setIsPopupOpen(false);
+  };
+
+  const handleDelete = () => {
+    console.log(`Deleting event with ID: ${selectedEvent.id}`);
+    closePopup();
   };
 
   return (
@@ -66,11 +73,16 @@ const Events = () => {
       {isPopupOpen && (
         <div className="popup-overlay">
           <div className="popup-box">
+            <Button   danger   icon={<DeleteOutlined />}   className="delete-icon"   onClick={handleDelete}/>
+
             <h2>{selectedEvent.title}</h2>
-            <p>Name : {selectedEvent.description}</p>
+            <p>Name: {selectedEvent.description}</p>
             <p>Category: {selectedEvent.category}</p>
             <p>Ticket Price: {selectedEvent.ticketPrice}</p>
-            <button onClick={closePopup} className="close-popup">Buy Ticket</button>
+            <div className="popup-actions">
+              <Button type="primary" onClick={closePopup} className="close-popup">Buy Ticket</Button>
+            </div>
+            
           </div>
         </div>
       )}

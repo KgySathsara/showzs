@@ -158,5 +158,9 @@ root.render(
         <Route path='/not-authorized' element={<NotAuthorized />} />
       </Routes>
     </BrowserRouter>
+
+  </GoogleOAuthProvider>
+
   </GoogleOAuthProvider>
 );
+
