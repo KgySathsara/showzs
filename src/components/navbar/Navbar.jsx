@@ -93,7 +93,7 @@ const Navbar = () => {
               <p><FaUserCircle className="icon" /> Sign out</p>
             </Link>
           ) : (
-            <Link to="/Register" className="signin flex">
+            <Link to="/Login" className="signin flex">
               <p><FaUserCircle className="icon" /> Sign in</p>
             </Link>
           )}
