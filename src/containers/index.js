@@ -29,6 +29,6 @@ export { default as EditorAccountForm } from './AdminSetting/EditorAccountForm.j
 export { default as PasswordResetForm } from './AdminSetting/PasswordResetForm.jsx';
 export { default as PhoneNumberForm } from './AdminSetting/PhoneNumberForm.jsx';
 export { default as AdminEditNews } from './adminAddNews/AdminEditNews.jsx';
-
+export { default as EventPayment } from './payment/EventPayment.jsx';
 export { default as Paybuttons } from './payment/Paybuttons.jsx';
 

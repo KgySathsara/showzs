@@ -1,4 +1,3 @@
-// Import necessary dependencies
 import React, { useState } from 'react';
 import background from '../../assest/banner.jpg';
 import './login.css';
@@ -7,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -21,13 +21,11 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:8000/api/login', { email, password });
 
-      // Show success toast
       toast.success('User logged in successfully');
       
       const role = response.data.role;
-      sessionStorage.setItem('userRole', role); // Store the user role in session storage
+      sessionStorage.setItem('userRole', role);
 
-      // Role-based redirection
       if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
         navigate('/admin');
       } else {
@@ -38,18 +36,13 @@ const Login = () => {
       
       if (error.response) {
         if (error.response.data.errors) {
-          // Handle validation errors
           setErrors(error.response.data.errors);
         } else if (error.response.data.message) {
-          // Handle specific error messages
           errorMessage = error.response.data.message;
         }
       } else {
-        // Handle network errors
         errorMessage = 'Network error. Please try again.';
       }
-      
-      // Display the error message
       toast.error(errorMessage);
       setErrors({ general: errorMessage });
     }
@@ -59,6 +52,36 @@ const Login = () => {
     navigate('/Register');
   };
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      console.log('Google Token Response:', tokenResponse);
+  
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/api/google-login', {
+          token: tokenResponse.access_token,
+        });
+  
+        console.log('Server Response:', response);
+  
+        toast.success('Google Sign-In successful!');
+        const role = response.data.user.user_type;
+        sessionStorage.setItem('userRole', role);
+
+        if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
+          navigate('/admin');
+        } else {
+          navigate('/');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Google Sign-In failed!');
+      }
+    },
+    onError: () => {
+      toast.error('Google Sign-In failed!');
+    },
+  });
+
   return (
     <section className='login'>
       <div className="overlay"></div>
@@ -66,7 +89,7 @@ const Login = () => {
       <div className="login-box">
         <h2 style={{ textAlign: 'center' }} className="login-heading">Login</h2>
         <div className="login-container">
-          <button className="google-login">
+          <button className="google-login" onClick={googleLogin}>
             <FcGoogle className="icon" /> Sign in with Google
           </button>
         </div>

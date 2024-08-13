@@ -11,7 +11,6 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check if the user is authenticated
     const userRole = sessionStorage.getItem('userRole');
     if (userRole) {
       setIsAuthenticated(true);
@@ -27,19 +26,20 @@ const Navbar = () => {
     }
   };
 
-  const handleClick = (index) => {
-    setActiveIndex(index);
-    if (index === activeIndex && showSubNav) {
-      setShowSubNav(false);
+  const handleClick = (index, e) => {
+    if (index === 2) {
+      e.preventDefault();
+      handleDropdownClick(index);
     } else {
-      setShowSubNav(true);
+      setActiveIndex(index);
+      setShowSubNav(false);
     }
   };
 
   const handleSignOut = () => {
-    sessionStorage.removeItem('userRole'); // Clear user session
+    sessionStorage.removeItem('userRole');
     setIsAuthenticated(false);
-    navigate('/login'); // Redirect to login page
+    navigate('/login');
   };
 
   return (
@@ -54,11 +54,14 @@ const Navbar = () => {
               <li
                 key={index}
                 className={`navItem ${activeIndex === index ? 'active' : ''}`}
-                onClick={() => handleClick(index)}
                 onMouseEnter={() => item === 'Shows' && handleDropdownClick(index)}
                 onMouseLeave={() => item === 'Shows' && setShowSubNav(false)}
               >
-                <Link to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`} className="navLink">
+                <Link
+                  to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`}
+                  className="navLink"
+                  onClick={(e) => handleClick(index, e)}
+                >
                   {item}
                   {item === 'Shows' && (
                     <FaCaretDown
@@ -93,7 +96,7 @@ const Navbar = () => {
               <p><FaUserCircle className="icon" /> Sign out</p>
             </Link>
           ) : (
-            <Link to="/Register" className="signin flex">
+            <Link to="/login" className="signin flex">
               <p><FaUserCircle className="icon" /> Sign in</p>
             </Link>
           )}

@@ -51,10 +51,15 @@ const Register = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+      console.log('Google Token Response:', tokenResponse);
+  
       try {
-        await axios.post('http://127.0.0.1:8000/api/google-login', {
-          token: tokenResponse.credential,
+        const response = await axios.post('http://127.0.0.1:8000/api/google-login', {
+          token: tokenResponse.access_token,
         });
+  
+        console.log('Server Response:', response);
+  
         alert('Google Sign-In successful!');
         navigate('/');
       } catch (error) {
@@ -66,6 +71,7 @@ const Register = () => {
       alert('Google Sign-In failed!');
     },
   });
+  
 
   return (
     <section className="registration">
@@ -74,7 +80,7 @@ const Register = () => {
       <div className="registration-box">
         <h2 style={{ textAlign: 'center' }} className="registration-heading">Registration</h2>
         <div className='signin-container'>
-          <button className="google-signin" onClick={() => googleLogin()}>
+          <button className="google-signin" onClick={googleLogin}>
             <FcGoogle className="icon" /> Sign in with Google
           </button>
         </div>
