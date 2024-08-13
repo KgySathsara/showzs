@@ -48,6 +48,23 @@
   border-radius: 10px;
 }
 
+.payment-image {
+  text-align: center;
+}
+
+.slider-image {
+  width: 100%;
+  height: auto;
+  max-height: 550px;
+  object-fit: cover;
+}
+
+.centered-col {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Responsive adjustments */
 
 @media (max-width: 768px) {
