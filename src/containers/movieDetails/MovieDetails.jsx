@@ -5,6 +5,7 @@ import './movieDetails.css';
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/movie')
@@ -16,6 +17,14 @@ const MovieDetails = () => {
         console.error('Failed to fetch movie data:', error);
       });
   }, []);
+
+  const handleWatchTrailer = () => {
+    setShowModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+  };
 
   if (!movie) {
     return <p>No movie details available.</p>;
@@ -30,7 +39,7 @@ const MovieDetails = () => {
         <p>{`Duration: ${movie.duration} Min`}</p>
         <div className="movie-actions">
           <img src={ticket} alt="Ticket" className='ticketImg' />
-          <button className="watch-trailer">Watch Trailer</button>
+          <button className="watch-trailer" onClick={handleWatchTrailer}>Watch Trailer</button>
         </div>
       </div>
       <div className='movie-poster'>
@@ -46,6 +55,22 @@ const MovieDetails = () => {
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <div className="modal-overlay" onClick={handleCloseModal}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <span className="close-button" onClick={handleCloseModal}>&times;</span>
+            <iframe
+              width="560"
+              height="315"
+              src={movie.trailer}
+              title="Movie Trailer"
+              frameBorder="0"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
