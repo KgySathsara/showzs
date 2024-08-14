@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, notification } from 'antd';
 import {
   VideoCameraOutlined,
   CalendarOutlined,
@@ -47,8 +47,17 @@ const AdminNavBar = () => {
 
   const handleSignOut = () => {
     sessionStorage.clear();
-    navigate('/');
+    notification.success({
+      message: 'Log Out Successful',
+      description: 'You have successfully logged out.',
+      placement: 'topRight',
+    });
+  
+    setTimeout(() => {
+      navigate('/');
+    }, 2000); 
   };
+  
 
   return (
     <Sider

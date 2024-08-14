@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaUserCircle, FaCaretDown } from "react-icons/fa";
 import logo from '../../assest/logo.png';
 import './navbar.css';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Navbar = () => {
   const [activeIndex, setActiveIndex] = useState(null);
@@ -39,6 +41,7 @@ const Navbar = () => {
   const handleSignOut = () => {
     sessionStorage.removeItem('userRole');
     setIsAuthenticated(false);
+    toast.success('Sign Out Successful');
     navigate('/login');
   };
 
@@ -102,6 +105,7 @@ const Navbar = () => {
           )}
         </div>
       </header>
+      <ToastContainer />
     </section>
   );
 };
