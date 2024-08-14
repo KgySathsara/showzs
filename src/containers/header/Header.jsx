@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './header.css';
-import { FaBook } from 'react-icons/fa'; 
+import { Button } from 'antd';
+import { FaBook, FaTimes } from 'react-icons/fa';
 import banner from '../../assest/banner.jpg';
 import ticket from '../../assest/ticket.jpg';
 
@@ -29,11 +30,11 @@ const Header = () => {
   }, []);
 
   const handleBookNowMovie = () => {
-    navigate('/Movies');
+    navigate('/Checkout');
   };
 
   const handleBookNowEvent = () => {
-    navigate('/LiveEvents');
+    navigate('/Checkout');
   };
 
   const handleWatchNowMovie = () => {
@@ -48,7 +49,12 @@ const Header = () => {
 
   const closePopup = () => {
     setIsPopupOpen(false);
+  };
+
+  const closePopupAndNavigate = () => {
+    setIsPopupOpen(false);
     setSelectedItem(null);
+    navigate('/Checkout');
   };
 
   return (
@@ -82,7 +88,7 @@ const Header = () => {
               </button>
             </div>
             <div className='ticket'>
-              <img src={ticket} alt='Ticket for Movie 1'/>
+              <img src={ticket} alt='Ticket for Movie 1' />
             </div>
           </div>
           <div className='card-description'>
@@ -92,23 +98,27 @@ const Header = () => {
               </button>
             </div>
             <div className='ticket'>
-              <img src={ticket} alt='Ticket for Event 2'/>
+              <img src={ticket} alt='Ticket for Event 2' />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Popup Box */}
       {isPopupOpen && selectedItem && (
         <div className="popup-overlay">
           <div className="popup-box">
+            <button onClick={closePopup} className="close-icon">
+              <FaTimes />
+            </button>
             <h2>{selectedItem.title}</h2>
-            <p>{selectedItem.description}</p>
-            <p>Category: {selectedItem.category}</p>
-            <p>Ticket Price: {selectedItem.ticketPrice}</p>
-            <button onClick={closePopup} className="close-popup">Buy Ticket</button>
+            <p>{selectedItem.director || selectedItem.description}</p>
+            <p>Category: {selectedItem.genre || selectedItem.category}</p>
+            <p>Ticket Price: {selectedItem.price || selectedItem.ticketPrice}</p>
+            <div className="popup-actions">
+              <Button type="primary" onClick={closePopupAndNavigate} className="close-popup">Buy Ticket</Button>
+            </div>
           </div>
-        </div> 
+        </div>
       )}
     </section>
   );
