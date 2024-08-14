@@ -35,6 +35,7 @@ import NotAuthorized from './pages/NotAuthorized/NotAuthorized';
 import ProtectedRoute from './components/ProtectedRoute';
 import TermsAndConditions from './pages/FooterPages/TermsAndConditions';
 import PrivacyPolicy from './pages/FooterPages/PrivacyPolicy'; 
+import RefundPolicy from './pages/FooterPages/RefundPolicy'; 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 
@@ -53,6 +54,7 @@ root.render(
         <Route path='/Register' element={<Register />} />
         <Route path='/TermsAndConditions' element={<TermsAndConditions />} />
         <Route path='/PrivacyPolicy' element={<PrivacyPolicy />} />
+        <Route path='/RefundPolicy' element={<RefundPolicy />} />
         <Route path='/Admin' element={
           <ProtectedRoute allowedRoles={['admin', 'editor', 'contect_owner']}>
             <Admin />
