@@ -19,7 +19,11 @@ const MovieDetails = () => {
   }, []);
 
   const handleWatchTrailer = () => {
-    setShowModal(true);
+    if (movie.trailer) {
+      setShowModal(true);
+    } else {
+      console.error('No valid trailer URL found:', movie.trailer);
+    }
   };
 
   const handleCloseModal = () => {
@@ -56,18 +60,11 @@ const MovieDetails = () => {
         </div>
       </div>
 
-      {showModal && (
-        <div className="modal-overlay" onClick={handleCloseModal}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      {showModal && movie.trailer && (
+        <div className="modal-overlay">
+          <div className="modal-content">
             <span className="close-button" onClick={handleCloseModal}>&times;</span>
-            <iframe
-              width="560"
-              height="315"
-              src={movie.trailer}
-              title="Movie Trailer"
-              frameBorder="0"
-              allowFullScreen
-            ></iframe>
+            <video controls src={movie.trailer} alt="Movie Trailer" />
           </div>
         </div>
       )}
