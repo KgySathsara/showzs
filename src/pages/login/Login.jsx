@@ -20,15 +20,21 @@ const Login = () => {
     
     try {
       const response = await axios.post('http://localhost:8000/api/login', { email, password });
-
-      toast.success('User logged in successfully');
       
       const role = response.data.role;
       sessionStorage.setItem('userRole', role);
 
-      if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
+      if (role === 'admin') {
+        toast.success('Admin logged in successfully');
+        navigate('/admin');
+      } else if (role === 'editor') {
+        toast.success('Editor logged in successfully');
+        navigate('/admin');
+      } else if (role === 'contect_owner') {
+        toast.success('Content Owner logged in successfully');
         navigate('/admin');
       } else {
+        toast.success('User logged in successfully');
         navigate('/');
       }
     } catch (error) {
