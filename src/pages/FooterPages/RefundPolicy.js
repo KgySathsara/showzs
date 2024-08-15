@@ -17,9 +17,10 @@ const RefundPolicy = () => {
     return (
       <section className="refund-policy-section">
         <Navbar />
-        <Layout style={{ padding: '24px', minHeight: '100vh', backgroundColor: '#fff' }}>
+        <Layout style={{ padding: '24px', minHeight: '100vh', backgroundColor: '#0047ab' }}>
             <Content className="refund-policy-content">
                 <Title className="refund-policy-title" level={2}>Refund Policy</Title>
+                <Divider className="terms-and-conditions-divider" />
                 <Paragraph className="refund-policy-italic">
                     <strong>Effective Date: 2024/08/14</strong>
                 </Paragraph>
