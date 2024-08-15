@@ -18,29 +18,30 @@
     text-align: center;
     font-weight: bold;
     margin-bottom: 16px;
-    color: #f5fffa ;
+    color: #ffffff; /* White text color */
   }
   
   .refund-policy-paragraph {
     text-align: justify;
     line-height: 1.8;
-    color: #080808;
+    color: #ffffff; /* White text color */
   }
   
   .refund-policy-divider {
     margin: 20px 0;
+    color: #ffffff; /* White text color */
   }
   
   .refund-policy-subtitle {
     font-size: 1.5em;
     margin-top: 20px;
-    color: #444;
+    color: #ffffff; /* White text color */
   }
   
   .refund-policy-italic {
     text-align: center;
     font-style: italic;
     margin-top: 10px;
-    color: #f5fffa ;
+    color: #ffffff; /* White text color */
   }
   

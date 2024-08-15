@@ -9,7 +9,7 @@
     max-width: 1800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #0047ab;
+    background-color: #0047ab; /* Adjust if needed */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
   }
@@ -18,28 +18,30 @@
     text-align: center;
     font-weight: bold;
     margin-bottom: 16px;
-    color: #f5fffa ;
+    color: #ffffff; /* White text color */
   }
   
   .privacy-policy-paragraph {
     text-align: justify;
     line-height: 1.8;
-    color: #080808;
+    color: #ffffff; /* White text color */
   }
   
   .privacy-policy-divider {
     margin: 20px 0;
+    color: #ffffff; /* White text color */
   }
   
   .privacy-policy-subtitle {
     font-size: 1.5em;
     margin-top: 20px;
+    color: #ffffff; /* White text color */
   }
   
   .privacy-policy-italic {
     text-align: center;
     font-style: italic;
     margin-top: 10px;
-    color: #f5fffa ;
+    color: #ffffff; /* White text color */
   }
   

@@ -17,9 +17,10 @@ const PrivacyPolicy = () => {
     return (
       <section className="privacy-policy-section">
         <Navbar />
-        <Layout style={{ padding: '24px', minHeight: '100vh', backgroundColor: '#fff' }}>
+        <Layout style={{ padding: '24px', minHeight: '100vh', backgroundColor: '#0047ab' }}>
             <Content className="privacy-policy-content">
                 <Title className="privacy-policy-title" level={2}>Privacy Policy</Title>
+                <Divider className="terms-and-conditions-divider" />
                 <Paragraph className="privacy-policy-italic">
                     <strong>Effective Date: 2024/08/14</strong>
                 </Paragraph>
