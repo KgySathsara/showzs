@@ -1,0 +1,46 @@
+/* RefundPolicy.css */
+
+.refund-policy-section {
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
+  
+  .refund-policy-content {
+    max-width: 1800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #0047ab;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+  }
+  
+  .refund-policy-title {
+    text-align: center;
+    font-weight: bold;
+    margin-bottom: 16px;
+    color: #f5fffa ;
+  }
+  
+  .refund-policy-paragraph {
+    text-align: justify;
+    line-height: 1.8;
+    color: #080808;
+  }
+  
+  .refund-policy-divider {
+    margin: 20px 0;
+  }
+  
+  .refund-policy-subtitle {
+    font-size: 1.5em;
+    margin-top: 20px;
+    color: #444;
+  }
+  
+  .refund-policy-italic {
+    text-align: center;
+    font-style: italic;
+    margin-top: 10px;
+    color: #f5fffa ;
+  }
+  
