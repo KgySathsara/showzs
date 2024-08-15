@@ -17,19 +17,21 @@ const TermsAndConditions = () => {
     return (
       <section className="terms-and-conditions-section">
         <Navbar />
-        <Layout style={{ padding: '24px', minHeight: '100vh', backgroundColor: '#fff' }}>
+        <Layout style={{ padding: '24px', minHeight: '100vh', backgroundColor: '#0047ab' }}>
             <Content className="terms-and-conditions-content">
                 <Title className="terms-and-conditions-title" level={2}>Terms and Conditions</Title>
                 <Divider className="terms-and-conditions-divider" />
                 <Paragraph className="terms-and-conditions-italic">
                     <strong>Effective Date: 2024/08/14</strong>
                 </Paragraph>
+                <Divider className="terms-and-conditions-divider" />
                 <Typography>
                     <Paragraph className="terms-and-conditions-paragraph">
                         Welcome to Showzs! These terms and conditions outline the rules and regulations for the use of Showzs' services.
                     </Paragraph>
 
                     <Title className="terms-and-conditions-subtitle" level={4}>1. Introduction</Title>
+                    
                     <Paragraph className="terms-and-conditions-paragraph">
                         These Terms and Conditions govern your use of Showzs, an OTT platform owned and operated by <b>GLOBAL Mesh</b>. By accessing or using our platform, you agree to be bound by these terms.
                     </Paragraph>

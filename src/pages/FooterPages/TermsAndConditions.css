@@ -18,29 +18,30 @@
     text-align: center;
     font-weight: bold;
     margin-bottom: 16px;
-    color: #f5fffa ;
+    color: white; /* White text color */
   }
   
   .terms-and-conditions-paragraph {
     text-align: justify;
     line-height: 1.8;
-    color: #080808;
+    color: #ffffff; /* White text color */
   }
   
   .terms-and-conditions-divider {
     margin: 20px 0;
+    color: #ffffff; /* White text color */
   }
   
   .terms-and-conditions-subtitle {
     font-size: 1.5em;
     margin-top: 20px;
-    color: #444;
+    color: #ffffff; /* White text color */
   }
   
   .terms-and-conditions-italic {
     text-align: center;
     font-style: italic;
     margin-top: 10px;
-    color: #f5fffa ;
+    color: #ffffff; /* White text color */
   }
   
