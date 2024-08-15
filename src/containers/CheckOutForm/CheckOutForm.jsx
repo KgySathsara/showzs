@@ -1,18 +1,86 @@
-import React from 'react';
-import { Form, Input, Button, Select, Checkbox, Row, Col, Typography, Card } from 'antd';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import React, { useState, useEffect, useMemo } from 'react';
+import { Form, Input, Button, Checkbox, Row, Col, Typography, Card, notification } from 'antd';
+import Select from 'react-select';
+import countryList from 'react-select-country-list';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './CheckoutForm.css';
+import { FaTimes } from 'react-icons/fa';
 
-const { Title, Text } = Typography;
-const { Option } = Select;
+const { Title } = Typography;
+
+function CountrySelector({ onChange }) {
+    const [value, setValue] = useState('');
+    const options = useMemo(() => countryList().getData(), []);
+
+    const changeHandler = (value) => {
+        setValue(value);
+        onChange(value);
+    };
+
+    return <Select options={options} value={value} onChange={changeHandler} />;
+}
 
 const CheckoutForm = () => {
     const [form] = Form.useForm();
-    const navigate = useNavigate(); // Initialize the navigate function
+    const navigate = useNavigate();
+    const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
+    const [cartDetails, setCartDetails] = useState(null); // Track a single item (movie/event) in the cart
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [selectedMovie, setSelectedMovie] = useState(null);
+
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
+            .then(() => {
+                axios.get('http://127.0.0.1:8000/api/current-user')
+                    .then(response => {
+                        const user = response.data.user;
+                        if (user) {
+                            form.setFieldsValue({
+                                firstName: user.full_name.split(' ')[0] || '',
+                                lastName: user.full_name.split(' ')[1] || '',
+                                email: user.email || '',
+                                mobileNumber: user.phone_number || '',
+                                country: user.country || '',
+                            });
+                            setIsUserLoggedIn(true);
+                        }
+                    })
+                    .catch(error => {
+                        notification.error({
+                            message: 'Error',
+                            description: 'Failed to fetch user details. Please try again.',
+                        });
+                    });
+            });
+    }, [form]);
+
+    const handleItemClick = (item) => {
+        setCartDetails(item); // Update the cart with the selected movie or event
+        setSelectedMovie(item); // Update the selected movie (for the popup)
+        setIsPopupOpen(true);
+    };
+
+    const closePopup = () => {
+        setIsPopupOpen(false);
+        setSelectedMovie(null);
+    };
+
+    const closePopupAndNavigate = () => {
+        setIsPopupOpen(false);
+        setSelectedMovie(null);
+        navigate('/Payment');
+    };
 
     const handleSubmit = (values) => {
+        if (!isUserLoggedIn) {
+            notification.error({
+                message: 'Login Required',
+                description: 'Please login first to proceed with the checkout.',
+            });
+            return;
+        }
         console.log('Form submitted:', values);
-        // Redirect to the payment page after form submission
         navigate('/Payment');
     };
 
@@ -69,11 +137,7 @@ const CheckoutForm = () => {
                                 name="country"
                                 rules={[{ required: true, message: 'Please select your country!' }]}
                             >
-                                <Select placeholder="Select your country" className="select-field">
-                                    <Option value="India">India</Option>
-                                    <Option value="USA">USA</Option>
-                                    <Option value="UK">UK</Option>
-                                </Select>
+                                <CountrySelector onChange={(value) => form.setFieldsValue({ country: value.label })} />
                             </Form.Item>
 
                             <Form.Item name="saveInfo" valuePropName="checked">
@@ -93,12 +157,44 @@ const CheckoutForm = () => {
                         bordered={false}
                         className="cart-card"
                     >
-                        <p>Visal Adare</p>
-                        <p>Movie</p>
-                        <Text strong>Total (Rs) : Rs.500</Text>
+                        {cartDetails ? (
+                            <div className="movie-container">
+                                <div className="movie">
+                                    {cartDetails.picture && (
+                                        <img src={cartDetails.picture} alt={cartDetails.title} />
+                                    )}
+                                    <h2>{cartDetails.title}</h2>
+                                    <p>{cartDetails.duration} min</p>
+                                    <p>Category: {cartDetails.genre || cartDetails.category}</p>
+                                    <p>Ticket Price: Rs.{cartDetails.price || cartDetails.ticketPrice}</p>
+                                    <div className="buttons">
+                                        <Button type="primary" onClick={() => handleItemClick(cartDetails)} className="buy-tickets">Buy Ticket</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <p>No item selected.</p>
+                        )}
                     </Card>
                 </Col>
             </Row>
+
+            {isPopupOpen && selectedMovie && (
+                <div className="popup-overlay">
+                    <div className="popup-box">
+                        <button onClick={closePopup} className="close-icon">
+                            <FaTimes />
+                        </button>
+                        <h2>{selectedMovie.title}</h2>
+                        <p>Duration: {selectedMovie.duration} min</p>
+                        <p>Category: {selectedMovie.genre}</p>
+                        <p>Ticket Price: {selectedMovie.price}</p>
+                        <div className="popup-actions">
+                            <Button type="primary" onClick={closePopupAndNavigate} className="close-popup">Buy Ticket</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </section>
     );
 };

@@ -45,10 +45,15 @@ const Navbar = () => {
     navigate('/login');
   };
 
+  const handleLogoClick = () => {
+    setActiveIndex(null);
+    navigate('/');
+  };
+
   return (
     <section className='navbar'>
       <header className='navbar-links'>
-        <div className='navbar-links_logo'>
+        <div className='navbar-links_logo' onClick={handleLogoClick} style={{ cursor: 'pointer' }}>
           <img src={logo} alt='logo' />
         </div>
         <div className='navbar-links-container'>
