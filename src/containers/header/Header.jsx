@@ -30,11 +30,11 @@ const Header = () => {
   }, []);
 
   const handleBookNowMovie = () => {
-    navigate('/Checkout');
+    navigate('/Movies');
   };
 
   const handleBookNowEvent = () => {
-    navigate('/Checkout');
+    navigate('/LiveEvents');
   };
 
   const handleWatchNowMovie = () => {
