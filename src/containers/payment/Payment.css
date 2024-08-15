@@ -18,28 +18,43 @@
 .payment-container {
   background-color: #f2f2f2;
   padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.payment-card {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .payment-title {
-  color: red;
-  margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px !important;
+  color: #1890ff;
 }
 
 .payment-methods {
   display: flex;
-  gap: 10px; 
-  margin-bottom: 20px;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 30px;
 }
 
 .payment-logo {
-  width: 40px; 
-  height: 30px; 
+  width: 70px;
+  height: auto;
+  transition: transform 0.3s;
 }
 
-.confirm-payment-btn {
-  width: 100%;
-  font-size: 16px;
-  font-weight: bold;
+.payment-logo:hover {
+  transform: scale(1.1);
+}
+
+.confirm-payment-btn:hover {
+  background: linear-gradient(90deg, #40a9ff 0%, #69c0ff 100%);
 }
 
 .payment-image img {

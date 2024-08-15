@@ -35,9 +35,13 @@ import NotAuthorized from './pages/NotAuthorized/NotAuthorized';
 import ProtectedRoute from './components/ProtectedRoute';
 import TermsAndConditions from './pages/FooterPages/TermsAndConditions';
 import PrivacyPolicy from './pages/FooterPages/PrivacyPolicy'; 
+import CheckOut from './pages/CheckOut/CheckOut';
+import Payment from './pages/Payments/Payment';
 import RefundPolicy from './pages/FooterPages/RefundPolicy'; 
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
+
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
@@ -50,6 +54,8 @@ root.render(
         <Route path='/Movies' element={<Movies />} />
         <Route path='/News' element={<News />} />
         <Route path='/Contactus' element={<Contactus />} />
+        <Route path='/CheckOut' element={<CheckOut />} />
+        <Route path='/Payment' element={<Payment />} />
         <Route path='/Login' element={<Login />} />
         <Route path='/Register' element={<Register />} />
         <Route path='/TermsAndConditions' element={<TermsAndConditions />} />

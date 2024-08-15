@@ -3,7 +3,7 @@ export { default as Stream } from './stream/Stream';
 export { default as Header } from './header/Header';
 export { default as Events } from './events/Events';
 export { default as MovieDetails } from './movieDetails/MovieDetails';
-export { default as Payment } from './payment/Payment';
+export { default as PaymentForm } from './payment/Payment';
 export { default as NowShowing } from './nowShowing/NowShowing';
 export { default as UpCommingMovies } from './upCommingMovies/UpCommingMovies';
 export { default as ContactForm } from './contactForm/ContactForm';
@@ -31,4 +31,4 @@ export { default as PhoneNumberForm } from './AdminSetting/PhoneNumberForm.jsx';
 export { default as AdminEditNews } from './adminAddNews/AdminEditNews.jsx';
 export { default as EventPayment } from './payment/EventPayment.jsx';
 export { default as Paybuttons } from './payment/Paybuttons.jsx';
-
+export { default as CheckOutForm } from './CheckOutForm/CheckOutForm.jsx';
