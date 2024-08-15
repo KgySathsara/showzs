@@ -41,8 +41,6 @@ import RefundPolicy from './pages/FooterPages/RefundPolicy';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 
-import { GoogleOAuthProvider } from '@react-oauth/google';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
 root.render(
