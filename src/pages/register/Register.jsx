@@ -102,7 +102,7 @@ const Register = () => {
           <div className="terms-container">
             <input type="checkbox" id="terms" name="terms" checked={formData.terms} onChange={handleChange} />
             <label htmlFor="terms">
-              I agree to the <a href="/">terms</a> of use and <a href="/">privacy policy</a>
+              I agree to the <a href="/TermsAndConditions">terms</a> of use and <a href="/PrivacyPolicy">privacy policy</a>
             </label>
 
             <div className='signup-button'>

@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Button } from 'antd';
-import { DeleteOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 import './events.css';
 
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/live-events/showEvent')
       .then(response => {
-        console.log('API response:', response.data); // Log the response
+        console.log('API response:', response.data); 
         let responseData = response.data;
         if (!Array.isArray(responseData)) {
           responseData = [responseData];
         }
-        
-        // Sort by date descending and take the first 3 events
+
         const sortedEvents = responseData.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 3);
         
         setEvents(sortedEvents);
@@ -37,9 +38,10 @@ const Events = () => {
     setIsPopupOpen(false);
   };
 
-  const handleDelete = () => {
-    console.log(`Deleting event with ID: ${selectedEvent.id}`);
-    closePopup();
+  const closePopupAndNavigate = () => {
+    setIsPopupOpen(false);
+    setSelectedEvent(null);
+    navigate('/Checkout');
   };
 
   return (
@@ -71,21 +73,23 @@ const Events = () => {
       </div>
 
       {isPopupOpen && (
-        <div className="popup-overlay">
-          <div className="popup-box">
-            <Button   danger   icon={<DeleteOutlined />}   className="delete-icon"   onClick={handleDelete}/>
-
-            <h2>{selectedEvent.title}</h2>
-            <p>Name: {selectedEvent.description}</p>
-            <p>Category: {selectedEvent.category}</p>
-            <p>Ticket Price: {selectedEvent.ticketPrice}</p>
-            <div className="popup-actions">
-              <Button type="primary" onClick={closePopup} className="close-popup">Buy Ticket</Button>
-            </div>
-            
-          </div>
-        </div>
-      )}
+  <div className="popup-overlay">
+    <div className="popup-box">
+      <Button
+        icon={<CloseOutlined />}
+        className="close-icon"
+        onClick={closePopup}
+      />
+      <h2>{selectedEvent.title}</h2>
+      <p>Description: {selectedEvent.description}</p>
+      <p>Category: {selectedEvent.category}</p>
+      <p>Ticket Price: {selectedEvent.ticketPrice}</p>
+      <div className="popup-actions">
+        <Button type="primary" onClick={closePopupAndNavigate} className="buy-ticket">Buy Ticket</Button>
+      </div>
+    </div>
+  </div>
+)}
     </section>
   );
 };
