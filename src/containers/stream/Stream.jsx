@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './stream.css';
+import { Button } from 'antd';
+import { FaTimes } from 'react-icons/fa';
 
 const Stream = () => {
   const [movies, setMovies] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedTrailer, setSelectedTrailer] = useState('');
-  const navigate = useNavigate(); // Initialize the navigate function
+  const [selectedMovie, setSelectedMovie] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios.get('http://localhost:8000/api/movies')
@@ -46,8 +50,20 @@ const Stream = () => {
     setSelectedTrailer('');
   };
 
-  const handleBuyTickets = () => {
-    navigate('/Checkout'); // Redirect to the checkout page
+  const handleBuyTickets = (movie) => {
+    setSelectedMovie(movie);
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+    setSelectedMovie(null);
+  };
+
+  const closePopupAndNavigate = () => {
+    setIsPopupOpen(false);
+    setSelectedMovie(null);
+    navigate('/Checkout');
   };
 
   return (
@@ -65,7 +81,7 @@ const Stream = () => {
               <p>{movie.duration} min</p>
               <div className="buttons">
                 <button className="watch-trailer" onClick={() => handleWatchTrailer(movie.trailer)}>Watch Trailer</button>
-                <button className="buy-tickets" onClick={handleBuyTickets}>Buy Tickets</button>
+                <button className="buy-tickets" onClick={() => handleBuyTickets(movie)}>Buy Tickets</button>
               </div>
             </div>
           ))}
@@ -78,6 +94,23 @@ const Stream = () => {
           <div className="modal-content">
             <span className="close-button" onClick={handleCloseModal}>&times;</span>
             <video controls src={selectedTrailer} className="trailer-video" />
+          </div>
+        </div>
+      )}
+
+      {isPopupOpen && selectedMovie && (
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <button onClick={closePopup} className="close-icon">
+              <FaTimes />
+            </button>
+            <h2>{selectedMovie.title}</h2>
+            <p>Duration: {selectedMovie.duration} min</p>
+            <p>Category: {selectedMovie.genre}</p>
+            <p>Ticket Price: {selectedMovie.price}</p>
+            <div className="popup-actions">
+              <Button type="primary" onClick={closePopupAndNavigate} className="close-popup">Buy Ticket</Button>
+            </div>
           </div>
         </div>
       )}
