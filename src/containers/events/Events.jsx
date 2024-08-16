@@ -39,6 +39,9 @@ const Events = () => {
   };
 
   const closePopupAndNavigate = () => {
+    // Store selected event data in localStorage
+    localStorage.setItem('selectedEvent', JSON.stringify(selectedEvent));
+    
     setIsPopupOpen(false);
     setSelectedEvent(null);
     navigate('/Checkout');
@@ -73,25 +76,25 @@ const Events = () => {
       </div>
 
       {isPopupOpen && (
-  <div className="popup-overlay">
-    <div className="popup-box">
-      <Button
-        icon={<CloseOutlined />}
-        className="close-icon"
-        onClick={closePopup}
-      />
-      <h2>{selectedEvent.title}</h2>
-      <p>Description: {selectedEvent.description}</p>
-      <p>Category: {selectedEvent.category}</p>
-      <p>Ticket Price: {selectedEvent.ticketPrice}</p>
-      <div className="popup-actions">
-        <Button type="primary" onClick={closePopupAndNavigate} className="buy-ticket">Buy Ticket</Button>
-      </div>
-    </div>
-  </div>
-)}
+        <div className="popup-overlay">
+          <div className="popup-box">
+            <Button
+              icon={<CloseOutlined />}
+              className="close-icon"
+              onClick={closePopup}
+            />
+            <h2>{selectedEvent.title}</h2>
+            <p>Description: {selectedEvent.description}</p>
+            <p>Category: {selectedEvent.category}</p>
+            <p>Ticket Price: {selectedEvent.ticketPrice}</p>
+            <div className="popup-actions">
+              <Button type="primary" onClick={closePopupAndNavigate} className="buy-ticket">Buy Ticket</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 };
 
-export default Events;
+export default Events

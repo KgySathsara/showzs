@@ -52,6 +52,9 @@ const Header = () => {
   };
 
   const closePopupAndNavigate = () => {
+    if (selectedItem) {
+      localStorage.setItem('selectedItem', JSON.stringify(selectedItem));
+    }
     setIsPopupOpen(false);
     setSelectedItem(null);
     navigate('/Checkout');
