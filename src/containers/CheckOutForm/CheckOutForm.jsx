@@ -25,6 +25,7 @@ const CheckoutForm = () => {
             behavior: 'smooth'
         });
     }, []);
+    
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
@@ -43,9 +44,12 @@ const CheckoutForm = () => {
             setIsUserLoggedIn(true);
         }
 
-        const storedCartDetails = localStorage.getItem('selectedItem');
-        if (storedCartDetails) {
-            setCartDetails(JSON.parse(storedCartDetails));
+        const storedSelectedItem = localStorage.getItem('selectedItem');
+        const storedSelectedEvent = localStorage.getItem('selectedEvent');
+
+        const cartDetails = storedSelectedEvent ? JSON.parse(storedSelectedEvent) : JSON.parse(storedSelectedItem);
+        if (cartDetails) {
+            setCartDetails(cartDetails);
         }
     }, [form]);
 
@@ -58,17 +62,31 @@ const CheckoutForm = () => {
             return;
         }
 
+        const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
+        if (purchasedItems.includes(cartDetails.id)) {
+            notification.error({
+                message: 'Duplicate Purchase',
+                description: 'You have already purchased this item.',
+            });
+            return;
+        }
+
         axios.post('http://127.0.0.1:8000/api/checkout', {
             name: values.name,
             email: values.email,
             mobileNumber: values.mobileNumber,
-            country: values.country.label, // Use the label of the selected country
+            country: values.country.label,
+            itemId: cartDetails.id,
         })
         .then(response => {
             notification.success({
                 message: 'Success',
                 description: 'Your data has been submitted successfully!',
             });
+
+            purchasedItems.push(cartDetails.id);
+            localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+
             navigate('/Payment');
         })
         .catch(error => {
