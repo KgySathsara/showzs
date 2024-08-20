@@ -22,6 +22,12 @@ function CountrySelector({ onChange }) {
 }
 
 const CheckoutForm = () => {
+    useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    }, []);
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
