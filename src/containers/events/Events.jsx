@@ -8,7 +8,7 @@ import './events.css';
 const Events = () => {
   const [events, setEvents] = useState([]);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
-  const [selectedEvent, setSelectedEvent] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,8 +29,8 @@ const Events = () => {
       });
   }, []);
 
-  const handleWatchNowClick = (event) => {
-    setSelectedEvent(event);
+  const handleWatchNowClick = (item) => {
+    setSelectedItem(item);
     setIsPopupOpen(true);
   };
 
@@ -39,11 +39,11 @@ const Events = () => {
   };
 
   const closePopupAndNavigate = () => {
-    // Store selected event data in localStorage
-    localStorage.setItem('selectedEvent', JSON.stringify(selectedEvent));
+    // Store selected item data in localStorage
+    localStorage.setItem('selectedItem', JSON.stringify(selectedItem));
     
     setIsPopupOpen(false);
-    setSelectedEvent(null);
+    setSelectedItem(null);
     navigate('/Checkout');
   };
 
@@ -75,7 +75,7 @@ const Events = () => {
         </div>
       </div>
 
-      {isPopupOpen && (
+      {isPopupOpen && selectedItem && (
         <div className="popup-overlay">
           <div className="popup-box">
             <Button
@@ -83,10 +83,10 @@ const Events = () => {
               className="close-icon"
               onClick={closePopup}
             />
-            <h2>{selectedEvent.title}</h2>
-            <p>Description: {selectedEvent.description}</p>
-            <p>Category: {selectedEvent.category}</p>
-            <p>Ticket Price: {selectedEvent.ticketPrice}</p>
+            <h2>{selectedItem.title}</h2>
+            <p>Description: {selectedItem.description}</p>
+            <p>Category: {selectedItem.category}</p>
+            <p>Ticket Price: {selectedItem.ticketPrice}</p>
             <div className="popup-actions">
               <Button type="primary" onClick={closePopupAndNavigate} className="buy-ticket">Buy Ticket</Button>
             </div>
@@ -97,4 +97,4 @@ const Events = () => {
   );
 };
 
-export default Events
+export default Events;

@@ -1,5 +1,21 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
+
+.ant-layout {
+  overflow-y: auto; /* Allow the content area to scroll */
+  height: 100vh; /* Make the content area fill the screen */
+}
+
+@media (max-width: 768px) {
+  .ant-layout-sider {
+    width: 80px; /* Smaller width when collapsed */
+  }
+
+  .ant-layout {
+    margin-left: 80px;
+  }
+}
+
 .navbar {
   font-family: 'DM Sans', sans-serif;
   width: 100%; 
