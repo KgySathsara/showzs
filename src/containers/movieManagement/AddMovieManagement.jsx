@@ -4,7 +4,7 @@ import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
 import axios from 'axios';
 import './movieManagement.css';
 
-const AddMovieManagement = ({ onSubmit }) => {
+const AddMovieManagement = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [trailerList, setTrailerList] = useState([]);
@@ -27,6 +27,7 @@ const AddMovieManagement = ({ onSubmit }) => {
       const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
         email: values.email,
         password: values.password,
+        password_confirmation: values.password_confirmation,
         full_name: values.fullName,
         phone_number: values.phoneNumber,
         user_type: 4,
@@ -294,6 +295,9 @@ const AddMovieManagement = ({ onSubmit }) => {
           <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
             <Input.Password />
           </Form.Item>
+          <Form.Item name="password_confirmation" label="Confirm Password" rules={[{ required: true, message: 'Please confirm your password' }]}>
+            <Input.Password />
+          </Form.Item>
           <Form.Item name="fullName" label="Full Name" rules={[{ required: true, message: 'Please enter your full name' }]}>
             <Input />
           </Form.Item>
@@ -304,6 +308,7 @@ const AddMovieManagement = ({ onSubmit }) => {
             <Button type="primary" htmlType="submit">Submit</Button>
           </Form.Item>
         </Form>
+
       </Modal>
 
       <Modal

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const { Option } = Select;
 
-const LiveEventForm = ({ onSubmit }) => {
+const LiveEventForm = () => {
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,6 +26,7 @@ const LiveEventForm = ({ onSubmit }) => {
       const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
         email: values.email,
         password: values.password,
+        password_confirmation: values.password_confirmation,
         full_name: values.fullName,
         phone_number: values.phoneNumber,
         user_type: 4,
@@ -102,8 +103,8 @@ const LiveEventForm = ({ onSubmit }) => {
         }
       }
     } catch (error) {
-      message.error('Failed to create live event');
-      console.error('Error adding user:', error);
+      console.error('Error adding movie or user:', error);
+      message.error('Failed to add user or movie. Please check the credentials and try again.');
     }
   };
 
@@ -111,9 +112,9 @@ const LiveEventForm = ({ onSubmit }) => {
     const isImage = fileList.every(file => file.type.startsWith('image/'));
     if (isImage) {
       setFileList(fileList);
-    }else {
-    message.error('You can only upload image files!');
-    setFileList([]);
+    } else {
+      message.error('You can only upload image files!');
+      setFileList([]);
     }
   };
 
@@ -169,16 +170,20 @@ const LiveEventForm = ({ onSubmit }) => {
           <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
             <Input.Password />
           </Form.Item>
-          <Form.Item name="fullName" label="Full Name">
+          <Form.Item name="password_confirmation" label="Confirm Password" rules={[{ required: true, message: 'Please confirm your password' }]}>
+            <Input.Password />
+          </Form.Item>
+          <Form.Item name="fullName" label="Full Name" rules={[{ required: true, message: 'Please enter your full name' }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="phoneNumber" label="Phone Number">
+          <Form.Item name="phoneNumber" label="Phone Number" rules={[{ required: true, message: 'Please enter your phone number' }]}>
             <Input />
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit">Submit</Button>
           </Form.Item>
         </Form>
+
       </Modal>
 
       <Modal
