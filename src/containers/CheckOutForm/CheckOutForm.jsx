@@ -5,17 +5,14 @@ import countryList from 'react-select-country-list';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CheckoutForm.css';
-import { FaTimes } from 'react-icons/fa';
 
 const { Title } = Typography;
 
-function CountrySelector({ onChange }) {
-    const [value, setValue] = useState('');
+function CountrySelector({ onChange, value }) {
     const options = useMemo(() => countryList().getData(), []);
 
-    const changeHandler = (value) => {
-        setValue(value);
-        onChange(value);
+    const changeHandler = (selectedOption) => {
+        onChange(selectedOption);
     };
 
     return <Select options={options} value={value} onChange={changeHandler} />;
@@ -25,52 +22,26 @@ const CheckoutForm = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-    const [cartDetails, setCartDetails] = useState(null); // Track a single item (movie/event) in the cart
-    const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [selectedMovie, setSelectedMovie] = useState(null);
+    const [cartDetails, setCartDetails] = useState(null);
 
     useEffect(() => {
-        axios.get('http://127.0.0.1:8000/sanctum/csrf-cookie')
-            .then(() => {
-                axios.get('http://127.0.0.1:8000/api/current-user')
-                    .then(response => {
-                        const user = response.data.user;
-                        if (user) {
-                            form.setFieldsValue({
-                                firstName: user.full_name.split(' ')[0] || '',
-                                lastName: user.full_name.split(' ')[1] || '',
-                                email: user.email || '',
-                                mobileNumber: user.phone_number || '',
-                                country: user.country || '',
-                            });
-                            setIsUserLoggedIn(true);
-                        }
-                    })
-                    .catch(error => {
-                        notification.error({
-                            message: 'Error',
-                            description: 'Failed to fetch user details. Please try again.',
-                        });
-                    });
+        const storedUser = sessionStorage.getItem('user');
+        if (storedUser) {
+            const user = JSON.parse(storedUser);
+            form.setFieldsValue({
+                name: user.full_name || '',
+                email: user.email || '',
+                mobileNumber: user.phone_number || '',
+                country: { label: user.country, value: user.country } || '',
             });
+            setIsUserLoggedIn(true);
+        }
+
+        const storedCartDetails = localStorage.getItem('selectedItem');
+        if (storedCartDetails) {
+            setCartDetails(JSON.parse(storedCartDetails));
+        }
     }, [form]);
-
-    const handleItemClick = (item) => {
-        setCartDetails(item); // Update the cart with the selected movie or event
-        setSelectedMovie(item); // Update the selected movie (for the popup)
-        setIsPopupOpen(true);
-    };
-
-    const closePopup = () => {
-        setIsPopupOpen(false);
-        setSelectedMovie(null);
-    };
-
-    const closePopupAndNavigate = () => {
-        setIsPopupOpen(false);
-        setSelectedMovie(null);
-        navigate('/Payment');
-    };
 
     const handleSubmit = (values) => {
         if (!isUserLoggedIn) {
@@ -80,8 +51,27 @@ const CheckoutForm = () => {
             });
             return;
         }
-        console.log('Form submitted:', values);
-        navigate('/Payment');
+
+        axios.post('http://127.0.0.1:8000/api/checkout', {
+            name: values.name,
+            email: values.email,
+            mobileNumber: values.mobileNumber,
+            country: values.country.label, // Use the label of the selected country
+        })
+        .then(response => {
+            notification.success({
+                message: 'Success',
+                description: 'Your data has been submitted successfully!',
+            });
+            navigate('/Payment');
+        })
+        .catch(error => {
+            console.error('There was an error submitting the form!', error);
+            notification.error({
+                message: 'Error',
+                description: 'There was an error submitting your data.',
+            });
+        });
     };
 
     return (
@@ -101,19 +91,11 @@ const CheckoutForm = () => {
                             initialValues={{ remember: true }}
                         >
                             <Form.Item
-                                label="First Name"
-                                name="firstName"
-                                rules={[{ required: true, message: 'Please input your first name!' }]}
+                                label="User Name"
+                                name="name"
+                                rules={[{ required: true, message: 'Please input your user name!' }]}
                             >
-                                <Input placeholder="Enter your first name" className="input-field" />
-                            </Form.Item>
-
-                            <Form.Item
-                                label="Last Name"
-                                name="lastName"
-                                rules={[{ required: true, message: 'Please input your last name!' }]}
-                            >
-                                <Input placeholder="Enter your last name" className="input-field" />
+                                <Input placeholder="Enter your user name" className="input-field" />
                             </Form.Item>
 
                             <Form.Item
@@ -137,7 +119,10 @@ const CheckoutForm = () => {
                                 name="country"
                                 rules={[{ required: true, message: 'Please select your country!' }]}
                             >
-                                <CountrySelector onChange={(value) => form.setFieldsValue({ country: value.label })} />
+                                <CountrySelector
+                                    value={form.getFieldValue('country')}
+                                    onChange={(value) => form.setFieldsValue({ country: value })}
+                                />
                             </Form.Item>
 
                             <Form.Item name="saveInfo" valuePropName="checked">
@@ -160,16 +145,11 @@ const CheckoutForm = () => {
                         {cartDetails ? (
                             <div className="movie-container">
                                 <div className="movie">
-                                    {cartDetails.picture && (
-                                        <img src={cartDetails.picture} alt={cartDetails.title} />
-                                    )}
-                                    <h2>{cartDetails.title}</h2>
-                                    <p>{cartDetails.duration} min</p>
-                                    <p>Category: {cartDetails.genre || cartDetails.category}</p>
-                                    <p>Ticket Price: Rs.{cartDetails.price || cartDetails.ticketPrice}</p>
-                                    <div className="buttons">
-                                        <Button type="primary" onClick={() => handleItemClick(cartDetails)} className="buy-tickets">Buy Ticket</Button>
-                                    </div>
+                                    <h3> {cartDetails.title}</h3>
+                                    <p>Director: {cartDetails.director || 'N/A'}</p>
+                                    <p>Description: {cartDetails.description || 'N/A'}</p>
+                                    <p>Category: {cartDetails.genre || cartDetails.category || 'N/A'}</p>
+                                    <p>Ticket Price: Rs.{cartDetails.price || cartDetails.ticketPrice || 'N/A'}</p>
                                 </div>
                             </div>
                         ) : (
@@ -178,23 +158,6 @@ const CheckoutForm = () => {
                     </Card>
                 </Col>
             </Row>
-
-            {isPopupOpen && selectedMovie && (
-                <div className="popup-overlay">
-                    <div className="popup-box">
-                        <button onClick={closePopup} className="close-icon">
-                            <FaTimes />
-                        </button>
-                        <h2>{selectedMovie.title}</h2>
-                        <p>Duration: {selectedMovie.duration} min</p>
-                        <p>Category: {selectedMovie.genre}</p>
-                        <p>Ticket Price: {selectedMovie.price}</p>
-                        <div className="popup-actions">
-                            <Button type="primary" onClick={closePopupAndNavigate} className="close-popup">Buy Ticket</Button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </section>
     );
 };

@@ -108,6 +108,23 @@
     margin-bottom: 5vh;
 }
 
+.footer-social-icons {
+    display: flex;
+    gap: 5px;
+    margin-top: 10px;
+  }
+  
+  .footer-social-icons a {
+    color: #ffffff;
+    font-size: 30px;
+    transition: color 0.3s ease;
+    margin-left: 30px;
+  }
+  
+  .footer-social-icons a:hover {
+    color: #ffa500;
+  }
+
 /* Responsive styles */
 
 @media screen and (max-width: 850px) {
