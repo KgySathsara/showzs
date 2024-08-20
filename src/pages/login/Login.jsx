@@ -21,9 +21,12 @@ const Login = () => {
     try {
       const response = await axios.post('http://localhost:8000/api/login', { email, password });
       
-      const role = response.data.role;
-      sessionStorage.setItem('userRole', role);
+      const user = response.data.user;
+      const role = response.data.role;         
 
+      sessionStorage.setItem('user', JSON.stringify(user));
+      sessionStorage.setItem('userRole', role);
+  
       if (role === 'admin') {
         toast.success('Admin logged in successfully');
         navigate('/admin');
@@ -53,6 +56,7 @@ const Login = () => {
       setErrors({ general: errorMessage });
     }
   };
+  
 
   const handleRegister = () => {
     navigate('/Register');
@@ -67,12 +71,14 @@ const Login = () => {
           token: tokenResponse.access_token,
         });
   
-        console.log('Server Response:', response);
+        const user = response.data.user; 
+        const role = response.data.user_type;    
+
+        sessionStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('userRole', role);
   
         toast.success('Google Sign-In successful!');
-        const role = response.data.user.user_type;
-        sessionStorage.setItem('userRole', role);
-
+  
         if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
           navigate('/admin');
         } else {
@@ -87,6 +93,7 @@ const Login = () => {
       toast.error('Google Sign-In failed!');
     },
   });
+  
 
   return (
     <section className='login'>
