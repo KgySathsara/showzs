@@ -6,15 +6,13 @@ const NowShowing = () => {
   const [movies, setMovies] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/movies')
+    axios.get('http://127.0.0.1:8000/api/movies/latest')
       .then(response => {
-        console.log('API response:', response.data); // Log the response
+        console.log('API response:', response.data);
         let responseData = response.data;
         if (!Array.isArray(responseData)) {
           responseData = [responseData];
         }
-
-        // Sort by date descending and take the first 2 movies
         const sortedMovies = responseData.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 2);
 
         setMovies(sortedMovies);

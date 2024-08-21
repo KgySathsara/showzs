@@ -1,7 +1,6 @@
 import React from 'react';
-import { Footer, MovieDetails, Paybuttons} from '../../containers';
+import { Footer, MovieDetails} from '../../containers';
 import { Navbar } from '../../components';
-// import './LiveEvents.css';
 
 const Movies = () => {
   return (
@@ -11,7 +10,6 @@ const Movies = () => {
       </div>
       <div className='live-events-content'>
         <MovieDetails />
-        <Paybuttons />
       </div>
       <Footer />
     </div>
