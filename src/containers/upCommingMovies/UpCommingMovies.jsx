@@ -11,8 +11,8 @@ const UpCommingMovies = () => {
 
   const fetchUpcomingMovies = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/upcoming-movies');
-      setUpcomingMovies(response.data); 
+      const response = await axios.get('http://localhost:8000/api/upcoming-movies/latest');
+      setUpcomingMovies(response.data.upcomingmovie);
     } catch (error) {
       console.error('Error fetching upcoming movies:', error);
     }
@@ -21,8 +21,8 @@ const UpCommingMovies = () => {
   return (
     <section className='upcoming-movies'>
       <h2>Upcoming Movies</h2>
-      <div className={`upcoming-movies-container ${upcomingMovies.length === 1 ? 'single-movie' : ''}`}>
-        {upcomingMovies.slice(0, 2).map(movie => (
+      <div className={`upcoming-movies-container ${Array.isArray(upcomingMovies) && upcomingMovies.length === 1 ? 'single-movie' : ''}`}>
+        {Array.isArray(upcomingMovies) && upcomingMovies.slice(0, 2).map(movie => (
           <div key={movie.id} className='movie-card animate__animated animate__fadeInUp'>
             <img src={movie.image} alt={movie.title} />
             <div className='movie-info'>
@@ -39,6 +39,6 @@ const UpCommingMovies = () => {
       </div>
     </section>
   );
-}
+};
 
 export default UpCommingMovies;
