@@ -2,7 +2,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input, Button, Checkbox, Row, Col, Typography, Card, notification } from 'antd';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CheckoutForm.css';
 
@@ -25,9 +24,8 @@ const CheckoutForm = () => {
             behavior: 'smooth'
         });
     }, []);
-    
+
     const [form] = Form.useForm();
-    const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [cartDetails, setCartDetails] = useState(null);
 
@@ -53,7 +51,7 @@ const CheckoutForm = () => {
         }
     }, [form]);
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         if (!isUserLoggedIn) {
             notification.error({
                 message: 'Login Required',
@@ -71,31 +69,44 @@ const CheckoutForm = () => {
             return;
         }
 
-        axios.post('http://127.0.0.1:8000/api/checkout', {
-            name: values.name,
-            email: values.email,
-            mobileNumber: values.mobileNumber,
-            country: values.country.label,
-            itemId: cartDetails.id,
-        })
-        .then(response => {
-            notification.success({
-                message: 'Success',
-                description: 'Your data has been submitted successfully!',
+        const otherOnePayParams = {
+            merchantId: 'YOUR_MERCHANT_ID',
+            merchantSecret: 'YOUR_MERCHANT_SECRET',
+        };
+
+        try {
+            await axios.post('http://127.0.0.1:8000/api/checkout', {
+                name: values.name,
+                email: values.email,
+                mobileNumber: values.mobileNumber,
+                country: values.country.label,
+                itemId: cartDetails.id,
             });
 
-            purchasedItems.push(cartDetails.id);
-            localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
+            const paymentResponse = await axios.post('https://merchant-api-live-v2.onepay.lk/api/ipg/gateway', {
+                amount: cartDetails.price || cartDetails.ticketPrice,
+                currency: 'INR',
+                description: cartDetails.title,
+                returnUrl: 'http://your-website.com/payment-success',
+                cancelUrl: 'http://your-website.com/payment-cancel',
+                ...otherOnePayParams,
+            });
 
-            navigate('/Payment');
-        })
-        .catch(error => {
-            console.error('There was an error submitting the form!', error);
+            if (paymentResponse.data.paymentUrl) {
+                window.location.href = paymentResponse.data.paymentUrl;
+            } else {
+                notification.error({
+                    message: 'Payment Error',
+                    description: 'Unable to initiate payment. Please try again.',
+                });
+            }
+        } catch (error) {
+            console.error('There was an error submitting the form or initiating payment!', error);
             notification.error({
                 message: 'Error',
-                description: 'There was an error submitting your data.',
+                description: 'There was an error submitting your data or initiating payment.',
             });
-        });
+        }
     };
 
     return (
