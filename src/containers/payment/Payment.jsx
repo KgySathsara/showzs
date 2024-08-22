@@ -67,6 +67,6 @@ const PaymentForm = () => {
       </Card>
     </div>
   );
-}
+} 
 
 export default PaymentForm;
