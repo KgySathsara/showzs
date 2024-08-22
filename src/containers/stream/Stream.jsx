@@ -14,27 +14,24 @@ const Stream = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/movies')
+    axios.get('http://localhost:8000/api/movies/latest')
       .then(response => {
         console.log('API response:', response.data);
-        if (response.status === 200) {
-          let responseData = response.data;
-
-          if (!Array.isArray(responseData)) {
-            responseData = [responseData];
-          }
-
-          const sortedMovies = responseData.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 2);
-
-          setMovies(sortedMovies);
-        } else {
-          console.error('No movies found:', response.data.error);
+        let responseData = response.data;
+        if (!Array.isArray(responseData)) {
+          responseData = [responseData];
         }
+  
+        const sortedMovies = responseData.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 2);
+  
+        console.log('Sorted Movies:', sortedMovies);
+        setMovies(sortedMovies);
       })
       .catch(error => {
         console.error('There was an error fetching the movies!', error);
       });
   }, []);
+  
 
   const handleWatchTrailer = (trailerUrl) => {
     if (trailerUrl) {
