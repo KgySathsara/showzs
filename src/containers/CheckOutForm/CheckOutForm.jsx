@@ -48,7 +48,12 @@ const CheckoutForm = () => {
         if (storedCartDetails) {
             setCartDetails(JSON.parse(storedCartDetails));
         }
+
     }, [form]);
+
+        doc.save("checkout-details.pdf");
+    };
+
 
     const handleSubmit = (values) => {
         if (!isUserLoggedIn) {
@@ -58,6 +63,7 @@ const CheckoutForm = () => {
             });
             return;
         }
+
 
         axios.post('http://127.0.0.1:8000/api/onepay', {
             name: values.name,
@@ -88,6 +94,44 @@ const CheckoutForm = () => {
                 description: 'There was an error submitting your data.',
             });
         });
+=======
+        const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
+        if (purchasedItems.includes(cartDetails.id)) {
+            notification.error({
+                message: 'Duplicate Purchase',
+                description: 'You have already purchased this item.',
+            });
+            return;
+        }
+
+        // Send payment details to Laravel backend
+        axios.post('http://127.0.0.1:8000/api/checkout', {
+            name: values.name,
+            email: values.email,
+            mobileNumber: values.mobileNumber,
+            country: values.country.label,
+            itemId: cartDetails.id,
+            pay: cartDetails.price, // Assuming cartDetails has the price
+        })
+            .then(response => {
+                if (response.data.paymentUrl) {
+                    // Redirect the user to the Onepay payment gateway
+                    window.location.href = response.data.paymentUrl;
+                } else {
+                    notification.error({
+                        message: 'Error',
+                        description: 'Payment initiation failed.',
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('There was an error submitting the form!', error);
+                notification.error({
+                    message: 'Error',
+                    description: 'There was an error submitting your data.',
+                });
+            });
+
     };
 
     return (
