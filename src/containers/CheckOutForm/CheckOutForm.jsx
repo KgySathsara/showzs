@@ -67,89 +67,54 @@ const CheckoutForm = () => {
             doc.text(`Category: ${cartDetails.genre || cartDetails.category || 'N/A'}`, 20, 120);
             doc.text(`Ticket Price: Rs.${cartDetails.price || cartDetails.ticketPrice || 'N/A'}`, 20, 130);
         }
-
-
         doc.save("checkout-details.pdf");
     };
 
-
-
-    const handleSubmit = async (values) => {
+    const handleSubmit = (values) => {
         if (!isUserLoggedIn) {
-            return notification.error({
+            notification.error({
                 message: 'Login Required',
                 description: 'Please login first to proceed with the checkout.',
             });
+            return;
         }
 
-        /*const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
+        const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
         if (purchasedItems.includes(cartDetails.id)) {
-            return notification.error({
+            notification.error({
                 message: 'Duplicate Purchase',
                 description: 'You have already purchased this item.',
             });
-        }*/
-
-        try {
-            await axios.post('http://127.0.0.1:8000/api/checkout', {
-                ...values,
-                country: values.country.label,
-                itemId: cartDetails.id,
-            });
-
-
-            notification.success({
-                message: 'Success',
-                description: 'Your data has been submitted successfully!',
-            });
-
-            //purchasedItems.push(cartDetails.id);
-            //localStorage.setItem('purchasedItems', JSON.stringify(purchasedItems));
-
-            generatePDF(values);
-            navigate('/Payment');
-        } catch (error) {
-            console.error('There was an error submitting the form!', error);
-
-        const otherOnePayParams = {
-            merchantId: 'YOUR_MERCHANT_ID',
-            merchantSecret: 'YOUR_MERCHANT_SECRET',
-        };
-
-        try {
-            await axios.post('http://127.0.0.1:8000/api/checkout', {
-                name: values.name,
-                email: values.email,
-                mobileNumber: values.mobileNumber,
-                country: values.country.label,
-                itemId: cartDetails.id,
-            });
-
-            const paymentResponse = await axios.post('https://merchant-api-live-v2.onepay.lk/api/ipg/gateway', {
-                amount: cartDetails.price || cartDetails.ticketPrice,
-                currency: 'INR',
-                description: cartDetails.title,
-                returnUrl: 'http://your-website.com/payment-success',
-                cancelUrl: 'http://your-website.com/payment-cancel',
-                ...otherOnePayParams,
-            });
-
-            if (paymentResponse.data.paymentUrl) {
-                window.location.href = paymentResponse.data.paymentUrl;
-            } else {
-                notification.error({
-                    message: 'Payment Error',
-                    description: 'Unable to initiate payment. Please try again.',
-                });
-            }
-        } catch (error) {
-            console.error('There was an error submitting the form or initiating payment!', error);
-
-            notification.error({
-                message: 'Error',
-                description: 'There was an error submitting your data or initiating payment.',
-            });
+            return;
         }
+
+        // Send payment details to Laravel backend
+        axios.post('http://127.0.0.1:8000/api/checkout', {
+            name: values.name,
+            email: values.email,
+            mobileNumber: values.mobileNumber,
+            country: values.country.label,
+            itemId: cartDetails.id,
+            pay: cartDetails.price, // Assuming cartDetails has the price
+        })
+            .then(response => {
+                if (response.data.paymentUrl) {
+                    // Redirect the user to the Onepay payment gateway
+                    window.location.href = response.data.paymentUrl;
+                } else {
+                    notification.error({
+                        message: 'Error',
+                        description: 'Payment initiation failed.',
+                    });
+                }
+            })
+            .catch(error => {
+                console.error('There was an error submitting the form!', error);
+                notification.error({
+                    message: 'Error',
+                    description: 'There was an error submitting your data.',
+                });
+            });
     };
 
     return (
