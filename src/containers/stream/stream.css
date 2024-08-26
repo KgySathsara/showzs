@@ -161,6 +161,11 @@ hr {
 }
 
 @media (max-width: 480px) {
+
+  .stream-container { 
+    height: 100%;
+  }
+
   h1 {
     font-size: 28px;
     padding: 10px;
@@ -168,6 +173,7 @@ hr {
 
   hr {
     visibility: visible;
+    margin-bottom: 8%;
   }
 
   .movie {
@@ -179,9 +185,9 @@ hr {
     width: 100%;
   }
 
-  .watch-trailer,
-  .buy-tickets {
-    width: 100%;
+  .buttons .watch-trailer,
+  .buttons .buy-tickets {
+    width: 60%;
     margin: 5px 0;
   }
 }

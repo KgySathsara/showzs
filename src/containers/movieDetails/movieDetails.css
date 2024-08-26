@@ -202,7 +202,8 @@
   }
 
   .movie-poster img {
-    max-width: 100%;
+    min-width: 100%;
+    min-height: 300px;
   }
 
   .ticketImg {
@@ -211,6 +212,6 @@
   }
 
   .watch-trailer{
-    width: 60%;
+    width: 100%;
   }
 }

@@ -306,4 +306,9 @@
     padding: 5px 10px;
     font-size: 14px;
   }
+
+  .card-details .watch-now{
+    font-size: 15px;
+    width: auto;
+  }
 }
