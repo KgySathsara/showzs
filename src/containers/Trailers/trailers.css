@@ -109,7 +109,12 @@
 
 @media (max-width: 480px) {
   .now-showing {
-    padding: 10px;
+    margin-bottom: -40px;
+  }
+
+  .now-showing-container {
+    margin-bottom: 5rem;
+    gap: 10px;
   }
 
   .now-showing h2 {
@@ -117,7 +122,7 @@
   }
 
   .movie-card {
-    flex: 1 1 calc(100% - 20px);
+    flex: 1 1 calc(100% - 10px);
   }
 
   .movie-card video {

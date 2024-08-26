@@ -65,3 +65,26 @@
 .upcoming-movies-container.single-movie .movie-card {
   max-width: 49%;
 }
+
+@media screen and (max-width: 480px) {
+  .upcoming-movies h2 {
+    font-size: 20px;
+  }
+
+  .upcoming-movies{
+    height: max-content;
+  }
+
+  .movie-card {
+    flex: 1 1 100%;
+    margin-bottom: 20px;
+  }
+
+  .movie-info h3 {
+    font-size: 16px;
+  }
+
+  .movie-info p {
+    font-size: 12px;
+  }
+}

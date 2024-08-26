@@ -2,9 +2,9 @@
 
 .navbar {
     font-family: 'DM Sans', sans-serif;
-    width: 100%; 
+    width: 100%;
     background-color: #20448A;
-    padding: 1px; 
+    padding: 1px;
     position: relative;
     top: 0;
     z-index: 1000;
@@ -21,12 +21,12 @@
 
 .navbar-links_logo img {
     display: flex;
-    width: 200px; 
+    width: 200px;
 }
 
 .navbar-links-container {
     display: flex;
-    justify-content: center; 
+    justify-content: center;
     flex-grow: 1;
 }
 
@@ -35,15 +35,15 @@
     list-style: none;
     margin: 0;
     padding: 0;
-    justify-content: center; 
+    justify-content: center;
 }
 
 .navItem {
     position: relative;
-    margin-top: 10px;  
+    margin-top: 10px;
     font-family: 'DM Sans', sans-serif;
-    margin-left: 50px; 
-    font-size: 20px; 
+    margin-left: 50px;
+    font-size: 20px;
     font-weight: bold;
     cursor: pointer;
 }
@@ -128,16 +128,23 @@
     font-size: 24px;
 }
 
+.mobileMenu {
+    display: none;
+    position: absolute;
+    right: 100px;
+    top: 40px;
+    z-index: 2000;
+    background-color: #20448A;
+}
+
+.mobileMenu .ant-btn {
+    color: white;
+    font-size: 30px;
+    border: none;
+}
+
 /* Responsive Design */
 @media screen and (max-width: 768px) {
-    .navbar-links {
-        flex-direction: column;
-    }
-
-    .navbar-links_logo img {
-        margin-bottom: 10px;
-    }
-
     .navLists {
         flex-direction: column;
         align-items: center;
@@ -148,13 +155,58 @@
         margin-bottom: 10px;
     }
 
-    .subNavLists {
-        position: static;
-        background-color: #305496;
+    .dropdown-icon {
+        margin-left: 5px;
+        cursor: pointer;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .navbar-links-container .navLists {
+        flex-direction: column;
+        align-items: start;
+        display: none;
+    }
+
+    .navbar-links_logo {
+        position: relative;
+        width: 100%;
+    }
+
+    .navItem {
+        margin-left: 0;
+        right: 15px;
+        margin-bottom: 10px;
+    }
+
+    .navbar-links .mobileMenu {
+        display: flex;
+    }
+
+    .dropdown-icon {
+        margin-left: 5px;
+        cursor: pointer;
+    }
+
+    .navbar-links-container {
+        display: none;
     }
 
     .signin-container {
-        justify-content: center;
-        padding-bottom: 10px;
+        padding: 10px 0;
+        text-align: center;
+    }
+
+    .signin-container p {
+        display: none;
+    }
+
+    .mobileMenu::after{
+        display: flex;
+        background-color: #20448A;
+    }
+
+    .mobileMenu .ant-btn {
+        color: white;
     }
 }

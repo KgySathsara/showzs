@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input, Button, Checkbox, Row, Col, Typography, Card, notification } from 'antd';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CheckoutForm.css';
 
@@ -21,7 +21,7 @@ function CountrySelector({ onChange, value }) {
 
 const CheckoutForm = () => {
     const [form] = Form.useForm();
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [cartDetails, setCartDetails] = useState(null);
 
