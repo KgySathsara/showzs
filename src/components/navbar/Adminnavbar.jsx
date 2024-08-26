@@ -52,12 +52,11 @@ const AdminNavBar = () => {
       description: 'You have successfully logged out.',
       placement: 'topRight',
     });
-  
+
     setTimeout(() => {
       navigate('/');
     }, 2000); 
   };
-  
 
   return (
     <Sider
@@ -75,7 +74,9 @@ const AdminNavBar = () => {
       <div className="user-info" style={{ padding: '5px', textAlign: 'center' }}>
         <p style={{ color: '#fff' }}>Hello, {roleName}</p>
         <p style={{ color: '#fff' }}>{role}</p>
-      </div><br /><br />
+      </div>
+      <br />
+      <br />
 
       <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
         <Menu.Item key="sub1" icon={<DashboardOutlined />} title="Dashboard">

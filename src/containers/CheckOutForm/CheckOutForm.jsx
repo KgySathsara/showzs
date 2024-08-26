@@ -20,18 +20,17 @@ function CountrySelector({ onChange, value }) {
 }
 
 const CheckoutForm = () => {
-    useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-    }, []);
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [cartDetails, setCartDetails] = useState(null);
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth',
+        });
+
         const storedUser = sessionStorage.getItem('user');
         if (storedUser) {
             const user = JSON.parse(storedUser);
@@ -48,12 +47,7 @@ const CheckoutForm = () => {
         if (storedCartDetails) {
             setCartDetails(JSON.parse(storedCartDetails));
         }
-
     }, [form]);
-
-        doc.save("checkout-details.pdf");
-    };
-
 
     const handleSubmit = (values) => {
         if (!isUserLoggedIn) {
@@ -64,37 +58,37 @@ const CheckoutForm = () => {
             return;
         }
 
-
         axios.post('http://127.0.0.1:8000/api/onepay', {
             name: values.name,
             email: values.email,
             mobileNumber: values.mobileNumber,
             country: values.country.label, // Use the label of the selected country
         })
-        .then(response => {
-            if (response.data.status === 'success') {
-                notification.success({
-                    message: 'Success',
-                    description: 'Redirecting to payment...',
-                });
-                const transactionRedirectUrl = response.data.data.transaction_redirect_url || 
-                  'https://gateway-v2.onepay.lk/redirect/S23P118E4CFD12BD66039/WQBV118E584C83CBA50C6/9d1ad6e517ab60bdbee5e5b1a38af5571a706f1486e68f708e4129f3261fc81c';
-                window.location.href = transactionRedirectUrl;
-            } else {
+            .then((response) => {
+                if (response.data.status === 'success') {
+                    notification.success({
+                        message: 'Success',
+                        description: 'Redirecting to payment...',
+                    });
+                    const transactionRedirectUrl =
+                        response.data.data.transaction_redirect_url ||
+                        'https://gateway-v2.onepay.lk/redirect/S23P118E4CFD12BD66039/WQBV118E584C83CBA50C6/9d1ad6e517ab60bdbee5e5b1a38af5571a706f1486e68f708e4129f3261fc81c';
+                    window.location.href = transactionRedirectUrl;
+                } else {
+                    notification.error({
+                        message: 'Error',
+                        description: 'Failed to initiate the payment process.',
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('There was an error submitting the form!', error);
                 notification.error({
                     message: 'Error',
-                    description: 'Failed to initiate the payment process.',
+                    description: 'There was an error submitting your data.',
                 });
-            }
-        })
-        .catch(error => {
-            console.error('There was an error submitting the form!', error);
-            notification.error({
-                message: 'Error',
-                description: 'There was an error submitting your data.',
             });
-        });
-=======
+
         const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
         if (purchasedItems.includes(cartDetails.id)) {
             notification.error({
@@ -113,7 +107,7 @@ const CheckoutForm = () => {
             itemId: cartDetails.id,
             pay: cartDetails.price, // Assuming cartDetails has the price
         })
-            .then(response => {
+            .then((response) => {
                 if (response.data.paymentUrl) {
                     // Redirect the user to the Onepay payment gateway
                     window.location.href = response.data.paymentUrl;
@@ -124,14 +118,13 @@ const CheckoutForm = () => {
                     });
                 }
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('There was an error submitting the form!', error);
                 notification.error({
                     message: 'Error',
                     description: 'There was an error submitting your data.',
                 });
             });
-
     };
 
     return (
