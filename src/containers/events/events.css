@@ -107,6 +107,7 @@ h1 {
   h1 {
     font-size: 28px;
     padding: 10px;
+    /* margin-top: -20px; */
   }
 
   .event-container{
@@ -120,9 +121,10 @@ h1 {
     padding: 10px;
   }
 
-  .watch-now {
-    padding: 8px 16px;
-    font-size: 14px;
+  .event-container .watch-now {
+    width: 60%;
+    margin-top: -10px;
+    margin-bottom: 10px;
   }
 }
 

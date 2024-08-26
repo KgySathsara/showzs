@@ -157,10 +157,11 @@
     }
 }
 
-@media screen and (max-width: 415px) {
+@media screen and (max-width: 480px) {
     .footer-heading h1 {
         font-size: 27px;
         line-height: 38px;
+        margin-top: 30px;
     }
 
     .footer-link_div h4 {

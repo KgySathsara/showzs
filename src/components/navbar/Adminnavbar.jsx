@@ -55,7 +55,7 @@ const AdminNavBar = () => {
 
     setTimeout(() => {
       navigate('/');
-    }, 2000); 
+    }, 2000);
   };
 
   return (
@@ -163,7 +163,7 @@ const AdminNavBar = () => {
       </Menu>
 
       <div className="logout-container">
-        <LogoutOutlined style={{ color: '#fff', fontSize: '20px', cursor: 'pointer', marginTop: '15px' }} onClick={handleSignOut} />
+        <LogoutOutlined onClick={handleSignOut} />
       </div>
     </Sider>
   );
