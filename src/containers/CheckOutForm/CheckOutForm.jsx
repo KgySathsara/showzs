@@ -55,77 +55,48 @@ const CheckoutForm = () => {
                 message: 'Login Required',
                 description: 'Please login first to proceed with the checkout.',
             });
+            navigate('/login'); // Redirect to the home page
             return;
         }
-
-        axios.post('http://127.0.0.1:8000/api/onepay', {
+    
+        axios.post('http://127.0.0.1:8000/api/onepay-store', {
             name: values.name,
             email: values.email,
             mobileNumber: values.mobileNumber,
             country: values.country.label, // Use the label of the selected country
+            title: cartDetails?.title || 'N/A',
+            director: cartDetails?.director || 'N/A',
+            description: cartDetails?.description || 'N/A',
+            category: cartDetails?.genre || cartDetails?.category || 'N/A',
+            price: cartDetails?.price || cartDetails?.ticketPrice || 0,
         })
-            .then((response) => {
-                if (response.data.status === 'success') {
-                    notification.success({
-                        message: 'Success',
-                        description: 'Redirecting to payment...',
-                    });
-                    const transactionRedirectUrl =
-                        response.data.data.transaction_redirect_url ||
-                        'https://gateway-v2.onepay.lk/redirect/S23P118E4CFD12BD66039/WQBV118E584C83CBA50C6/9d1ad6e517ab60bdbee5e5b1a38af5571a706f1486e68f708e4129f3261fc81c';
-                    window.location.href = transactionRedirectUrl;
-                } else {
-                    notification.error({
-                        message: 'Error',
-                        description: 'Failed to initiate the payment process.',
-                    });
-                }
-            })
-            .catch((error) => {
-                console.error('There was an error submitting the form!', error);
+        .then((response) => {
+            if (response.data.status === 'success') {
+                notification.success({
+                    message: 'Success',
+                    description: 'Redirecting to payment...',
+                });
+                const transactionRedirectUrl =
+                response.data.data.transaction_redirect_url ||
+                'https://gateway-v2.onepay.lk/redirect/S23P118E4CFD12BD66039/WQBV118E584C83CBA50C6/9d1ad6e517ab60bdbee5e5b1a38af5571a706f1486e68f708e4129f3261fc81c';
+            window.location.href = transactionRedirectUrl;
+            } else {
                 notification.error({
                     message: 'Error',
-                    description: 'There was an error submitting your data.',
+                    description: 'Failed to initiate the payment process.',
                 });
-            });
-
-        const purchasedItems = JSON.parse(localStorage.getItem('purchasedItems')) || [];
-        if (purchasedItems.includes(cartDetails.id)) {
+            }
+        })
+        .catch((error) => {
+            console.error('There was an error submitting the form!', error);
             notification.error({
-                message: 'Duplicate Purchase',
-                description: 'You have already purchased this item.',
+                message: 'Error',
+                description: 'There was an error submitting your data.',
             });
-            return;
-        }
-
-        // Send payment details to Laravel backend
-        axios.post('http://127.0.0.1:8000/api/checkout', {
-            name: values.name,
-            email: values.email,
-            mobileNumber: values.mobileNumber,
-            country: values.country.label,
-            itemId: cartDetails.id,
-            pay: cartDetails.price, // Assuming cartDetails has the price
-        })
-            .then((response) => {
-                if (response.data.paymentUrl) {
-                    // Redirect the user to the Onepay payment gateway
-                    window.location.href = response.data.paymentUrl;
-                } else {
-                    notification.error({
-                        message: 'Error',
-                        description: 'Payment initiation failed.',
-                    });
-                }
-            })
-            .catch((error) => {
-                console.error('There was an error submitting the form!', error);
-                notification.error({
-                    message: 'Error',
-                    description: 'There was an error submitting your data.',
-                });
-            });
+        });
     };
+    
+    
 
     return (
         <section className="checkout-container">
