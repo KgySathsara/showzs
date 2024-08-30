@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Table, Input } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import './liveEventPayment.css';
 
 const { Search } = Input;
@@ -11,92 +12,55 @@ const columns = [
     dataIndex: 'name',
   },
   {
+    title: 'Email',
+    dataIndex: 'email',
+  },
+  {
     title: 'Mobile Number',
-    dataIndex: 'number',
-    sorter: {
-      compare: (a, b) => a.number - b.number,
-      multiple: 3,
-    },
+    dataIndex: 'mobile_number',
   },
   {
-    title: 'Paid Amounts',
-    dataIndex: 'amount',
-    sorter: {
-      compare: (a, b) => a.amount - b.amount,
-      multiple: 2,
-    },
+    title: 'Paid Amount',
+    dataIndex: 'price',
   },
   {
-    title: 'Event Name',
-    dataIndex: 'event',
-    sorter: {
-      compare: (a, b) => a.event - b.event,
-      multiple: 1,
-    },
+    title: 'Movie Name',
+    dataIndex: 'title',
   },
   {
     title: 'Date & Time',
-    dataIndex: 'date',
-    sorter: {
-      compare: (a, b) => a.date - b.date,
-      multiple: 1,
-    },
-  },
-];
-
-const data = [
-  {
-    key: '1',
-    name: 'John Brown',
-    number: '0778735281',
-    amount: 'LKR200.00',
-    event: 'Live Drama',
-    date: '2024-07-12',
-  },
-  {
-    key: '2',
-    name: 'Jim Green',
-    number: '0778735281',
-    amount: 'LKR200.00',
-    event: 'Sarigama Sajjaya',
-    date: '2024-07-12',
-  },
-  {
-    key: '3',
-    name: 'Joe Black',
-    number: '0778735281',
-    amount: 'LKR200.00',
-    event: 'Robin Hood',
-    date: '2024-07-12',
-  },
-  {
-    key: '4',
-    name: 'Jim Red',
-    number: '0778735281',
-    amount: 'LKR200.00',
-    event: 'LPL LIve Stream',
-    date: '2024-07-12',
+    dataIndex: 'created_at',
   },
 ];
 
 const MoviePayment = () => {
+  const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState('');
 
-  const onChange = (pagination, filters, sorter, extra) => {
-    console.log('params', pagination, filters, sorter, extra);
-  };
+  useEffect(() => {
+    // Fetch movie payments
+    axios.get('http://127.0.0.1:8000/api/movie-payments')
+      .then(response => {
+        setData(response.data);
+      })
+      .catch(error => {
+        console.error('Error fetching movie payments', error);
+      });
+  }, []);
 
   const onSearch = (value) => {
     setSearchText(value);
   };
 
-  const filteredData = searchText ? data.filter(item =>
-    item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.number.includes(searchText) ||
-    item.amount.includes(searchText) ||
-    item.event.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.date.includes(searchText)
-  ) : data;
+  const filteredData = searchText
+    ? data.filter(item =>
+        item.name.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchText.toLowerCase()) ||
+        item.mobile_number.includes(searchText) ||
+        item.price.includes(searchText) ||
+        item.title.toLowerCase().includes(searchText.toLowerCase())
+      )
+    : data;
 
   return (
     <div className="movie-payment-container">
@@ -110,9 +74,8 @@ const MoviePayment = () => {
       <Table
         columns={columns}
         dataSource={filteredData}
-        onChange={onChange}
+        rowKey="id"
         pagination={{ pageSize: 5 }}
-        scroll={{ x: 'max-content' }}
       />
     </div>
   );
