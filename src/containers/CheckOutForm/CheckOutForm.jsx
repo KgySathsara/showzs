@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Form, Input, Button, Checkbox, Row, Col, Typography, Card, notification } from 'antd';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
-// import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './CheckoutForm.css';
 
@@ -21,7 +21,7 @@ function CountrySelector({ onChange, value }) {
 
 const CheckoutForm = () => {
     const [form] = Form.useForm();
-    // const navigate = useNavigate();
+    const navigate = useNavigate();
     const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
     const [cartDetails, setCartDetails] = useState(null);
 
@@ -78,7 +78,7 @@ const CheckoutForm = () => {
                 });
                 const transactionRedirectUrl =
                 response.data.data.transaction_redirect_url ||
-                'https://gateway-v2.onepay.lk/redirect/S23P118E4CFD12BD66039/WQBV118E584C83CBA50C6/9d1ad6e517ab60bdbee5e5b1a38af5571a706f1486e68f708e4129f3261fc81c';
+                'https://gateway-v2.onepay.lk/redirect/0XYG118E5DEDBB02E8D9C/EJL4118E5DEE19FF69F84/0512a80abfbd7592fd93cb229556d3b67fe3bf1183cad3e46dbc30961f955430 ';
             window.location.href = transactionRedirectUrl;
             } else {
                 notification.error({
