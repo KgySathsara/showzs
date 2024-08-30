@@ -6,15 +6,15 @@ import { Form, Input, Card } from 'antd';
 const MovieProfileManagement = () => {
   const [form] = Form.useForm();
   const [movie, setMovie] = useState(null);
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
+  const [profileViews, setProfileViews] = useState(0); // New state for profile views
 
   useEffect(() => {
     const fetchMovie = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/movie');
-        console.log('Movie data:', response.data);
         const movieData = response.data;
 
-        // Map API response to form fields
         const formData = {
           title: movieData.title,
           genre: movieData.genre,
@@ -26,8 +26,20 @@ const MovieProfileManagement = () => {
 
         setMovie(movieData);
         form.setFieldsValue(formData);
+
+        // Fetch the monthly revenue for this movie title
+        const revenueResponse = await axios.get('http://127.0.0.1:8000/api/movie-revenue', {
+          params: { title: movieData.title }
+        });
+        setMonthlyRevenue(revenueResponse.data.monthly_revenue);
+
+        // Fetch the profile views for this movie title
+        const profileViewsResponse = await axios.get('http://127.0.0.1:8000/api/movie-views', {
+          params: { title: movieData.title }
+        });
+        setProfileViews(profileViewsResponse.data.count);
       } catch (error) {
-        console.error('Failed to fetch movie data:', error);
+        console.error('Failed to fetch data:', error);
       }
     };
 
@@ -39,10 +51,10 @@ const MovieProfileManagement = () => {
       <h2>Movie Profile</h2>
       <div className='movie-profile-card'>
         <Card title="Monthly Revenue" className='profile-card'>
-          <p>Monthly Revenue Content</p>
+          <p>{monthlyRevenue} LKR</p>
         </Card>
         <Card title="Profile Views" className='profile-card'>
-          <p>Profile Views Content</p>
+          <p>{profileViews}</p>
         </Card>
       </div>
       <div className="movie-management-container">

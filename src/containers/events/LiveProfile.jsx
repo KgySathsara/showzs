@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Form, Input, Card } from 'antd';
@@ -6,32 +5,47 @@ import { Form, Input, Card } from 'antd';
 const LiveEventProfile = () => {
   const [form] = Form.useForm();
   const [eventData, setEventData] = useState(null);
+  const [monthlyRevenue, setMonthlyRevenue] = useState(0);
+  const [profileViews, setProfileViews] = useState(0);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/live-events/show')
-      .then(response => {
-        setEventData(response.data);
-        form.setFieldsValue(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the Live Event data!', error);
-      });
-  }, [form]);
+    const fetchEventData = async () => {
+      try {
+        // Fetch event data
+        const response = await axios.get('http://127.0.0.1:8000/api/live-events/show');
+        const eventData = response.data;
 
-  const handleSubmit = (values) => {
-    console.log('Received values:', values);
-    form.resetFields();
-  };
+        setEventData(eventData);
+        form.setFieldsValue(eventData);
+
+        // Fetch monthly revenue for this event
+        const revenueResponse = await axios.get('http://127.0.0.1:8000/api/event-revenue', {
+          params: { title: eventData.title }
+        });
+        setMonthlyRevenue(revenueResponse.data.monthly_revenue);
+
+        // Fetch profile views for this event
+        const profileViewsResponse = await axios.get('http://127.0.0.1:8000/api/event-views', {
+          params: { title: eventData.title }
+        });
+        setProfileViews(profileViewsResponse.data.count);
+      } catch (error) {
+        console.error('Failed to fetch event data:', error);
+      }
+    };
+
+    fetchEventData();
+  }, [form]);
 
   return (
     <section className='admin-movie-management'>
       <h2>Live Event Profile</h2>
       <div className='movie-profile-card'>
         <Card title="Monthly Revenue" className='profile-card'>
-          <p>Monthly Revenue Content</p>
+          <p>{monthlyRevenue} LKR</p>
         </Card>
         <Card title="Profile Views" className='profile-card'>
-          <p>Profile Views Content</p>
+          <p>{profileViews}</p>
         </Card>
       </div>
       <div className="movie-management-container">
@@ -42,7 +56,7 @@ const LiveEventProfile = () => {
           )}
         </div>
         <div className='movie-profile-management'>
-          <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
+          <Form form={form} layout="vertical" className="details-form">
             <Form.Item name="title" label="Event" rules={[{ required: true, message: 'Please enter the Event title' }]}>
               <Input readOnly />
             </Form.Item>
