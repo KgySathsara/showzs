@@ -37,19 +37,16 @@ hr {
   text-align: center;
 }
 
-.movie img {
-  width: 100%;
-  height: auto;
+.movie-container .movie img {
+  max-width: 800px;
+  min-height: 500px;
   border-radius: 10px;
 }
 
 .single-movie .movie img {
-  max-width: 65%;
-  height: auto;
-}
-
-.single-movie {
-  margin-bottom: 12%;
+  min-width: 700px;
+  max-width: 100%;
+  max-height: 500px;
 }
 
 .movie h2 {
@@ -174,6 +171,11 @@ hr {
   hr {
     visibility: visible;
     margin-bottom: 8%;
+  }
+
+  .movie-container .movie img{
+    width: 100%;  
+    min-height: 250px;
   }
 
   .movie {

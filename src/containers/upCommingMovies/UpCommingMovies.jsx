@@ -22,20 +22,24 @@ const UpCommingMovies = () => {
     <section className='upcoming-movies'>
       <h2>Upcoming Movies</h2>
       <div className={`upcoming-movies-container ${Array.isArray(upcomingMovies) && upcomingMovies.length === 1 ? 'single-movie' : ''}`}>
-        {Array.isArray(upcomingMovies) && upcomingMovies.slice(0, 2).map(movie => (
-          <div key={movie.id} className='movie-card animate__animated animate__fadeInUp'>
-            <img src={movie.image} alt={movie.title} />
-            <div className='movie-info'>
-              <h3>{movie.title}</h3>
-              <p>{movie.description}</p>
-              <p>Release Date: {movie.date}</p>
-              <p>Duration: {movie.duration}</p>
-              <p>Category: {movie.category}</p>
-              <p>Ticket Price: {movie.price}</p>
-              <p><a href={movie.wikipediaLink}>Wikipedia</a></p>
+        {Array.isArray(upcomingMovies) && upcomingMovies.length > 0 ? (
+          upcomingMovies.slice(0, 2).map(movie => (
+            <div key={movie.id} className='movie-card animate__animated animate__fadeInUp'>
+              <img src={movie.image} alt={movie.title} />
+              <div className='movie-info'>
+                <h3>{movie.title}</h3>
+                <p>{movie.description}</p>
+                <p>Release Date: {movie.date}</p>
+                <p>Duration: {movie.duration}</p>
+                <p>Category: {movie.category}</p>
+                <p>Ticket Price: {movie.price}</p>
+                <p><a href={movie.wikipediaLink}>Wikipedia</a></p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <p>No upcoming movies available at the moment.</p>
+        )}
       </div>
     </section>
   );
