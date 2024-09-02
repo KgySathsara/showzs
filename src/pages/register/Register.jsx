@@ -57,6 +57,12 @@ const Register = () => {
         const response = await axios.post('http://127.0.0.1:8000/api/google-login', {
           token: tokenResponse.access_token,
         });
+
+        const user = response.data.user; 
+        const role = response.data.user_type;    
+
+        sessionStorage.setItem('user', JSON.stringify(user));
+        sessionStorage.setItem('userRole', role);
   
         console.log('Server Response:', response);
   
