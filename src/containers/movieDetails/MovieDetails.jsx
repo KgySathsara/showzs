@@ -19,10 +19,10 @@ const MovieDetails = () => {
   }, []);
 
   const handleWatchTrailer = () => {
-    if (movie.trailer) {
+    if (movie && movie.trailer) {
       setShowModal(true);
     } else {
-      console.error('No valid trailer URL found:', movie.trailer);
+      console.error('No valid trailer URL found:', movie?.trailer);
     }
   };
 
@@ -30,43 +30,45 @@ const MovieDetails = () => {
     setShowModal(false);
   };
 
-  if (!movie) {
-    return <p>No movie details available.</p>;
-  }
-
   return (
     <section className='movie-details'>
-      <div className='movie-info'>
-        <h1>{movie.title}</h1>
-        <p>{`Directed by: ${movie.director}`}</p>
-        <p>{`Genre: ${movie.genre}`}</p>
-        <p>{`Duration: ${movie.duration} Min`}</p>
-        <div className="movie-actions">
-          <img src={ticket} alt="Ticket" className='ticketImg' />
-          <button className="watch-trailer" onClick={handleWatchTrailer}>Watch Trailer</button>
-        </div>
-      </div>
-      <div className='movie-poster'>
-        <div className="poster-container">
-          {movie.picture && (
-            <img src={movie.picture} alt={movie.title} />
-          )}
-          <div className="movie-details-overlay">
-            <h2>{`${movie.title} - The Movie`}</h2>
-            <p>{`Directed by ${movie.director}`}</p>
+      {movie ? (
+        <>
+          <div className='movie-info'>
+            <h1>{movie.title}</h1>
+            <p>{`Directed by: ${movie.director}`}</p>
             <p>{`Genre: ${movie.genre}`}</p>
             <p>{`Duration: ${movie.duration} Min`}</p>
+            <div className="movie-actions">
+              <img src={ticket} alt="Ticket" className='ticketImg' />
+              <button className="watch-trailer" onClick={handleWatchTrailer}>Watch Trailer</button>
+            </div>
           </div>
-        </div>
-      </div>
+          <div className='movie-poster'>
+            <div className="poster-container">
+              {movie.picture && (
+                <img src={movie.picture} alt={movie.title} />
+              )}
+              <div className="movie-details-overlay">
+                <h2>{`${movie.title} - The Movie`}</h2>
+                <p>{`Directed by ${movie.director}`}</p>
+                <p>{`Genre: ${movie.genre}`}</p>
+                <p>{`Duration: ${movie.duration} Min`}</p>
+              </div>
+            </div>
+          </div>
 
-      {showModal && movie.trailer && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <span className="close-button" onClick={handleCloseModal}>&times;</span>
-            <video controls src={movie.trailer} alt="Movie Trailer" />
-          </div>
-        </div>
+          {showModal && movie.trailer && (
+            <div className="modal-overlay">
+              <div className="modal-content">
+                <span className="close-button" onClick={handleCloseModal}>&times;</span>
+                <video controls src={movie.trailer} alt="Movie Trailer" />
+              </div>
+            </div>
+          )}
+        </>
+      ) : (
+        <p>No movie details available at the moment.</p>
       )}
     </section>
   );

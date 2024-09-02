@@ -42,6 +42,7 @@
   color: white;
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
+  margin-top: 20px;
 }
 
 .ticket {
@@ -68,6 +69,7 @@
 }
 
 .movie-poster img {
+  min-width: 700px;
   max-width: 100%;
   border-radius: 10px;
   transition: filter 0.3s ease;
@@ -104,6 +106,8 @@
   width: 170px;
   height: 90px;
   margin-right: 10px;
+  margin-left: -90px;
+  margin-top: 20px;
 }
 
 .modal-overlay {
@@ -209,6 +213,7 @@
   .ticketImg {
     width: 120px;
     height: 60px;
+    margin: 12px 0 -12px;
   }
 
   .watch-trailer{

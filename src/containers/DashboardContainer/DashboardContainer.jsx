@@ -65,8 +65,8 @@ const DashboardContainer = () => {
       </Row>
       <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
         <Col xs={24} sm={12} md={8}>
-          <Card title="Current Show" bordered={false}>
-            Show Name: {latestEvent}
+          <Card title="Latest Event" bordered={false}>
+          Latest Event: {latestEvent}
           </Card>
         </Col>
         <Col xs={24} sm={12} md={8}>

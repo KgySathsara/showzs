@@ -31,7 +31,6 @@ const Stream = () => {
         console.error('There was an error fetching the movies!', error);
       });
   }, []);
-  
 
   const handleWatchTrailer = (trailerUrl) => {
     if (trailerUrl) {
@@ -71,21 +70,25 @@ const Stream = () => {
       <div className='stream-container'>
         <hr />
         <h1>Now Streaming</h1>
-        <div className={`movie-container ${movies.length === 1 ? 'single-movie' : ''}`}>
-          {movies.map((movie) => (
-            <div className="movie" key={movie.id}>
-              {movie.picture && (
-                <img src={movie.picture} alt={movie.title} />
-              )}
-              <h2>{movie.title}</h2>
-              <p>{movie.duration} min</p>
-              <div className="buttons">
-                <button className="watch-trailer" onClick={() => handleWatchTrailer(movie.trailer)}>Watch Trailer</button>
-                <button className="buy-tickets" onClick={() => handleBuyTickets(movie)}>Buy Tickets</button>
+        {movies.length > 0 ? (
+          <div className={`movie-container ${movies.length === 1 ? 'single-movie' : ''}`}>
+            {movies.map((movie) => (
+              <div className="movie" key={movie.id}>
+                {movie.picture && (
+                  <img src={movie.picture} alt={movie.title} />
+                )}
+                <h2>{movie.title}</h2>
+                <p>{movie.duration} min</p>
+                <div className="buttons">
+                  <button className="watch-trailer" onClick={() => handleWatchTrailer(movie.trailer)}>Watch Trailer</button>
+                  <button className="buy-tickets" onClick={() => handleBuyTickets(movie)}>Buy Tickets</button>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        ) : (
+          <p>No movies available at the moment.</p>
+        )}
         <hr />
       </div>
 
