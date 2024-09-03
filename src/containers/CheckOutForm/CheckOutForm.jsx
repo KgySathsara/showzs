@@ -55,7 +55,7 @@ const CheckoutForm = () => {
                 message: 'Login Required',
                 description: 'Please login first to proceed with the checkout.',
             });
-            navigate('/login'); // Redirect to the home page
+            navigate('/login');
             return;
         }
     
@@ -63,7 +63,7 @@ const CheckoutForm = () => {
             name: values.name,
             email: values.email,
             mobileNumber: values.mobileNumber,
-            country: values.country.label, // Use the label of the selected country
+            country: values.country.label,
             title: cartDetails?.title || 'N/A',
             director: cartDetails?.director || 'N/A',
             description: cartDetails?.description || 'N/A',
@@ -77,9 +77,12 @@ const CheckoutForm = () => {
                     description: 'Redirecting to payment...',
                 });
                 const transactionRedirectUrl =
-                response.data.data.transaction_redirect_url ||
-                'https://gateway-v2.onepay.lk/redirect/0XYG118E5DEDBB02E8D9C/EJL4118E5DEE19FF69F84/0512a80abfbd7592fd93cb229556d3b67fe3bf1183cad3e46dbc30961f955430 ';
-            window.location.href = transactionRedirectUrl;
+                    response.data.data.transaction_redirect_url ||
+                    'https://gateway-v2.onepay.lk/redirect/0XYG118E5DEDBB02E8D9C/EJL4118E5DEE19FF69F84/0512a80abfbd7592fd93cb229556d3b67fe3bf1183cad3e46dbc30961f955430';
+                window.location.href = transactionRedirectUrl;
+
+                // Assuming the payment is completed successfully, redirect to the home page
+                window.setTimeout(() => navigate('/'), 5000); // Redirect after 5 seconds
             } else {
                 notification.error({
                     message: 'Error',
@@ -95,8 +98,6 @@ const CheckoutForm = () => {
             });
         });
     };
-    
-    
 
     return (
         <section className="checkout-container">
