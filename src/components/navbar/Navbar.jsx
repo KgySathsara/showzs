@@ -74,12 +74,10 @@ const Navbar = () => {
             visible={visible}
           >
             <ul className="navLists flex">
-              {['Home', 'Movies', 'Shows', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+              {['Home', 'Movies', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
                 <li
                   key={index}
                   className={`navItem ${activeIndex === index ? 'active' : ''}`}
-                  onMouseEnter={() => item === 'Shows' && handleDropdownClick(index)}
-                  onMouseLeave={() => item === 'Shows' && setShowSubNav(false)}
                 >
                   <Link
                     to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`}
@@ -87,24 +85,31 @@ const Navbar = () => {
                     onClick={(e) => handleClick(index, e)}
                   >
                     {item}
-                    {item === 'Shows' && (
-                      <FaCaretDown
-                        className="dropdown-icon"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleDropdownClick(index);
-                        }}
-                      />
-                    )}
                   </Link>
-                  {item === 'Shows' && showSubNav && activeIndex === index && (
+                </li>
+              ))}
+              {isAuthenticated && (
+                <li
+                  className={`navItem ${activeIndex === 2 ? 'active' : ''}`}
+                  onMouseEnter={() => handleDropdownClick(2)}
+                  onMouseLeave={() => setShowSubNav(false)}
+                >
+                  <Link
+                    to="#"
+                    className="navLink"
+                    onClick={(e) => handleClick(2, e)}
+                  >
+                    Shows
+                    <FaCaretDown className="dropdown-icon" />
+                  </Link>
+                  {showSubNav && activeIndex === 2 && (
                     <ul className="subNavLists">
                       <li className="subNavItem"><Link to="/WatchMovie" className="navLink">Watch Movies</Link></li>
                       <li className="subNavItem"><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
                     </ul>
                   )}
                 </li>
-              ))}
+              )}
             </ul>
             <div className='signin-container'>
               {isAuthenticated ? (
@@ -128,12 +133,10 @@ const Navbar = () => {
         </div>
         <div className='navbar-links-container'>
           <ul className="navLists flex">
-            {['Home', 'Movies', 'Shows', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+            {['Home', 'Movies', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
               <li
                 key={index}
                 className={`navItem ${activeIndex === index ? 'active' : ''}`}
-                onMouseEnter={() => item === 'Shows' && handleDropdownClick(index)}
-                onMouseLeave={() => item === 'Shows' && setShowSubNav(false)}
               >
                 <Link
                   to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`}
@@ -141,24 +144,31 @@ const Navbar = () => {
                   onClick={(e) => handleClick(index, e)}
                 >
                   {item}
-                  {item === 'Shows' && (
-                    <FaCaretDown
-                      className="dropdown-icon"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleDropdownClick(index);
-                      }}
-                    />
-                  )}
                 </Link>
-                {item === 'Shows' && showSubNav && activeIndex === index && (
+              </li>
+            ))}
+            {isAuthenticated && (
+              <li
+                className={`navItem ${activeIndex === 2 ? 'active' : ''}`}
+                onMouseEnter={() => handleDropdownClick(2)}
+                onMouseLeave={() => setShowSubNav(false)}
+              >
+                <Link
+                  to="#"
+                  className="navLink"
+                  onClick={(e) => handleClick(2, e)}
+                >
+                  Shows
+                  <FaCaretDown className="dropdown-icon" />
+                </Link>
+                {showSubNav && activeIndex === 2 && (
                   <ul className="subNavLists">
                     <li className="subNavItem"><Link to="/WatchMovie" className="navLink">Watch Movies</Link></li>
                     <li className="subNavItem"><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
                   </ul>
                 )}
               </li>
-            ))}
+            )}
           </ul>
         </div>
         <div className='signin-container'>
@@ -181,7 +191,6 @@ const Navbar = () => {
             </Link>
           )}
         </div>
-
       </header>
       <ToastContainer />
     </section>
