@@ -102,7 +102,7 @@ const AdminNavBar = () => {
         {(role === 'admin' || role === 'contect_owner') && (
           <SubMenu key="sub8" icon={<NotificationOutlined />} title="News Management">
             <Menu.Item key="24">
-              <Link to="/AdminAddNews">Add News</Link>
+              <Link to="/AdminAddNews">Add Trailer</Link>
             </Menu.Item>
             <Menu.Item key="27">
               <Link to="/AdminEditNews">Edit/Delete News</Link>
