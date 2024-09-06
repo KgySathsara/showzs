@@ -49,6 +49,31 @@ const CheckoutForm = () => {
         }
     }, [form]);
 
+    const handlePaymentSuccess = (checkoutId) => {
+        axios.post(`http://127.0.0.1:8000/api/update-payment-status/${checkoutId}`)
+            .then((response) => {
+                if (response.data.status === 'success') {
+                    notification.success({
+                        message: 'Payment Successful',
+                        description: 'Your payment status has been updated.',
+                    });
+                    navigate('/payment-success');
+                } else {
+                    notification.error({
+                        message: 'Error',
+                        description: 'Failed to update payment status.',
+                    });
+                }
+            })
+            .catch((error) => {
+                console.error('Payment Status Update Error:', error);
+                notification.error({
+                    message: 'Error',
+                    description: 'There was an error updating your payment status.',
+                });
+            });
+    };
+    
     const handleSubmit = (values) => {
         if (!isUserLoggedIn) {
             notification.error({
@@ -59,6 +84,7 @@ const CheckoutForm = () => {
             return;
         }
     
+        // First, store the payment information
         axios.post('http://127.0.0.1:8000/api/onepay-store', {
             name: values.name,
             email: values.email,
@@ -73,25 +99,54 @@ const CheckoutForm = () => {
         .then((response) => {
             if (response.data.status === 'success') {
                 notification.success({
-                    message: 'Success',
-                    description: 'Redirecting to payment...',
+                    message: 'Payment Information Stored',
+                    description: 'Now redirecting to the payment gateway...',
+                    duration: 1,
                 });
-                const transactionRedirectUrl =
-                    response.data.data.transaction_redirect_url ||
-                    'https://gateway-v2.onepay.lk/redirect/0XYG118E5DEDBB02E8D9C/EJL4118E5DEE19FF69F84/0512a80abfbd7592fd93cb229556d3b67fe3bf1183cad3e46dbc30961f955430';
-                window.location.href = transactionRedirectUrl;
-
-                // Assuming the payment is completed successfully, redirect to the home page
-                window.setTimeout(() => navigate('/'), 5000); // Redirect after 5 seconds
+    
+                const checkoutId = response.data.data.id; // Get checkout ID for later use
+    
+                // After storing the information, call the OnePay API to generate the payment link
+                axios.post('http://127.0.0.1:8000/api/onepay', {
+                    name: values.name,
+                    email: values.email,
+                    mobileNumber: values.mobileNumber,
+                    country: values.country.label,
+                    price: cartDetails?.price || cartDetails?.ticketPrice,
+                })
+                .then((response) => {
+                    console.log("Payment Response: ", response.data);
+    
+                    // Check if the response contains the redirect URL
+                    if (response.data.status === 'success' && response.data.redirect_url) {
+                        // Listen for the payment success, then update payment status
+                        window.location.href = response.data.redirect_url;
+    
+                        // You should have some way to detect the successful payment callback
+                        handlePaymentSuccess(checkoutId); // Update payment status after success
+                    } else {
+                        notification.error({
+                            message: 'Payment Error',
+                            description: 'Failed to initiate the payment process.',
+                        });
+                    }
+                })
+                .catch((error) => {
+                    console.error("Payment Request Error: ", error);
+                    notification.error({
+                        message: 'Payment Error',
+                        description: 'Failed to initiate the payment process.',
+                    });
+                });
+    
             } else {
                 notification.error({
                     message: 'Error',
-                    description: 'Failed to initiate the payment process.',
+                    description: 'Failed to store the payment information.',
                 });
             }
         })
         .catch((error) => {
-            console.error('There was an error submitting the form!', error);
             notification.error({
                 message: 'Error',
                 description: 'There was an error submitting your data.',
