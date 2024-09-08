@@ -30,7 +30,7 @@ const Navbar = () => {
   };
 
   const handleClick = (index, e) => {
-    if (index === 2) {
+    if (index === 2) { // Adjusted based on the position of "Shows"
       e.preventDefault();
       handleDropdownClick(index);
     } else {
@@ -73,44 +73,6 @@ const Navbar = () => {
             onClose={onClose}
             visible={visible}
           >
-            <ul className="navLists flex">
-              {['Home', 'Movies', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
-                <li
-                  key={index}
-                  className={`navItem ${activeIndex === index ? 'active' : ''}`}
-                >
-                  <Link
-                    to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`}
-                    className="navLink"
-                    onClick={(e) => handleClick(index, e)}
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-              {isAuthenticated && (
-                <li
-                  className={`navItem ${activeIndex === 2 ? 'active' : ''}`}
-                  onMouseEnter={() => handleDropdownClick(2)}
-                  onMouseLeave={() => setShowSubNav(false)}
-                >
-                  <Link
-                    to="#"
-                    className="navLink"
-                    onClick={(e) => handleClick(2, e)}
-                  >
-                    Shows
-                    <FaCaretDown className="dropdown-icon" />
-                  </Link>
-                  {showSubNav && activeIndex === 2 && (
-                    <ul className="subNavLists">
-                      <li className="subNavItem"><Link to="/WatchMovie" className="navLink">Watch Movies</Link></li>
-                      <li className="subNavItem"><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
-                    </ul>
-                  )}
-                </li>
-              )}
-            </ul>
             <div className='signin-container'>
               {isAuthenticated ? (
                 <Link
@@ -137,11 +99,11 @@ const Navbar = () => {
               <li
                 key={index}
                 className={`navItem ${activeIndex === index ? 'active' : ''}`}
+                onClick={(e) => handleClick(index, e)}
               >
                 <Link
                   to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`}
                   className="navLink"
-                  onClick={(e) => handleClick(index, e)}
                 >
                   {item}
                 </Link>
@@ -149,17 +111,23 @@ const Navbar = () => {
             ))}
             {isAuthenticated && (
               <li
-                className={`navItem ${activeIndex === 2 ? 'active' : ''}`}
+                className={`navItem ${activeIndex === 2 ? 'active' : ''}`} // Adjusted index for "Shows"
                 onMouseEnter={() => handleDropdownClick(2)}
                 onMouseLeave={() => setShowSubNav(false)}
               >
                 <Link
-                  to="#"
+                  to="/Shows"
                   className="navLink"
                   onClick={(e) => handleClick(2, e)}
                 >
                   Shows
-                  <FaCaretDown className="dropdown-icon" />
+                  <FaCaretDown
+                    className="dropdown-icon"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleDropdownClick(2);
+                    }}
+                  />
                 </Link>
                 {showSubNav && activeIndex === 2 && (
                   <ul className="subNavLists">
