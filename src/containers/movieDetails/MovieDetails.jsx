@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ticket from '../../assest/ticket.jpg';
+import { ArrowRightOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import './movieDetails.css';
 
 const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate hook
 
   useEffect(() => {
     axios.get('http://127.0.0.1:8000/api/movie')
@@ -30,6 +33,12 @@ const MovieDetails = () => {
     setShowModal(false);
   };
 
+  const handleBuyNow = () => {
+    if (movie) {
+      navigate('/checkout', { state: { movie } }); // Navigate to checkout page with movie data
+    }
+  };
+
   return (
     <section className='movie-details'>
       {movie ? (
@@ -40,8 +49,12 @@ const MovieDetails = () => {
             <p>{`Genre: ${movie.genre}`}</p>
             <p>{`Duration: ${movie.duration} Min`}</p>
             <div className="movie-actions">
-              <img src={ticket} alt="Ticket" className='ticketImg' />
               <button className="watch-trailer" onClick={handleWatchTrailer}>Watch Trailer</button>
+              <p>Buy Now</p>
+              <ArrowRightOutlined />
+              <div className="buy-now" onClick={handleBuyNow}>
+                <img src={ticket} alt="Ticket" className='ticketImg' />
+              </div>
             </div>
           </div>
           <div className='movie-poster'>

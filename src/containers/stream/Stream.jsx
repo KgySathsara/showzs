@@ -47,8 +47,9 @@ const Stream = () => {
   };
 
   const handleBuyTickets = (item) => {
-    setSelectedItem(item);
-    setIsPopupOpen(true);
+    // setSelectedItem(item);
+    // setIsPopupOpen(true);
+    navigate('/Movies');
   };
 
   const closePopup = () => {
@@ -78,7 +79,8 @@ const Stream = () => {
                   <img src={movie.picture} alt={movie.title} />
                 )}
                 <h2>{movie.title}</h2>
-                <p>{movie.duration} min</p>
+                <p>Duration : {movie.duration} min</p>
+                <p>Price : {movie.price}</p>
                 <div className="buttons">
                   <button className="watch-trailer" onClick={() => handleWatchTrailer(movie.trailer)}>Watch Trailer</button>
                   <button className="buy-tickets" onClick={() => handleBuyTickets(movie)}>Buy Tickets</button>
