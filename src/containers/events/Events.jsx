@@ -57,7 +57,7 @@ const Events = () => {
               <div className="event animate_animated animate_fadeInUp" key={event.id}>
                 <img src={event.coverImage} alt={event.title} />
                 <div className="movie-info">
-                  <h3>{event.title}</h3>
+                  <h2>{event.title}</h2>
                   <p>{event.description}</p>
                   <p>Category: {event.category}</p>
                   <p>Ticket Price: {event.ticketPrice}</p>

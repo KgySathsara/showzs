@@ -38,7 +38,7 @@ const NowShowing = () => {
                 <p>Genre: {movie.genre}</p>
                 <p>Director: {movie.director}</p>
                 <p>Duration: {movie.duration} minutes</p>
-                <p>Price: ${movie.price}</p>
+                <p>Price: {movie.price}</p>
               </div>
             </div>
           ))

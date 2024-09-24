@@ -38,8 +38,6 @@ h1 {
 }
 
 .watch-now {
-
-  margin-top: 30px;
   margin-bottom: 30px;
   padding: 10px 20px;
   border: none;
@@ -54,14 +52,17 @@ h1 {
   padding: 15px;
 }
 
-.movie-info h3 {
-  font-size: 18px;
-  margin-bottom: 10px;
+.movie-info h2 {
+  font-family: 'Donegal One', serif;
+  color: #fff;
+  font-weight: 100;
 }
 
-.movie-info p {
-  font-size: 14px;
-  margin-bottom: 10px;
+.event-container .movie-info p {
+  padding-top: 10px;
+  color: #fff;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 16px;
 }
 
 .movie-info a {

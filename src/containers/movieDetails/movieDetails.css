@@ -27,6 +27,14 @@
   margin-bottom: 10px;
 }
 
+.movie-info .movie-rating {
+  border: 1px solid white;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 20px;
+  width: 33%;
+}
+
 .movie-actions {
   display: flex;
   align-items: center;
@@ -34,7 +42,6 @@
 }
 
 .watch-trailer {
-  padding: 10px 20px;
   border: none;
   border-radius: 5px;
   background-color: red;
@@ -42,6 +49,7 @@
   cursor: pointer;
   font-family: 'DM Sans', sans-serif;
   margin-top: 20px;
+  margin-left: 20px;
 }
 
 .ticket {
@@ -69,7 +77,7 @@
   margin: 10px 10px 0 10px;
 }
 
-.movie-info .movie-actions p{
+.movie-info .movie-actions p {
   margin: 10px 0 0 10px;
   font-size: 18px;
 }
@@ -174,7 +182,8 @@
     flex-direction: column;
   }
 
-  .watch-trailer, .ticket {
+  .watch-trailer,
+  .ticket {
     width: 100%;
     text-align: center;
     margin-bottom: 10px;
@@ -210,6 +219,11 @@
     padding-left: 0;
     justify-content: center;
   }
+
+  .movie-info .movie-rating {
+    width: 100%;
+  
+  }
 }
 
 @media (max-width: 480px) {
@@ -232,7 +246,7 @@
     margin: 12px 0 -12px;
   }
 
-  .watch-trailer{
+  .watch-trailer {
     width: 100%;
   }
 }
