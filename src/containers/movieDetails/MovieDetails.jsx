@@ -8,17 +8,26 @@ import './movieDetails.css';
 const MovieDetails = () => {
   const [movie, setMovie] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate hook
+  const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/movie')
-      .then(response => {
-        console.log('Movie data:', response.data);
-        setMovie(response.data);
-      })
-      .catch(error => {
-        console.error('Failed to fetch movie data:', error);
-      });
+    // Check if there is a selected movie in sessionStorage
+    const selectedMovie = sessionStorage.getItem('selectedItem');
+
+    if (selectedMovie) {
+      // If a movie is found in sessionStorage, use it
+      setMovie(JSON.parse(selectedMovie));
+    } else {
+      // If no movie is found in sessionStorage, fetch the latest movie
+      axios.get('http://127.0.0.1:8000/api/movie')
+        .then(response => {
+          console.log('Movie data:', response.data);
+          setMovie(response.data);
+        })
+        .catch(error => {
+          console.error('Failed to fetch movie data:', error);
+        });
+    }
   }, []);
 
   const handleWatchTrailer = () => {
@@ -45,9 +54,11 @@ const MovieDetails = () => {
         <>
           <div className='movie-info'>
             <h1>{movie.title}</h1>
-            <p>{`Directed by: ${movie.director}`}</p>
-            <p>{`Genre: ${movie.genre}`}</p>
-            <p>{`Duration: ${movie.duration} Min`}</p>
+            <div className='movie-rating'>
+              <p>{`Directed by: ${movie.director}`}</p>
+              <p>{`Genre: ${movie.genre}`}</p>
+              <p>{`Duration: ${movie.duration} Min`}</p>
+            </div>
             <div className="movie-actions">
               <button className="watch-trailer" onClick={handleWatchTrailer}>Watch Trailer</button>
               <p>Buy Now</p>

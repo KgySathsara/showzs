@@ -1,5 +1,5 @@
 import React from 'react';
-import { Footer, MovieDetails} from '../../containers';
+import { Footer, MovieDetails, Stream } from '../../containers';
 import { Navbar } from '../../components';
 
 const Movies = () => {
@@ -11,6 +11,7 @@ const Movies = () => {
       <div className='live-events-content'>
         <MovieDetails />
       </div>
+      {/* <Stream /> */}
       <Footer />
     </div>
   );
