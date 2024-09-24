@@ -31,7 +31,6 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  padding-left: 90px;
 }
 
 .watch-trailer {
@@ -53,6 +52,26 @@
   padding: 10px 20px;
   border-radius: 5px;
   font-family: 'DM Sans', sans-serif;
+}
+
+.anticon {
+  font-size: 30px;
+  color: white;
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.anticon:hover {
+  color: #ff0000;
+}
+
+.movie-actions .anticon {
+  margin: 10px 10px 0 10px;
+}
+
+.movie-info .movie-actions p{
+  margin: 10px 0 0 10px;
+  font-size: 18px;
 }
 
 .movie-poster {
@@ -105,9 +124,6 @@
 .ticketImg {
   width: 170px;
   height: 90px;
-  margin-right: 10px;
-  margin-left: -90px;
-  margin-top: 20px;
 }
 
 .modal-overlay {
