@@ -18,7 +18,7 @@ const Header = () => {
     const fetchLatestData = async () => {
       try {
         const movieResponse = await axios.get('http://127.0.0.1:8000/api/movie');
-        const eventResponse = await axios.get('http://localhost:8000/api/live-events/showLastEvent');
+        const eventResponse = await axios.get('http://127.0.0.1:8000/api/live-events/showLastEvent');
         setMovie(movieResponse.data);
         setEvent(eventResponse.data);
       } catch (error) {

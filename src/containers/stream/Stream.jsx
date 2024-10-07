@@ -10,7 +10,7 @@ const Stream = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/movies/latest')
+    axios.get('http://127.0.0.1:8000/api/movies/latest')
       .then(response => {
         console.log('API response:', response.data);
         let responseData = response.data;

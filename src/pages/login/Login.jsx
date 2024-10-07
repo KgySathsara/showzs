@@ -19,7 +19,7 @@ const Login = () => {
     setErrors({});
     
     try {
-      const response = await axios.post('http://localhost:8000/api/login', { email, password });
+      const response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
       
       const user = response.data.user;
       const role = response.data.role;         
