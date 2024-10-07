@@ -55,7 +55,7 @@ const LiveEventForm = () => {
             setProgressModalVisible(true);
             setProgress(0);
 
-            const response = await axios.get('http://localhost:8000/api/s3-CoverImages', {
+            const response = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
               params: {
                 file_name: coverFile.name,
                 file_type: coverFile.type,

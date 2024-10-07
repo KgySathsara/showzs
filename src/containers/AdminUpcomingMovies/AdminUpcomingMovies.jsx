@@ -25,7 +25,7 @@ const AdminUpcomingMovies = () => {
   const getSignedUrl = async (file) => {
     try {
       setProgress(0);
-      const response = await axios.get('http://localhost:8000/api/s3-CoverImages', {
+      const response = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
         params: {
           file_name: file.name,
           file_type: file.type,
