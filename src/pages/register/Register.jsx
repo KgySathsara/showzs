@@ -40,7 +40,7 @@ const Register = () => {
     }
 
     try {
-      await axios.post('http://127.0.0.1:8000/api/register', formData);
+      await axios.post('http://showz-backend.socialgear.co.uk/api/register', formData);
       alert('Registration successful!');
       navigate('/login');
     } catch (error) {
@@ -54,7 +54,7 @@ const Register = () => {
       console.log('Google Token Response:', tokenResponse);
   
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/google-login', {
+        const response = await axios.post('http://showz-backend.socialgear.co.uk/api/google-login', {
           token: tokenResponse.access_token,
         });
 

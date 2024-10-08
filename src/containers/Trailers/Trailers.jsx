@@ -11,7 +11,7 @@ const Trailers = () => {
 
   const fetchTrailers = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/news/latest');
+      const response = await axios.get('http://showz-backend.socialgear.co.uk/api/news/latest');
       console.log('API Response:', response.data);
       setTrailers(response.data.news);
     } catch (error) {

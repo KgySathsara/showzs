@@ -19,7 +19,7 @@ const Login = () => {
     setErrors({});
     
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
+      const response = await axios.post('http://showz-backend.socialgear.co.uk/api/login', { email, password });
       
       const user = response.data.user;
       const role = response.data.role;         
@@ -67,7 +67,7 @@ const Login = () => {
       console.log('Google Token Response:', tokenResponse);
   
       try {
-        const response = await axios.post('http://127.0.0.1:8000/api/google-login', {
+        const response = await axios.post('http://showz-backend.socialgear.co.uk/api/google-login', {
           token: tokenResponse.access_token,
         });
   

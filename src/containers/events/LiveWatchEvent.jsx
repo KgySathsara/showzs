@@ -8,7 +8,7 @@ const LiveWatchEvent = () => {
   const [currentEventLink, setCurrentEventLink] = useState('');
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/live-events/showEvent')
+    axios.get('http://showz-backend.socialgear.co.uk/api/live-events/showEvent')
       .then(response => {
         console.log('API response:', response.data); // Log the response
         let responseData = response.data;

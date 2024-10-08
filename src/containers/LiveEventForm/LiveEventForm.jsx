@@ -23,7 +23,7 @@ const LiveEventForm = () => {
 
   const handleModalSubmit = async (values) => {
     try {
-      const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
+      const userResponse = await axios.post('http://showz-backend.socialgear.co.uk/api/add-users', {
         email: values.email,
         password: values.password,
         password_confirmation: values.password_confirmation,
@@ -55,7 +55,7 @@ const LiveEventForm = () => {
             setProgressModalVisible(true);
             setProgress(0);
 
-            const response = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
+            const response = await axios.get('http://showz-backend.socialgear.co.uk/api/s3-CoverImages', {
               params: {
                 file_name: coverFile.name,
                 file_type: coverFile.type,
@@ -77,7 +77,7 @@ const LiveEventForm = () => {
             const coverUrl = signedUrl.split('?')[0];
             formData.append('coverImage', coverUrl);
 
-            await axios.post('http://127.0.0.1:8000/api/live-events', formData, {
+            await axios.post('http://showz-backend.socialgear.co.uk/api/live-events', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },
