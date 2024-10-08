@@ -50,7 +50,7 @@ const CheckoutForm = () => {
     }, [form]);
 
     const handlePaymentSuccess = (checkoutId) => {
-        axios.post(`http://127.0.0.1:8000/api/update-payment-status/${checkoutId}`)
+        axios.post(`http://showz-backend.socialgear.co.uk/api/update-payment-status/${checkoutId}`)
             .then((response) => {
                 if (response.data.status === 'success') {
                     notification.success({
@@ -81,7 +81,7 @@ const CheckoutForm = () => {
         }
     
         // First, store the payment information
-        axios.post('http://127.0.0.1:8000/api/onepay-store', {
+        axios.post('http://showz-backend.socialgear.co.uk/api/onepay-store', {
             name: values.name,
             email: values.email,
             mobileNumber: values.mobileNumber,
@@ -103,7 +103,7 @@ const CheckoutForm = () => {
                 const checkoutId = response.data.data.id; // Get checkout ID for later use
     
                 // After storing the information, call the OnePay API to generate the payment link
-                axios.post('http://127.0.0.1:8000/api/onepay', {
+                axios.post('http://showz-backend.socialgear.co.uk/api/onepay', {
                     name: values.name,
                     email: values.email,
                     mobileNumber: values.mobileNumber,

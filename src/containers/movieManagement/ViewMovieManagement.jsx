@@ -22,7 +22,7 @@ const ViewMovieManagement = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/movies');
+        const response = await axios.get('http://showz-backend.socialgear.co.uk/api/movies');
         setMovies(response.data);
       } catch (error) {
         console.error('Failed to fetch movies:', error);
@@ -34,7 +34,7 @@ const ViewMovieManagement = () => {
 
   const fetchMovie = async (movieId) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/movies/${movieId}`);
+      const response = await axios.get(`http://showz-backend.socialgear.co.uk/api/movies/${movieId}`);
       const movieData = response.data;
       const formData = {
         title: movieData.title,
@@ -60,7 +60,7 @@ const ViewMovieManagement = () => {
     formData.append('object_type', type);
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
+      const response = await axios.post('http://showz-backend.socialgear.co.uk/api/s3-upload-url', formData);
       const { url } = response.data;
 
       await axios.put(url, file, {
@@ -120,7 +120,7 @@ const ViewMovieManagement = () => {
           updatedValues.movie = await handleUpload(movieFile, 'movies');
         }
 
-        await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, updatedValues, {
+        await axios.put(`http://showz-backend.socialgear.co.uk/api/movies/${selectedMovie.id}`, updatedValues, {
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setProgress(percentCompleted);
@@ -145,7 +145,7 @@ const ViewMovieManagement = () => {
 
     if (selectedMovie) {
       try {
-        await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, {
+        await axios.delete(`http://showz-backend.socialgear.co.uk/api/movies/${selectedMovie.id}`, {
           data: {
             picture: selectedMovie.picture,
             trailer: selectedMovie.trailer,

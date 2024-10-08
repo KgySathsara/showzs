@@ -34,7 +34,7 @@ const AdminAddNewManagement = () => {
         setProgressModalVisible(true);
         setProgress(0);
 
-        const response = await axios.get('http://127.0.0.1:8000/api/s3-Trailers', {
+        const response = await axios.get('http://showz-backend.socialgear.co.uk/api/s3-Trailers', {
           params: {
             file_name: trailerFile.name,
             file_type: trailerFile.type,
@@ -56,7 +56,7 @@ const AdminAddNewManagement = () => {
         const trailerUrl = signedUrl.split('?')[0];
         formData.append('trailer', trailerUrl);
 
-        await axios.post('http://127.0.0.1:8000/api/news', formData, {
+        await axios.post('http://showz-backend.socialgear.co.uk/api/news', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },

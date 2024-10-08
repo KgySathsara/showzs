@@ -11,7 +11,7 @@ const NowShowing = () => {
 
   const fetchMovies = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:8000/api/movies/latest');
+      const response = await axios.get('http://showz-backend.socialgear.co.uk/api/movies/latest');
       console.log('API Response:', response.data);
       const sortedMovies = response.data.sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 2);
       setMovies(sortedMovies);

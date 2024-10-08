@@ -12,20 +12,20 @@ const LiveEventProfile = () => {
     const fetchEventData = async () => {
       try {
         // Fetch event data
-        const response = await axios.get('http://127.0.0.1:8000/api/live-events/show');
+        const response = await axios.get('http://showz-backend.socialgear.co.uk/api/live-events/show');
         const eventData = response.data;
 
         setEventData(eventData);
         form.setFieldsValue(eventData);
 
         // Fetch monthly revenue for this event
-        const revenueResponse = await axios.get('http://127.0.0.1:8000/api/event-revenue', {
+        const revenueResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/event-revenue', {
           params: { title: eventData.title }
         });
         setMonthlyRevenue(revenueResponse.data.monthly_revenue);
 
         // Fetch profile views for this event
-        const profileViewsResponse = await axios.get('http://127.0.0.1:8000/api/event-views', {
+        const profileViewsResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/event-views', {
           params: { title: eventData.title }
         });
         setProfileViews(profileViewsResponse.data.count);

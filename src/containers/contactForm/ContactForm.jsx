@@ -9,7 +9,7 @@ export default function ContactForm() {
   const [form] = Form.useForm();  // Destructure form instance from Form.useForm
 
   const onFinish = (values) => {
-    axios.post('http://127.0.0.1:8000/api/contact', values)
+    axios.post('http://showz-backend.socialgear.co.uk/api/contact', values)
       .then(response => {
         console.log('Success:', response.data);
         message.success('Message sent successfully');

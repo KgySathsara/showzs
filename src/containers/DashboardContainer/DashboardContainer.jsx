@@ -22,12 +22,12 @@ const DashboardContainer = () => {
           movieViewsCountResponse
 
         ] = await Promise.all([
-          axios.get('http://127.0.0.1:8000/api/user-count'),
-          axios.get('http://127.0.0.1:8000/api/movie'),
-          axios.get('http://127.0.0.1:8000/api/live-events/showLastEvent'),
-          axios.get('http://127.0.0.1:8000/api/monthly-revenue'),
-          axios.get('http://127.0.0.1:8000/api/event-participation'),
-          axios.get('http://127.0.0.1:8000/api/all-movie-views')
+          axios.get('http://showz-backend.socialgear.co.uk/api/user-count'),
+          axios.get('http://showz-backend.socialgear.co.uk/api/movie'),
+          axios.get('http://showz-backend.socialgear.co.uk/api/live-events/showLastEvent'),
+          axios.get('http://showz-backend.socialgear.co.uk/api/monthly-revenue'),
+          axios.get('http://showz-backend.socialgear.co.uk/api/event-participation'),
+          axios.get('http://showz-backend.socialgear.co.uk/api/all-movie-views')
         ]);
 
         setUserCount(userCountResponse.data.count);
