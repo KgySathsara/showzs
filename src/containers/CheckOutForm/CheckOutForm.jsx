@@ -67,10 +67,6 @@ const CheckoutForm = () => {
             })
             .catch((error) => {
                 console.error('Payment Status Update Error:', error);
-                notification.error({
-                    message: 'Error',
-                    description: 'There was an error updating your payment status.',
-                });
             });
     };
     
