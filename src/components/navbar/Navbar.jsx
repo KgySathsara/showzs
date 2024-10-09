@@ -73,6 +73,51 @@ const Navbar = () => {
             onClose={onClose}
             visible={visible}
           >
+            <ul className="navLists flex">
+              {['Home', 'Movies', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+                <li
+                  key={index}
+                  className={`navItem ${activeIndex === index ? 'active' : ''}`}
+                  onClick={(e) => handleClick(index, e)}
+                >
+                  <Link
+                    to={item === 'Home' ? '/' : `/${item.replace(' ', '')}`}
+                    className="navLink"
+                    onClick={() => setVisible(true)} // Close drawer on click
+                  >
+                    {item}
+                  </Link>
+                </li>
+              ))}
+              {isAuthenticated && (
+                <li
+                  className={`navItem ${activeIndex === 2 ? 'active' : ''}`} // Adjusted index for "Shows"
+                  onMouseEnter={() => handleDropdownClick(2)}
+                  onMouseLeave={() => setShowSubNav(false)}
+                >
+                  <Link
+                    to="/Shows"
+                    className="navLink"
+                    onClick={(e) => handleClick(2, e)}
+                  >
+                    Shows
+                    <FaCaretDown
+                      className="dropdown-icon"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleDropdownClick(2);
+                      }}
+                    />
+                  </Link>
+                  {showSubNav && activeIndex === 2 && (
+                    <ul className="subNavLists">
+                      <li className="subNavItem"><Link to="/WatchMovie" className="navLink">Watch Movies</Link></li>
+                      <li className="subNavItem"><Link to="/WatchLive" className="navLink">Watch Live</Link></li>
+                    </ul>
+                  )}
+                </li>
+              )}
+            </ul>
             <div className='signin-container'>
               {isAuthenticated ? (
                 <Link
@@ -81,12 +126,13 @@ const Navbar = () => {
                   onClick={(e) => {
                     e.preventDefault();
                     handleSignOut();
+                    onClose(); // Close drawer after sign-out
                   }}
                 >
                   <p><FaUserCircle className="icon" /> Sign out</p>
                 </Link>
               ) : (
-                <Link to="/login" className="signin flex">
+                <Link to="/login" className="signin flex" onClick={() => setVisible(false)}>
                   <p><FaUserCircle className="icon" /> Sign in</p>
                 </Link>
               )}
