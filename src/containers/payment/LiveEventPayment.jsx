@@ -39,7 +39,7 @@ const LiveEventPayment = () => {
 
   useEffect(() => {
     // Fetch live event payments
-    axios.get('http://showz-backend.socialgear.co.uk/api/live-event-payments')
+    axios.get('http://127.0.0.1:8000/api/live-event-payments')
       .then(response => {
         setData(response.data);
       })

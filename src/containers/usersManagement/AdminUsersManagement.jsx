@@ -13,7 +13,7 @@ const AdminUsersManagement = () => {
 
   useEffect(() => {
     // Fetch users from the backend
-    axios.get('http://showz-backend.socialgear.co.uk/api/users')
+    axios.get('http://127.0.0.1:8000/api/users')
       .then(response => {
         setData(response.data);
       })

@@ -11,7 +11,7 @@ const UpCommingMovies = () => {
 
   const fetchUpcomingMovies = async () => {
     try {
-      const response = await axios.get('http://showz-backend.socialgear.co.uk/api/upcoming-movies/latest');
+      const response = await axios.get('http://127.0.0.1:8000/api/upcoming-movies/latest');
       setUpcomingMovies(response.data.upcomingmovie);
     } catch (error) {
       console.error('Error fetching upcoming movies:', error);

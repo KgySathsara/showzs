@@ -39,7 +39,7 @@ const MoviePayment = () => {
 
   useEffect(() => {
     // Fetch movie payments
-    axios.get('http://showz-backend.socialgear.co.uk/api/movie-payments')
+    axios.get('http://127.0.0.1:8000/api/movie-payments')
       .then(response => {
         setData(response.data);
       })

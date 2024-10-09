@@ -62,14 +62,14 @@
   font-family: 'DM Sans', sans-serif;
 }
 
-.anticon {
+.movie-actions .anticon {
   font-size: 30px;
   color: white;
   transition: color 0.3s ease;
   cursor: pointer;
 }
 
-.anticon:hover {
+.movie-actions .anticon:hover {
   color: #ff0000;
 }
 

@@ -20,7 +20,7 @@ const AdminEditNews = () => {
     useEffect(() => {
         const fetchNews = async () => {
             try {
-                const response = await axios.get('http://showz-backend.socialgear.co.uk/api/news');
+                const response = await axios.get('http://127.0.0.1:8000/api/news');
                 setNewsList(response.data.news);
             } catch (error) {
                 console.error('Failed to fetch news list:', error);
@@ -32,7 +32,7 @@ const AdminEditNews = () => {
 
     const fetchNewsDetails = async (newsId) => {
         try {
-            const response = await axios.get(`http://showz-backend.socialgear.co.uk/api/news/${newsId}`);
+            const response = await axios.get(`http://127.0.0.1:8000/api/news/${newsId}`);
             const newsData = response.data;
             const formData = {
                 title: newsData.title,
@@ -57,7 +57,7 @@ const AdminEditNews = () => {
         formData.append('object_type', 'movieTrailers');
 
         try {
-            const response = await axios.post('http://showz-backend.socialgear.co.uk/api/s3-upload-url', formData);
+            const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
             const { url } = response.data;
 
             await axios.put(url, file, {
@@ -101,7 +101,7 @@ const AdminEditNews = () => {
                     formattedValues.trailer = await handleUpload(trailerFile);
                 }
 
-                await axios.put(`http://showz-backend.socialgear.co.uk/api/news/${selectedNews.id}`, formattedValues, {
+                await axios.put(`http://127.0.0.1:8000/api/news/${selectedNews.id}`, formattedValues, {
                     onUploadProgress: (progressEvent) => {
                         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                         setProgress(percentCompleted);
@@ -125,7 +125,7 @@ const AdminEditNews = () => {
         setProgress(0);
         if (selectedNews) {
             try {
-                await axios.delete(`http://showz-backend.socialgear.co.uk/api/news/${selectedNews.id}`, {
+                await axios.delete(`http://127.0.0.1:8000/api/news/${selectedNews.id}`, {
                     onDownloadProgress: (progressEvent) => {
                         const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
                         setProgress(percentCompleted);
@@ -133,7 +133,7 @@ const AdminEditNews = () => {
                 });
 
                 if (selectedNews.trailer) {
-                    await axios.post('http://showz-backend.socialgear.co.uk/api/s3-delete-object', {
+                    await axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
                         object_type: 'movieTrailers',
                         file_name: selectedNews.trailer,
                     });

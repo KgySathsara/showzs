@@ -12,7 +12,7 @@ const MovieProfileManagement = () => {
   useEffect(() => {
     const fetchMovie = async () => {
       try {
-        const response = await axios.get('http://showz-backend.socialgear.co.uk/api/movie');
+        const response = await axios.get('http://127.0.0.1:8000/api/movie');
         const movieData = response.data;
 
         const formData = {
@@ -28,13 +28,13 @@ const MovieProfileManagement = () => {
         form.setFieldsValue(formData);
 
         // Fetch the monthly revenue for this movie title
-        const revenueResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/movie-revenue', {
+        const revenueResponse = await axios.get('http://127.0.0.1:8000/api/movie-revenue', {
           params: { title: movieData.title }
         });
         setMonthlyRevenue(revenueResponse.data.monthly_revenue);
 
         // Fetch the profile views for this movie title
-        const profileViewsResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/movie-views', {
+        const profileViewsResponse = await axios.get('http://127.0.0.1:8000/api/movie-views', {
           params: { title: movieData.title }
         });
         setProfileViews(profileViewsResponse.data.count);
