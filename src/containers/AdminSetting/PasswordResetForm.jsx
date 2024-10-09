@@ -13,7 +13,7 @@ const PasswordResetPage = () => {
 
   const handleRequestReset = async () => {
     try {
-      await axios.post('http://showz-backend.socialgear.co.uk/api/password-reset/request', { email });
+      await axios.post('http://127.0.0.1:8000/api/password-reset/request', { email });
       message.success('OTP has been sent to your email');
       setStep(2); // Move to the next step
     } catch (error) {
@@ -27,7 +27,7 @@ const PasswordResetPage = () => {
 
   const handleResetPassword = async () => {
     try {
-      await axios.post('http://showz-backend.socialgear.co.uk/api/password-reset/verify', { email, otp, newPassword });
+      await axios.post('http://127.0.0.1:8000/api/password-reset/verify', { email, otp, newPassword });
       message.success('Password reset successful');
       navigate('/'); // Redirect to the main page
     } catch (error) {

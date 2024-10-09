@@ -21,7 +21,7 @@ const AdminEditUpcomingMovie = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await axios.get('http://showz-backend.socialgear.co.uk/api/upcoming-movies');
+        const response = await axios.get('http://127.0.0.1:8000/api/upcoming-movies');
         console.log('Movie data:', response.data);
         setMovies(response.data);
       } catch (error) {
@@ -33,7 +33,7 @@ const AdminEditUpcomingMovie = () => {
 
   const fetchMovie = async (movieId) => {
     try {
-      const response = await axios.get(`http://showz-backend.socialgear.co.uk/api/upcoming-movies/${movieId}`);
+      const response = await axios.get(`http://127.0.0.1:8000/api/upcoming-movies/${movieId}`);
       const formData = {
         title: response.data.title,
         date: moment(response.data.date),
@@ -57,7 +57,7 @@ const AdminEditUpcomingMovie = () => {
     formData.append('object_type', 'movieCoverImages');
 
     try {
-      const response = await axios.post('http://showz-backend.socialgear.co.uk/api/s3-upload-url', formData);
+      const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
       const { url } = response.data;
 
       await axios.put(url, file, {
@@ -100,7 +100,7 @@ const AdminEditUpcomingMovie = () => {
           formattedValues.image = await handleUpload(imageFile);
         }
 
-        await axios.put(`http://showz-backend.socialgear.co.uk/api/upcoming-movies/${selectedMovie.id}`, formattedValues, {
+        await axios.put(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, formattedValues, {
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setProgress(percentCompleted);
@@ -123,7 +123,7 @@ const AdminEditUpcomingMovie = () => {
     setProgress(0);
     if (selectedMovie) {
       try {
-        await axios.delete(`http://showz-backend.socialgear.co.uk/api/upcoming-movies/${selectedMovie.id}`, {
+        await axios.delete(`http://127.0.0.1:8000/api/upcoming-movies/${selectedMovie.id}`, {
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setProgress(percentCompleted);
@@ -131,7 +131,7 @@ const AdminEditUpcomingMovie = () => {
         });
 
         if (selectedMovie.image) {
-          await axios.post('http://showz-backend.socialgear.co.uk/api/s3-delete-object', {
+          await axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
               object_type: 'movieCoverImages',
               file_name: selectedMovie.image,
           });

@@ -12,7 +12,7 @@ const EditorAccountForm = () => {
     console.log('Form values: ', values);
     try {
       // eslint-disable-next-line no-unused-vars
-      const response = await axios.post('http://showz-backend.socialgear.co.uk/api/create-editor', values);
+      const response = await axios.post('http://127.0.0.1:8000/api/create-editor', values);
       notification.success({
         message: 'Account Created',
         description: 'The editor account has been successfully created.',

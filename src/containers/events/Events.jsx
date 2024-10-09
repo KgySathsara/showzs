@@ -12,7 +12,7 @@ const Events = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axios.get('http://showz-backend.socialgear.co.uk/api/live-events/showEvent')
+    axios.get('http://127.0.0.1:8000/api/live-events/showEvent')
       .then(response => {
         console.log('API response:', response.data); 
         let responseData = response.data;

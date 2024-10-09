@@ -20,7 +20,7 @@ const LiveStreamManagement = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const response = await axios.get('http://showz-backend.socialgear.co.uk/api/live-events');
+        const response = await axios.get('http://127.0.0.1:8000/api/live-events');
         setEvents(response.data);
       } catch (error) {
         console.error('There was an error fetching the live events!', error);
@@ -31,7 +31,7 @@ const LiveStreamManagement = () => {
 
   const fetchEvent = async (eventId) => {
     try {
-      const response = await axios.get(`http://showz-backend.socialgear.co.uk/api/live-events/${eventId}`);
+      const response = await axios.get(`http://127.0.0.1:8000/api/live-events/${eventId}`);
       const formData = {
         title: response.data.title,
         description: response.data.description,
@@ -56,7 +56,7 @@ const LiveStreamManagement = () => {
     formData.append('object_type', 'movieCoverImages');
 
     try {
-      const response = await axios.post('http://showz-backend.socialgear.co.uk/api/s3-upload-url', formData);
+      const response = await axios.post('http://127.0.0.1:8000/api/s3-upload-url', formData);
       const { url } = response.data;
 
       await axios.put(url, file, {
@@ -96,7 +96,7 @@ const LiveStreamManagement = () => {
           updatedValues.coverImage = await handleUpload(coverImageFile);
         }
 
-        await axios.put(`http://showz-backend.socialgear.co.uk/api/live-events/${selectedEvent.id}`, updatedValues, {
+        await axios.put(`http://127.0.0.1:8000/api/live-events/${selectedEvent.id}`, updatedValues, {
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setProgress(percentCompleted);
@@ -121,7 +121,7 @@ const LiveStreamManagement = () => {
 
     if (selectedEvent) {
       try {
-        await axios.delete(`http://showz-backend.socialgear.co.uk/api/live-events/${selectedEvent.id}`, {
+        await axios.delete(`http://127.0.0.1:8000/api/live-events/${selectedEvent.id}`, {
           onUploadProgress: (progressEvent) => {
             const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
             setProgress(percentCompleted);
@@ -129,7 +129,7 @@ const LiveStreamManagement = () => {
         });
 
         if (selectedEvent.coverImage) {
-          await axios.post('http://showz-backend.socialgear.co.uk/api/s3-delete-object', {
+          await axios.post('http://127.0.0.1:8000/api/s3-delete-object', {
             object_type: 'movieCoverImages',
             file_name: selectedEvent.coverImage,
           });

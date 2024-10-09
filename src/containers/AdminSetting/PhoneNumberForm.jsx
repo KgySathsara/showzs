@@ -13,7 +13,7 @@ const PasswordResetPage = () => {
 
   const handleRequestReset = async () => {
     try {
-      await axios.post('http://showz-backend.socialgear.co.uk/api/passwordreset/request', { phone_number: phone });
+      await axios.post('http://127.0.0.1:8000/api/passwordreset/request', { phone_number: phone });
       message.success('OTP has been sent to your phone');
       setStep(2); // Move to the next step
     } catch (error) {
@@ -27,7 +27,7 @@ const PasswordResetPage = () => {
 
   const handleResetPassword = async () => {
     try {
-      await axios.post('http://showz-backend.socialgear.co.uk/api/passwordreset/verify', { phone_number: phone, otp, newPassword, newPassword_confirmation: confirmPassword });
+      await axios.post('http://127.0.0.1:8000/api/passwordreset/verify', { phone_number: phone, otp, newPassword, newPassword_confirmation: confirmPassword });
       message.success('Password reset successful');
       navigate('/'); // Redirect to the main page
     } catch (error) {

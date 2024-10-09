@@ -24,7 +24,7 @@ const AddMovieManagement = () => {
 
   const handleModalSubmit = async (values) => {
     try {
-      const userResponse = await axios.post('http://showz-backend.socialgear.co.uk/api/add-users', {
+      const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
         email: values.email,
         password: values.password,
         password_confirmation: values.password_confirmation,
@@ -55,7 +55,7 @@ const AddMovieManagement = () => {
             setProgressModalVisible(true);
             setProgress(0);
 
-            const coverImageResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/s3-CoverImages', {
+            const coverImageResponse = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
               params: {
                 file_name: coverImage.name,
                 file_type: coverImage.type,
@@ -95,7 +95,7 @@ const AddMovieManagement = () => {
             setProgressModalVisible(true);
             setProgress(0);
 
-            const trailerResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/s3-Trailers', {
+            const trailerResponse = await axios.get('http://127.0.0.1:8000/api/s3-Trailers', {
               params: {
                 file_name: trailer.name,
                 file_type: trailer.type,
@@ -135,7 +135,7 @@ const AddMovieManagement = () => {
             setProgressModalVisible(true);
             setProgress(0);
 
-            const movieResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/s3-Movies', {
+            const movieResponse = await axios.get('http://127.0.0.1:8000/api/s3-Movies', {
               params: {
                 file_name: movie.name,
                 file_type: movie.type,
@@ -157,7 +157,7 @@ const AddMovieManagement = () => {
             const movieUrl = signedUrl.split('?')[0];
             formData.append('movie', movieUrl);
 
-            await axios.post('http://showz-backend.socialgear.co.uk/api/movies', formData, {
+            await axios.post('http://127.0.0.1:8000/api/movies', formData, {
               headers: {
                 'Content-Type': 'multipart/form-data',
               },

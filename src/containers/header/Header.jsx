@@ -17,8 +17,8 @@ const Header = () => {
   useEffect(() => {
     const fetchLatestData = async () => {
       try {
-        const movieResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/movie');
-        const eventResponse = await axios.get('http://showz-backend.socialgear.co.uk/api/live-events/showLastEvent');
+        const movieResponse = await axios.get('http://127.0.0.1:8000/api/movie');
+        const eventResponse = await axios.get('http://127.0.0.1:8000/api/live-events/showLastEvent');
         setMovie(movieResponse.data);
         setEvent(eventResponse.data);
       } catch (error) {

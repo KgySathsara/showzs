@@ -7,7 +7,7 @@ export default function AdminContact() {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    axios.get('http://showz-backend.socialgear.co.uk/api/contact-messages')
+    axios.get('http://127.0.0.1:8000/api/contact-messages')
       .then(response => {
         setMessages(response.data);
       })

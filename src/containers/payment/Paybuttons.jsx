@@ -13,7 +13,7 @@ const Payment = () => {
   const navigate = useNavigate(); // Initialize the navigate function
 
   useEffect(() => {
-    axios.get('http://showz-backend.socialgear.co.uk/api/movies')
+    axios.get('http://127.0.0.1:8000/api/movies')
       .then(response => {
         setMovies(response.data);
       })

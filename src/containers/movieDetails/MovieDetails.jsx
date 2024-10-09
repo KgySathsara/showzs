@@ -19,7 +19,7 @@ const MovieDetails = () => {
       setMovie(JSON.parse(selectedMovie));
     } else {
       // If no movie is found in sessionStorage, fetch the latest movie
-      axios.get('http://showz-backend.socialgear.co.uk/api/movie')
+      axios.get('http://127.0.0.1:8000/api/movie')
         .then(response => {
           console.log('Movie data:', response.data);
           setMovie(response.data);
