@@ -44,6 +44,7 @@ const MovieDetails = () => {
 
   const handleBuyNow = () => {
     if (movie) {
+      localStorage.setItem('selectedItem', JSON.stringify(movie));
       navigate('/checkout', { state: { movie } }); // Navigate to checkout page with movie data
     }
   };
