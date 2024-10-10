@@ -4,8 +4,8 @@ import './login.css';
 import { FcGoogle } from 'react-icons/fc';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { notification } from 'antd'; // Import Ant Design notification
+import 'antd/dist/reset.css'; // Ensure Ant Design CSS is imported/reset
 import { useGoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
@@ -14,9 +14,41 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
+  // Open notification helper function
+  const openNotification = (type, message, description) => {
+    notification[type]({
+      message,
+      description,
+    });
+  };
+
+  // Validate form fields
+  const validate = () => {
+    const newErrors = {};
+
+    if (!email) {
+      newErrors.email = 'Email address is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+
+    if (!password) {
+      newErrors.password = 'Password is required';
+    }
+
+    return newErrors;
+  };
+
   const handleSignin = async (e) => {
     e.preventDefault();
     setErrors({});
+
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      openNotification('error', 'Login Error', 'Please correct the errors before submitting.');
+      return;
+    }
     
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/login', { email, password });
@@ -28,16 +60,16 @@ const Login = () => {
       sessionStorage.setItem('userRole', role);
   
       if (role === 'admin') {
-        toast.success('Admin logged in successfully');
+        openNotification('success', 'Login Successful', 'Admin logged in successfully.');
         navigate('/admin');
       } else if (role === 'editor') {
-        toast.success('Editor logged in successfully');
+        openNotification('success', 'Login Successful', 'Editor logged in successfully.');
         navigate('/admin');
       } else if (role === 'contect_owner') {
-        toast.success('Content Owner logged in successfully');
+        openNotification('success', 'Login Successful', 'Content Owner logged in successfully.');
         navigate('/admin');
       } else {
-        toast.success('User logged in successfully');
+        openNotification('success', 'Login Successful', 'Welcome back.');
         navigate('/');
       }
     } catch (error) {
@@ -52,11 +84,10 @@ const Login = () => {
       } else {
         errorMessage = 'Network error. Please try again.';
       }
-      toast.error(errorMessage);
+      openNotification('error', 'Login Failed', errorMessage);
       setErrors({ general: errorMessage });
     }
   };
-  
 
   const handleRegister = () => {
     navigate('/Register');
@@ -64,8 +95,6 @@ const Login = () => {
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log('Google Token Response:', tokenResponse);
-  
       try {
         const response = await axios.post('http://127.0.0.1:8000/api/google-login', {
           token: tokenResponse.access_token,
@@ -77,7 +106,7 @@ const Login = () => {
         sessionStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('userRole', role);
   
-        toast.success('Google Sign-In successful!');
+        openNotification('success', 'Google Sign-In', 'Google Sign-In successful!');
   
         if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
           navigate('/admin');
@@ -86,14 +115,13 @@ const Login = () => {
         }
       } catch (error) {
         console.error(error);
-        toast.error('Google Sign-In failed!');
+        openNotification('error', 'Google Sign-In Failed', 'Google Sign-In failed!');
       }
     },
     onError: () => {
-      toast.error('Google Sign-In failed!');
+      openNotification('error', 'Google Sign-In Failed', 'Google Sign-In failed!');
     },
   });
-  
 
   return (
     <section className='login'>
@@ -118,7 +146,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {errors.email && <span className="error">{errors.email[0]}</span>}
+            {errors.email && <span className="error">{errors.email}</span>}
             <input
               type="password"
               placeholder="Password"
@@ -126,7 +154,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            {errors.password && <span className="error">{errors.password[0]}</span>}
+            {errors.password && <span className="error">{errors.password}</span>}
             {errors.general && <span className="error">{errors.general}</span>}
           </div>
           <div className="options">
@@ -143,7 +171,6 @@ const Login = () => {
           Don't have an account? <button className="reg-btn" onClick={handleRegister}>Register</button>
         </div>
       </div>
-      <ToastContainer />
     </section>
   );
 };
