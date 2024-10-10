@@ -9,6 +9,7 @@ import './CheckoutForm.css';
 
 const { Title } = Typography;
 
+// Country Selector Component
 function CountrySelector({ onChange, value }) {
     const options = useMemo(() => countryList().getData(), []);
 
@@ -26,11 +27,9 @@ const CheckoutForm = () => {
     const [cartDetails, setCartDetails] = useState(null);
 
     useEffect(() => {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth',
-        });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
+        // Check if user is logged in and pre-fill form
         const storedUser = sessionStorage.getItem('user');
         if (storedUser) {
             const user = JSON.parse(storedUser);
@@ -43,12 +42,14 @@ const CheckoutForm = () => {
             setIsUserLoggedIn(true);
         }
 
+        // Get cart details from local storage
         const storedCartDetails = localStorage.getItem('selectedItem');
         if (storedCartDetails) {
             setCartDetails(JSON.parse(storedCartDetails));
         }
     }, [form]);
 
+    // Handle payment success
     const handlePaymentSuccess = (checkoutId) => {
         axios.post(`http://127.0.0.1:8000/api/update-payment-status/${checkoutId}`)
             .then((response) => {
@@ -69,7 +70,9 @@ const CheckoutForm = () => {
                 console.error('Payment Status Update Error:', error);
             });
     };
-    
+
+    // Handle form submission
+    // Handle form submission
     const handleSubmit = (values) => {
         if (!isUserLoggedIn) {
             notification.error({
@@ -79,8 +82,8 @@ const CheckoutForm = () => {
             navigate('/login');
             return;
         }
-    
-        // First, store the payment information
+
+        // First, check if the user has already purchased the item
         axios.post('http://127.0.0.1:8000/api/onepay-store', {
             name: values.name,
             email: values.email,
@@ -93,62 +96,60 @@ const CheckoutForm = () => {
             price: cartDetails?.price || cartDetails?.ticketPrice || 0,
             link: cartDetails?.movie || cartDetails?.streamLink || 'N/A',
         })
-        .then((response) => {
-            if (response.data.status === 'success') {
-                notification.success({
-                    message: 'Payment Information Stored',
-                    description: 'Now redirecting to the payment gateway...',
-                    duration: 1,
-                });
-    
-                const checkoutId = response.data.data.id; // Get checkout ID for later use
-    
-                // After storing the information, call the OnePay API to generate the payment link
-                axios.post('http://127.0.0.1:8000/api/onepay', {
-                    name: values.name,
-                    email: values.email,
-                    mobileNumber: values.mobileNumber,
-                    country: values.country.label,
-                    price: cartDetails?.price || cartDetails?.ticketPrice,
-                })
-                .then((response) => {
-                    console.log("Payment Response: ", response.data);
-    
-                    // Check if the response contains the redirect URL
-                    if (response.data.status === 'success' && response.data.redirect_url) {
-                        // Listen for the payment success, then update payment status
-                        window.location.href = response.data.redirect_url;
-    
-                        // You should have some way to detect the successful payment callback
-                        handlePaymentSuccess(checkoutId); // Update payment status after success
-                    } else {
-                        notification.error({
-                            message: 'Payment Error',
-                            description: 'Failed to initiate the payment process.',
-                        });
-                    }
-                })
-                .catch((error) => {
-                    console.error("Payment Request Error: ", error);
-                    notification.error({
-                        message: 'Payment Error',
-                        description: 'Failed to initiate the payment process.',
+            .then((response) => {
+                if (response.data.status === 'success') {
+                    notification.success({
+                        message: 'Payment Information Stored',
+                        description: 'Now redirecting to the payment gateway...',
+                        duration: 1,
                     });
-                });
-    
-            } else {
+
+                    const checkoutId = response.data.data.id; // Get checkout ID for later use
+
+                    // Call OnePay API to generate the payment link
+                    axios.post('http://127.0.0.1:8000/api/onepay', {
+                        name: values.name,
+                        email: values.email,
+                        mobileNumber: values.mobileNumber,
+                        country: values.country.label,
+                        price: cartDetails?.price || cartDetails?.ticketPrice,
+                    })
+                        .then((response) => {
+                            if (response.data.status === 'success' && response.data.redirect_url) {
+                                window.location.href = response.data.redirect_url;
+                                handlePaymentSuccess(checkoutId); // Update payment status after success
+                            } else {
+                                notification.error({
+                                    message: 'Payment Error',
+                                    description: 'Failed to initiate the payment process.',
+                                });
+                            }
+                        })
+                        .catch((error) => {
+                            notification.error({
+                                message: 'Payment Error',
+                                description: 'Failed to initiate the payment process.',
+                            });
+                        });
+                } else if (response.data.status === 'error' && response.data.message === 'You have already purchased this item.') {
+                    // Show notification when the user has already purchased the item
+                    notification.info({
+                        message: 'Item Already Purchased',
+                        description: 'You have already purchased this item. It is available in your purchase history.',
+                    });
+                } else {
+                    notification.error({
+                        message: 'Error',
+                        description: 'Failed to store the payment information.',
+                    });
+                }
+            })
+            .catch((error) => {
                 notification.error({
                     message: 'Error',
-                    description: 'Failed to store the payment information.',
+                    description: 'There was an error submitting your data.',
                 });
-            }
-        })
-        .catch((error) => {
-            notification.error({
-                message: 'Error',
-                description: 'There was an error submitting your data.',
             });
-        });
     };
 
     return (
