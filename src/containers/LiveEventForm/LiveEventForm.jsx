@@ -11,6 +11,7 @@ const LiveEventForm = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailForm] = Form.useForm();
 
   const handleSubmit = async (values) => {
@@ -22,6 +23,7 @@ const LiveEventForm = () => {
   };
 
   const handleModalSubmit = async (values) => {
+    setIsSubmitting(true);
     try {
       const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
         email: values.email,
@@ -105,6 +107,8 @@ const LiveEventForm = () => {
     } catch (error) {
       console.error('Error adding movie or user:', error);
       message.error('Failed to add user or movie. Please check the credentials and try again.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -134,7 +138,7 @@ const LiveEventForm = () => {
           <TimePicker />
         </Form.Item>
         <Form.Item name="ticketPrice" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
-          <Input type="number" />
+          <Input type="number" min={0} step={0.01} />
         </Form.Item>
         <Form.Item name="coverImage" label="Cover Image" valuePropName="fileList" getValueFromEvent={(e) => e.fileList}>
           <Upload name="logo" listType="picture" beforeUpload={() => false} onChange={handleUpload}>
@@ -149,11 +153,13 @@ const LiveEventForm = () => {
             <Option value="Education">Education</Option>
           </Select>
         </Form.Item>
-        <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
+        <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }, { type: 'url', message: 'Please enter a valid URL' }]}>
           <Input />
         </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">Create Event</Button>
+          <Button type="primary" htmlType="submit" disabled={isSubmitting}>
+            {isSubmitting ? <Spin indicator={<LoadingOutlined />} /> : 'Create Event'}
+          </Button>
         </Form.Item>
       </Form>
 
@@ -164,13 +170,21 @@ const LiveEventForm = () => {
       >
         <Form form={emailForm} layout="vertical" onFinish={handleModalSubmit}>
           <h2>Access For Content Owner</h2>
-          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please enter your email' }]}>
+          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please enter your email' }, { type: 'email', message: 'Please enter a valid email address' }]}>
             <Input />
           </Form.Item>
-          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
+          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }, { min: 8, message: 'Password must be at least 8 characters long' }]}>
             <Input.Password />
           </Form.Item>
-          <Form.Item name="password_confirmation" label="Confirm Password" rules={[{ required: true, message: 'Please confirm your password' }]}>
+          <Form.Item name="password_confirmation" label="Confirm Password" rules={[{ required: true, message: 'Please confirm your password' }, ({ getFieldValue }) => ({
+              validator(_, value) {
+                if (!value || getFieldValue('password') === value) {
+                  return Promise.resolve();
+                }
+                return Promise.reject('Passwords do not match!');
+              },
+            }),
+          ]}>
             <Input.Password />
           </Form.Item>
           <Form.Item name="fullName" label="Full Name" rules={[{ required: true, message: 'Please enter your full name' }]}>
@@ -180,10 +194,11 @@ const LiveEventForm = () => {
             <Input />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">Submit</Button>
+            <Button type="primary" htmlType="submit" disabled={isSubmitting}>
+              {isSubmitting ? <Spin indicator={<LoadingOutlined />} /> : 'Submit'}
+            </Button>
           </Form.Item>
         </Form>
-
       </Modal>
 
       <Modal
@@ -197,19 +212,13 @@ const LiveEventForm = () => {
         <Spin
           indicator={
             <LoadingOutlined
-              style={{
-                fontSize: 48,
-              }}
+              style={{ fontSize: 48, color: '#1890ff', marginBottom: '20px' }}
               spin
             />
           }
         />
-        <Progress percent={progress} style={{ marginTop: '20px' }} />
-        <div className="progress-modal-text">
-          Please wait, do not close the window
-          <br />
-          Event is still uploading...
-        </div>
+        <h3>Uploading files... Please wait</h3>
+        <Progress percent={progress} />
       </Modal>
     </>
   );

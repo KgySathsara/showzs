@@ -13,6 +13,7 @@ const AddMovieManagement = () => {
   const [progressModalVisible, setProgressModalVisible] = useState(false);
   const [emailForm] = Form.useForm();
   const [progress, setProgress] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (values) => {
     if (fileList.length === 0) {
@@ -23,7 +24,9 @@ const AddMovieManagement = () => {
   };
 
   const handleModalSubmit = async (values) => {
+    setIsSubmitting(true); // Disable form submissions during processing
     try {
+      // User data submission
       const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
         email: values.email,
         password: values.password,
@@ -43,6 +46,7 @@ const AddMovieManagement = () => {
         formData.append('price', movieValues.price);
         formData.append('stream_link', movieValues.streamLink);
 
+        // Handling cover image upload
         if (fileList.length > 0) {
           const coverImage = fileList[0].originFileObj;
 
@@ -83,6 +87,7 @@ const AddMovieManagement = () => {
           }
         }
 
+        // Handling trailer upload
         if (trailerList.length > 0) {
           const trailer = trailerList[0].originFileObj;
 
@@ -123,6 +128,7 @@ const AddMovieManagement = () => {
           }
         }
 
+        // Handling movie upload
         if (movieList.length > 0) {
           const movie = movieList[0].originFileObj;
 
@@ -188,6 +194,8 @@ const AddMovieManagement = () => {
     } catch (error) {
       console.error('Error adding movie or user:', error);
       message.error('Failed to add user or movie. Please check the credentials and try again.');
+    } finally {
+      setIsSubmitting(false); // Re-enable form submissions
     }
   };
 
@@ -246,95 +254,124 @@ const AddMovieManagement = () => {
         <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
           <Input />
         </Form.Item>
-        <Form.Item name="picture" label="Picture" valuePropName="fileList" getValueFromEvent={(e) => e && e.fileList} rules={[{ required: true, message: 'Please upload a cover image' }]}>
+        <Form.Item label="Upload Cover Image">
           <Upload
-            name="picture"
-            listType="picture"
             beforeUpload={() => false}
+            fileList={fileList}
             onChange={handleUpload}
+            listType="picture"
+            accept="image/*"
           >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-        <Form.Item name="trailer" label="Trailer" valuePropName="fileList" getValueFromEvent={(e) => e && e.fileList}>
+        <Form.Item label="Upload Trailer">
           <Upload
-            name="trailer"
-            listType="picture"
             beforeUpload={() => false}
+            fileList={trailerList}
             onChange={handleTrailerUpload}
-          >
-            <Button icon={<UploadOutlined />}>Click to upload</Button>
-          </Upload>
-        </Form.Item>
-        <Form.Item name="movie" label="Movie" valuePropName="fileList" getValueFromEvent={(e) => e && e.fileList}>
-          <Upload
-            name="movie"
             listType="picture"
-            beforeUpload={() => false}
-            onChange={handleMovieUpload}
+            accept="video/*"
           >
             <Button icon={<UploadOutlined />}>Click to upload</Button>
           </Upload>
         </Form.Item>
-
+        <Form.Item label="Upload Movie">
+          <Upload
+            beforeUpload={() => false}
+            fileList={movieList}
+            onChange={handleMovieUpload}
+            listType="picture"
+            accept="video/*"
+          >
+            <Button icon={<UploadOutlined />}>Click to upload</Button>
+          </Upload>
+        </Form.Item>
         <Form.Item>
-          <Button type="primary" htmlType="submit">Add Movie</Button>
+          <Button type="primary" htmlType="submit" disabled={isSubmitting}>
+            {isSubmitting ? <Spin indicator={<LoadingOutlined />} /> : 'Submit'}
+          </Button>
         </Form.Item>
       </Form>
 
       <Modal
+        title="Access For Content Owner"
         visible={modalVisible}
         onCancel={() => setModalVisible(false)}
         footer={null}
       >
-        <Form form={emailForm} layout="vertical" onFinish={handleModalSubmit}>
-          <h2>Access For Content Owner</h2>
-          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please enter your email' }]}>
+        <Form form={emailForm} onFinish={handleModalSubmit} layout="vertical">
+          <Form.Item
+            name="email"
+            label="Email"
+            rules={[{ required: true, message: 'Please enter your email', type: 'email' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter your password' }]}>
+          <Form.Item
+            name="password"
+            label="Password"
+            rules={[{ required: true, message: 'Please enter your password' }, { min: 8, message: 'Password must be at least 8 characters long' }]}
+          >
             <Input.Password />
           </Form.Item>
-          <Form.Item name="password_confirmation" label="Confirm Password" rules={[{ required: true, message: 'Please confirm your password' }]}>
+          <Form.Item
+            name="password_confirmation"
+            label="Confirm Password"
+            rules={[
+              { required: true, message: 'Please confirm your password' },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue('password') === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject('Passwords do not match!');
+                },
+              }),
+            ]}
+          >
             <Input.Password />
           </Form.Item>
-          <Form.Item name="fullName" label="Full Name" rules={[{ required: true, message: 'Please enter your full name' }]}>
+          <Form.Item
+            name="fullName"
+            label="Full Name"
+            rules={[{ required: true, message: 'Please enter your full name' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="phoneNumber" label="Phone Number" rules={[{ required: true, message: 'Please enter your phone number' }]}>
+          <Form.Item
+            name="phoneNumber"
+            label="Phone Number"
+            rules={[{ required: true, message: 'Please enter your phone number' }]}
+          >
             <Input />
           </Form.Item>
           <Form.Item>
-            <Button type="primary" htmlType="submit">Submit</Button>
+            <Button type="primary" htmlType="submit" disabled={isSubmitting}>
+              {isSubmitting ? <Spin indicator={<LoadingOutlined />} /> : 'Submit'}
+            </Button>
           </Form.Item>
         </Form>
-
       </Modal>
 
       <Modal
         visible={progressModalVisible}
         onCancel={() => setProgressModalVisible(false)}
         footer={null}
-        className="progress-modal"
+        className='progress-modal'
         closable={false}
         maskClosable={false}
       >
         <Spin
           indicator={
             <LoadingOutlined
-              style={{
-                fontSize: 48,
-              }}
+              style={{ fontSize: 48, color: '#1890ff', marginBottom: '20px' }}
               spin
             />
           }
         />
-        <Progress percent={progress} style={{ marginTop: '20px' }} />
-        <div className="progress-modal-text">
-          Please wait, do not close the window
-          <br />
-          Movie is still uploading...
-        </div>
+        <h3>Uploading files... Please wait</h3>
+        <Progress percent={progress} />
       </Modal>
     </div>
   );

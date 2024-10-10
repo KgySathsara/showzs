@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ViewMovieManagement.css';
 import { Form, Input, Button, Select, Upload, message, Modal, Spin, Progress } from 'antd';
-import { UploadOutlined, LoadingOutlined } from '@ant-design/icons';
+import { UploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
+// import moment from 'moment';
 
 const { Option } = Select;
+const { confirm } = Modal;
 
 const ViewMovieManagement = () => {
   const [form] = Form.useForm();
@@ -18,21 +20,27 @@ const ViewMovieManagement = () => {
   const [imageList, setImageList] = useState([]);
   const [trailerList, setTrailerList] = useState([]);
   const [movieList, setMovieList] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  // Fetch movies on component mount
   useEffect(() => {
     const fetchMovies = async () => {
+      setLoading(true);
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/movies');
         setMovies(response.data);
       } catch (error) {
-        console.error('Failed to fetch movies:', error);
+        message.error('Failed to fetch movies!');
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchMovies();
   }, []);
 
+  // Fetch selected movie data
   const fetchMovie = async (movieId) => {
+    setLoading(true);
     try {
       const response = await axios.get(`http://127.0.0.1:8000/api/movies/${movieId}`);
       const movieData = response.data;
@@ -49,11 +57,14 @@ const ViewMovieManagement = () => {
       form.setFieldsValue(formData);
       setIsMovieSelected(true);
     } catch (error) {
-      console.error('Failed to fetch movie data:', error);
+      message.error('Failed to fetch movie data!');
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleUpload = async (file, type, baseProgress = 0) => {
+  // Upload file function
+  const handleUpload = async (file, type) => {
     const formData = new FormData();
     formData.append('file_name', file.name);
     formData.append('file_type', file.type);
@@ -69,18 +80,18 @@ const ViewMovieManagement = () => {
         },
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          setProgress(baseProgress + percentCompleted * 0.2);
+          setProgress(percentCompleted);
         },
       });
 
       return url.split('?')[0];
     } catch (error) {
-      console.error('Failed to upload file:', error);
-      message.error('Failed to upload file');
+      message.error('Failed to upload file. Please try again.');
       throw error;
     }
   };
 
+  // Handle form submission (movie update)
   const handleSubmit = async (values) => {
     setModalAction('updating');
     setProgressModalVisible(true);
@@ -90,86 +101,70 @@ const ViewMovieManagement = () => {
       try {
         const updatedValues = { ...values };
 
+        // Upload Picture
         if (imageList.length > 0) {
           const pictureFile = imageList[0].originFileObj;
-
-          if (!pictureFile.type.startsWith('image/')) {
-            message.error('You can only upload image files!');
-            return;
-          }
           updatedValues.picture = await handleUpload(pictureFile, 'movieCoverImages');
         }
 
+        // Upload Trailer
         if (trailerList.length > 0) {
           const trailerFile = trailerList[0].originFileObj;
-
-          if (!trailerFile.type.startsWith('video/')) {
-            message.error('You can only upload video files!');
-            return;
-          }
           updatedValues.trailer = await handleUpload(trailerFile, 'movieTrailers');
         }
 
+        // Upload Movie
         if (movieList.length > 0) {
           const movieFile = movieList[0].originFileObj;
-
-          if (!movieFile.type.startsWith('video/')) {
-            message.error('You can only upload video files!');
-            return;
-          }
           updatedValues.movie = await handleUpload(movieFile, 'movies');
         }
 
-        await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, updatedValues, {
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setProgress(percentCompleted);
-          }
-        });
-
+        await axios.put(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, updatedValues);
         message.success('Movie updated successfully');
         setIsMovieSelected(false);
-        setProgressModalVisible(false);
+        form.resetFields();
       } catch (error) {
-        console.error('Failed to update movie:', error);
-        message.error('Failed to update movie');
+        message.error('Failed to update movie!');
+      } finally {
         setProgressModalVisible(false);
       }
     }
   };
 
+  // Handle movie deletion
   const handleDelete = async () => {
-    setModalAction('deleting');
-    setProgressModalVisible(true);
-    setProgress(0);
+    confirm({
+      title: 'Are you sure you want to delete this movie?',
+      icon: <ExclamationCircleOutlined />,
+      content: 'This action cannot be undone!',
+      onOk: async () => {
+        setModalAction('deleting');
+        setProgressModalVisible(true);
+        setProgress(0);
 
-    if (selectedMovie) {
-      try {
-        await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, {
-          data: {
-            picture: selectedMovie.picture,
-            trailer: selectedMovie.trailer,
-            movie: selectedMovie.movie,
-          },
-          onUploadProgress: (progressEvent) => {
-            const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-            setProgress(percentCompleted);
+        if (selectedMovie) {
+          try {
+            await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, {
+              data: {
+                picture: selectedMovie.picture,
+                trailer: selectedMovie.trailer,
+                movie: selectedMovie.movie,
+              },
+            });
+            message.success('Movie deleted successfully');
+            setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
+            setSelectedMovie(null);
+            form.resetFields();
+            setTrailerUrl('');
+            setIsMovieSelected(false);
+          } catch (error) {
+            message.error('Failed to delete movie!');
+          } finally {
+            setProgressModalVisible(false);
           }
-        });
-
-        message.success('Movie deleted successfully');
-        setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
-        setSelectedMovie(null);
-        form.resetFields();
-        setTrailerUrl('');
-        setIsMovieSelected(false);
-        setProgressModalVisible(false);
-      } catch (error) {
-        console.error('Failed to delete movie:', error);
-        message.error('Failed to delete movie');
-        setProgressModalVisible(false);
-      }
-    }
+        }
+      },
+    });
   };
 
   const handleMovieChange = (value) => {
@@ -177,126 +172,111 @@ const ViewMovieManagement = () => {
   };
 
   const handleImageUpload = ({ fileList }) => {
-    const isImage = fileList.every(file => file.type.startsWith('image/'));
-    if (isImage) {
-      setImageList(fileList);
-    } else {
-      message.error('You can only upload image files!');
-      setImageList([]);
-    }
-    return isImage;
+    setImageList(fileList);
   };
 
   const handleTrailerUpload = ({ fileList }) => {
-    const isVideo = fileList.every(file => file.type.startsWith('video/'));
-    if (isVideo) {
-      setTrailerList(fileList);
-    } else {
-      message.error('You can only upload video files!');
-      setTrailerList([]);
-    }
-    return isVideo;
+    setTrailerList(fileList);
   };
 
   const handleMovieUpload = ({ fileList }) => {
-    const isVideo = fileList.every(file => file.type.startsWith('video/'));
-    if (isVideo) {
-      setMovieList(fileList);
-    } else {
-      message.error('You can only upload video files!');
-      setMovieList([]);
-    }
-    return isVideo;
+    setMovieList(fileList);
   };
 
   return (
     <section className='admin-movie-management'>
       <h2>View/Update/Delete Movie</h2>
-      <div className="select-item-container">
-        <Form.Item name="category" label="Film" rules={[{ required: true, message: 'Please select a film' }]}>
-          <Select onChange={handleMovieChange}>
-            {movies.map(movie => (
-              <Option key={movie.id} value={movie.id}>{movie.title}</Option>
-            ))}
-          </Select>
-        </Form.Item>
-      </div>
-      <div className="movie-management-container">
-        <div className="video-container">
-          <h3>Trailer</h3>
-          {trailerUrl && (
-            <video controls src={trailerUrl} alt="Movie Trailer" />
-          )}
+      <Spin spinning={loading}>
+        <div className="select-item-container">
+          <Form.Item name="category" label="Film" rules={[{ required: true, message: 'Please select a film' }]}>
+            <Select onChange={handleMovieChange} disabled={progressModalVisible}>
+              {movies.map(movie => (
+                <Option key={movie.id} value={movie.id}>{movie.title}</Option>
+              ))}
+            </Select>
+          </Form.Item>
         </div>
-        <div className='movie-management-details'>
-          <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
-            <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter the movie title' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="genre" label="Genre" rules={[{ required: true, message: 'Please enter the movie genre' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="director" label="Director" rules={[{ required: true, message: 'Please enter the movie director' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="duration" label="Duration (in minutes)" rules={[{ required: true, message: 'Please enter the movie duration' }]}>
-              <Input type="number" />
-            </Form.Item>
-            <Form.Item name="price" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="stream_link" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="picture" label="Picture">
-              <Upload name="picture" listType="picture" beforeUpload={() => false} onChange={handleImageUpload} maxCount={1}>
-                <Button icon={<UploadOutlined />}>Click to upload</Button>
-              </Upload>
-            </Form.Item>
-            <Form.Item name="trailer" label="Trailer">
-              <Upload name="trailer" listType="picture" beforeUpload={() => false} onChange={handleTrailerUpload} maxCount={1}>
-                <Button icon={<UploadOutlined />}>Click to upload</Button>
-              </Upload>
-            </Form.Item>
-            <Form.Item name="movie" label="Movie">
-              <Upload name="movie" listType="picture" beforeUpload={() => false} onChange={handleMovieUpload} maxCount={1}>
-                <Button icon={<UploadOutlined />}>Click to upload</Button>
-              </Upload>
-            </Form.Item>
-
-            <div className="form-buttons">
-              <Button type="primary" className='btn-movie-management' htmlType="submit">
-                {isMovieSelected ? 'Update Movie' : 'Edit Movie'}
-              </Button>
-              <Button type="primary" className='btn-movie-management' htmlType="button" onClick={handleDelete}>Delete Movie</Button>
-            </div>
-          </Form>
+        <div className="movie-management-container">
+          <div className="video-container">
+            <h3>Trailer</h3>
+            {trailerUrl && (
+              <video controls src={trailerUrl} alt="Movie Trailer" />
+            )}
+          </div>
+          <div className='movie-management-details'>
+            <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
+              <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter the movie title' }]}>
+                <Input disabled={progressModalVisible} />
+              </Form.Item>
+              <Form.Item name="genre" label="Genre" rules={[{ required: true, message: 'Please enter the movie genre' }]}>
+                <Input disabled={progressModalVisible} />
+              </Form.Item>
+              <Form.Item name="director" label="Director" rules={[{ required: true, message: 'Please enter the movie director' }]}>
+                <Input disabled={progressModalVisible} />
+              </Form.Item>
+              <Form.Item name="duration" label="Duration (in minutes)" rules={[{ required: true, message: 'Please enter the movie duration' }]}>
+                <Input type="number" disabled={progressModalVisible} />
+              </Form.Item>
+              <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please enter the movie price' }]}>
+                <Input type="number" disabled={progressModalVisible} />
+              </Form.Item>
+              <Form.Item name="stream_link" label="Stream Link" rules={[{ required: true, message: 'Please enter the movie stream link' }]}>
+                <Input disabled={progressModalVisible} />
+              </Form.Item>
+              <Form.Item label="Upload Picture">
+                <Upload
+                  accept="image/*"
+                  beforeUpload={() => false}
+                  onChange={handleImageUpload}
+                  fileList={imageList}
+                >
+                  <Button icon={<UploadOutlined />}>Upload Image</Button>
+                </Upload>
+              </Form.Item>
+              <Form.Item label="Upload Trailer">
+                <Upload
+                  accept="video/*"
+                  beforeUpload={() => false}
+                  onChange={handleTrailerUpload}
+                  fileList={trailerList}
+                >
+                  <Button icon={<UploadOutlined />}>Upload Trailer</Button>
+                </Upload>
+              </Form.Item>
+              <Form.Item label="Upload Movie">
+                <Upload
+                  accept="video/*"
+                  beforeUpload={() => false}
+                  onChange={handleMovieUpload}
+                  fileList={movieList}
+                >
+                  <Button icon={<UploadOutlined />}>Upload Movie</Button>
+                </Upload>
+              </Form.Item>
+              <Form.Item>
+                <Button type="primary" htmlType="submit" disabled={!isMovieSelected || progressModalVisible}>
+                  Update Movie
+                </Button>
+                <Button type="primary" onClick={handleDelete} disabled={!isMovieSelected || progressModalVisible} style={{ marginTop: '10px' }}>
+                  Delete Movie
+                </Button>
+              </Form.Item>
+            </Form>
+          </div>
         </div>
-      </div>
-      <Modal
-        visible={progressModalVisible}
-        onCancel={() => setProgressModalVisible(false)}
-        footer={null}
-        className="progress-modal"
-        closable={false}
-        maskClosable={false}
-      >
+      </Spin>
+      <Modal visible={progressModalVisible} footer={null} closable={false}>
         <Spin
           indicator={
             <LoadingOutlined
-              style={{
-                fontSize: 48,
-              }}
+              style={{ fontSize: 48, color: '#1890ff', marginBottom: '20px' }}
               spin
             />
           }
         />
-        <Progress percent={progress} style={{ marginTop: '20px' }} />
-        <div className="progress-modal-text">
-          Please wait, do not close the window
-          <br />
-          {modalAction === 'updating' ? 'Movie is still updating...' : 'Movie is deleting...'}
-        </div>
+        {/* <h3>Uploading files... Please wait</h3> */}
+        <Progress percent={progress} />
+        {modalAction === 'updating' ? <p>Updating Movie...</p> : <p>Deleting Movie...</p>}
       </Modal>
     </section>
   );
