@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import ticket from '../../assest/ticket.jpg';
-import { ArrowRightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import './movieDetails.css';
 
@@ -62,8 +61,7 @@ const MovieDetails = () => {
             </div>
             <div className="movie-actions">
               <button className="watch-trailer" onClick={handleWatchTrailer}>Watch Trailer</button>
-              <p>Buy Now</p>
-              <ArrowRightOutlined />
+              {/* <p>Buy Now</p> */}
               <div className="buy-now" onClick={handleBuyNow}>
                 <img src={ticket} alt="Ticket" className='ticketImg' />
               </div>

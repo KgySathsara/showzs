@@ -74,7 +74,7 @@ const Navbar = () => {
             visible={visible}
           >
             <ul className="navLists flex">
-              {['Home', 'Movies', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+              {['Home', 'Movies', 'Live Events', 'News'].map((item, index) => (
                 <li
                   key={index}
                   className={`navItem ${activeIndex === index ? 'active' : ''}`}
@@ -141,7 +141,7 @@ const Navbar = () => {
         </div>
         <div className='navbar-links-container'>
           <ul className="navLists flex">
-            {['Home', 'Movies', 'Live Events', 'News', 'Contact Us'].map((item, index) => (
+            {['Home', 'Movies', 'Live Events', 'News'].map((item, index) => (
               <li
                 key={index}
                 className={`navItem ${activeIndex === index ? 'active' : ''}`}
