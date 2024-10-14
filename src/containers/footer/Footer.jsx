@@ -4,16 +4,16 @@ import logo from '../../assest/logo.png';
 import { Link } from 'react-router-dom';
 import { FaFacebookF, FaYoutube, FaInstagram } from 'react-icons/fa';
 
+// Import the App Store and Google Play image (assuming it's saved as 'appstore.png')
+import AppStore from '../../assest/app.png';
+import GooglePlay from '../../assest/android.png';
+
 const Footer = () => {
   return (
     <div className="footer section_padding">
       <div className="footer-heading">
         <h1 className="gradient_text">Do you want to step in to the theater before others</h1>
       </div>
-
-      {/* <div className="footer-btn">
-        <p>Request Early Access</p>
-      </div> */}
 
       <div className="footer-links">
         <div className="footer-link_logo">
@@ -41,6 +41,7 @@ const Footer = () => {
           <p>Global Mesh Solutions (Pvt) Ltd. <br /> No- 7B, Floor 25 1/2, Ocean Tower <br /> Building, Station Road, <br />Colombo 04, <br />Srilanka 00400.</p>
         </div>
       </div>
+
       <div className="footer-divider"></div>
       <div className="footer-copyright">
         <div className="footer-social-icons">
@@ -53,6 +54,11 @@ const Footer = () => {
           <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer">
             <FaInstagram />
           </a>
+        </div>
+        {/* Add the App Store and Google Play buttons */}
+        <div className="footer-app-download">
+          <img src={AppStore} alt="App Store" />
+          <img src={GooglePlay} alt="Google Play" />
         </div>
         <p>2024 Movie. All right reserved</p>
       </div>

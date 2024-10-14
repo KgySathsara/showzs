@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './header.css';
 import { Button } from 'antd';
-import { FaBook, FaTimes } from 'react-icons/fa';
-import banner from '../../assest/banner.jpg';
+import {  FaTimes } from 'react-icons/fa';
+import banner from '../../assest/banner1.jpg';
 import ticket from '../../assest/ticket.jpg';
 
 const Header = () => {
@@ -29,22 +29,25 @@ const Header = () => {
     fetchLatestData();
   }, []);
 
-  const handleBookNowMovie = () => {
-    navigate('/Movies');
-  };
-
-  const handleBookNowEvent = () => {
-    navigate('/LiveEvents');
-  };
-
-  const handleWatchNowMovie = () => {
+  const handleMovieTicket = () => {
     setSelectedItem(movie);
     setIsPopupOpen(true);
   };
 
-  const handleWatchNowEvent = () => {
+  const handleEventTicket = () => {
     setSelectedItem(event);
     setIsPopupOpen(true);
+  };
+
+  const handleWatchNowMovie = () => {
+    if (selectedItem) {
+      sessionStorage.setItem('selectedItem', JSON.stringify(selectedItem));
+    }
+    navigate('/Movies');
+  };
+
+  const handleWatchNowEvent = () => {
+    navigate('/LiveEvents');
   };
 
   const closePopup = () => {
@@ -69,17 +72,11 @@ const Header = () => {
           {movie && (
             <div className="card">
               <img src={movie.picture} alt={movie.title} />
-              <button className="book-now" onClick={handleBookNowMovie}>
-                <FaBook /> Book Now
-              </button>
             </div>
           )}
           {event && (
             <div className="card">
               <img src={event.coverImage} alt={event.title} />
-              <button className="book-now" onClick={handleBookNowEvent}>
-                <FaBook /> Book Now
-              </button>
             </div>
           )}
         </div>
@@ -90,7 +87,7 @@ const Header = () => {
                 Watch Now
               </button>
             </div>
-            <div className='ticket'>
+            <div className='ticket' onClick={handleMovieTicket}>
               <img src={ticket} alt='Ticket for Movie 1' />
             </div>
           </div>
@@ -100,7 +97,7 @@ const Header = () => {
                 Watch Now
               </button>
             </div>
-            <div className='ticket'>
+            <div className='ticket' onClick={handleEventTicket}>
               <img src={ticket} alt='Ticket for Event 2' />
             </div>
           </div>
