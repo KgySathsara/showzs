@@ -21,7 +21,6 @@ const MovieProfileManagement = () => {
           director: movieData.director,
           duration: movieData.duration,
           price: movieData.price,
-          streamLink: movieData.stream_link,
         };
 
         setMovie(movieData);
@@ -79,9 +78,6 @@ const MovieProfileManagement = () => {
               <Input type="number" disabled />
             </Form.Item>
             <Form.Item name="price" label="Ticket Price">
-              <Input disabled />
-            </Form.Item>
-            <Form.Item name="streamLink" label="Stream Link">
               <Input disabled />
             </Form.Item>
           </Form>

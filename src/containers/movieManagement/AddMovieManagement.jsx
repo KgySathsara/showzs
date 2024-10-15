@@ -44,7 +44,6 @@ const AddMovieManagement = () => {
         formData.append('director', movieValues.director);
         formData.append('duration', movieValues.duration);
         formData.append('price', movieValues.price);
-        formData.append('stream_link', movieValues.streamLink);
 
         // Handling cover image upload
         if (fileList.length > 0) {
@@ -249,9 +248,6 @@ const AddMovieManagement = () => {
           <Input type="number" />
         </Form.Item>
         <Form.Item name="price" label="Ticket Price" rules={[{ required: true, message: 'Please enter the ticket price' }]}>
-          <Input />
-        </Form.Item>
-        <Form.Item name="streamLink" label="Stream Link" rules={[{ required: true, message: 'Please enter the stream link' }]}>
           <Input />
         </Form.Item>
         <Form.Item label="Upload Cover Image">
