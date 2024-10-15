@@ -26,6 +26,17 @@ const AddMovieManagement = () => {
   const handleModalSubmit = async (values) => {
     setIsSubmitting(true); // Disable form submissions during processing
     try {
+      // Check if the email is already used
+      const checkEmailResponse = await axios.post('http://127.0.0.1:8000/api/check-email', {
+        email: values.email,
+      });
+
+      if (checkEmailResponse.data.exists) {
+        message.error('The email is already used. Please use a different email.');
+        setIsSubmitting(false);
+        return;
+      }
+
       // User data submission
       const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
         email: values.email,
@@ -33,7 +44,7 @@ const AddMovieManagement = () => {
         password_confirmation: values.password_confirmation,
         full_name: values.fullName,
         phone_number: values.phoneNumber,
-        user_type: 4,
+        user_type: 4, // Assuming user_type 4 is for content owners
       });
 
       if (userResponse.status === 201) {
