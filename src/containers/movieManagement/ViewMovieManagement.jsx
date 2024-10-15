@@ -50,7 +50,6 @@ const ViewMovieManagement = () => {
         director: movieData.director,
         duration: movieData.duration,
         price: movieData.price,
-        stream_link: movieData.stream_link,
       };
       setSelectedMovie(movieData);
       setTrailerUrl(movieData.trailer);
@@ -219,9 +218,6 @@ const ViewMovieManagement = () => {
               </Form.Item>
               <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please enter the movie price' }]}>
                 <Input type="number" disabled={progressModalVisible} />
-              </Form.Item>
-              <Form.Item name="stream_link" label="Stream Link" rules={[{ required: true, message: 'Please enter the movie stream link' }]}>
-                <Input disabled={progressModalVisible} />
               </Form.Item>
               <Form.Item label="Upload Picture">
                 <Upload
