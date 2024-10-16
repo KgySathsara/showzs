@@ -106,7 +106,7 @@ const Login = () => {
         sessionStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('userRole', role);
   
-        openNotification('success', 'Google Sign-In', 'Google Sign-In successful!');
+        openNotification('success','Google Sign-In successful!', 'Welcome back.');
   
         if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
           navigate('/admin');

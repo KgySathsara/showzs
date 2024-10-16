@@ -25,90 +25,107 @@ const LiveEventForm = () => {
   const handleModalSubmit = async (values) => {
     setIsSubmitting(true);
     try {
-      const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
+      // Check if the email is already used
+      const checkEmailResponse = await axios.post('http://127.0.0.1:8000/api/check-email', {
         email: values.email,
-        password: values.password,
-        password_confirmation: values.password_confirmation,
-        full_name: values.fullName,
-        phone_number: values.phoneNumber,
-        user_type: 4,
       });
 
-      if (userResponse.status === 201) {
-        const movieValues = form.getFieldsValue();
-        const formData = new FormData();
-        formData.append('title', movieValues.title);
-        formData.append('description', movieValues.description);
-        formData.append('date', movieValues.date.format('YYYY-MM-DD'));
-        formData.append('time', movieValues.time.format('HH:mm'));
-        formData.append('ticketPrice', movieValues.ticketPrice);
-        formData.append('category', movieValues.category);
-        formData.append('streamLink', movieValues.streamLink);
+      if (checkEmailResponse.data.exists) {
+        message.error('The email is already used. Please use a different email.');
+        setIsSubmitting(false);
+        return;
+      }
 
-        if (fileList.length > 0) {
-          const coverFile = fileList[0].originFileObj;
+      try {
+        const userResponse = await axios.post('http://127.0.0.1:8000/api/add-users', {
+          email: values.email,
+          password: values.password,
+          password_confirmation: values.password_confirmation,
+          full_name: values.fullName,
+          phone_number: values.phoneNumber,
+          user_type: 4,
+        });
 
-          if (!coverFile.type.startsWith('image/')) {
-            message.error('Please upload only image files.');
-            return;
+        if (userResponse.status === 201) {
+          const movieValues = form.getFieldsValue();
+          const formData = new FormData();
+          formData.append('title', movieValues.title);
+          formData.append('description', movieValues.description);
+          formData.append('date', movieValues.date.format('YYYY-MM-DD'));
+          formData.append('time', movieValues.time.format('HH:mm'));
+          formData.append('ticketPrice', movieValues.ticketPrice);
+          formData.append('category', movieValues.category);
+          formData.append('streamLink', movieValues.streamLink);
+
+          if (fileList.length > 0) {
+            const coverFile = fileList[0].originFileObj;
+
+            if (!coverFile.type.startsWith('image/')) {
+              message.error('Please upload only image files.');
+              setIsSubmitting(false);
+              return;
+            }
+
+            try {
+              setProgressModalVisible(true);
+              setProgress(0);
+
+              const response = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
+                params: {
+                  file_name: coverFile.name,
+                  file_type: coverFile.type,
+                },
+              });
+
+              const signedUrl = response.data.url;
+
+              await axios.put(signedUrl, coverFile, {
+                headers: {
+                  'Content-Type': coverFile.type,
+                },
+                onUploadProgress: (progressEvent) => {
+                  const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                  setProgress(percentCompleted);
+                },
+              });
+
+              const coverUrl = signedUrl.split('?')[0];
+              formData.append('coverImage', coverUrl);
+
+              await axios.post('http://127.0.0.1:8000/api/live-events', formData, {
+                headers: {
+                  'Content-Type': 'multipart/form-data',
+                },
+                onUploadProgress: (progressEvent) => {
+                  const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                  setProgress(percentCompleted);
+                },
+              });
+
+              message.success('Live event created successfully');
+              form.resetFields();
+              emailForm.resetFields();
+              setFileList([]);
+              setModalVisible(false);
+              setProgressModalVisible(false);
+            } catch (error) {
+              message.error('Failed to create live event');
+              console.error('Error uploading event cover or creating event:', error);
+              setProgressModalVisible(false);
+            }
+          } else {
+            message.error('Please upload an image.');
           }
-
-          try {
-            setProgressModalVisible(true);
-            setProgress(0);
-
-            const response = await axios.get('http://127.0.0.1:8000/api/s3-CoverImages', {
-              params: {
-                file_name: coverFile.name,
-                file_type: coverFile.type,
-              },
-            });
-
-            const signedUrl = response.data.url;
-
-            await axios.put(signedUrl, coverFile, {
-              headers: {
-                'Content-Type': coverFile.type,
-              },
-              onUploadProgress: (progressEvent) => {
-                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                setProgress(percentCompleted);
-              },
-            });
-
-            const coverUrl = signedUrl.split('?')[0];
-            formData.append('coverImage', coverUrl);
-
-            await axios.post('http://127.0.0.1:8000/api/live-events', formData, {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-              onUploadProgress: (progressEvent) => {
-                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                setProgress(percentCompleted);
-              },
-            });
-
-            message.success('Live event created successfully');
-            form.resetFields();
-            emailForm.resetFields();
-            setFileList([]);
-            setModalVisible(false);
-            setProgressModalVisible(false);
-          } catch (error) {
-            message.error('Failed to create live event');
-            console.error('Error adding user or event:', error);
-            setProgressModalVisible(false);
-          }
-        } else {
-          message.error('Please upload an image.');
         }
+      } catch (error) {
+        console.error('Error adding movie or user:', error);
+        message.error('Failed to add user or movie. Please check the credentials and try again.');
+      } finally {
+        setIsSubmitting(false);
       }
     } catch (error) {
-      console.error('Error adding movie or user:', error);
-      message.error('Failed to add user or movie. Please check the credentials and try again.');
-    } finally {
-      setIsSubmitting(false);
+      console.error('Error checking email:', error);
+      message.error('Failed to verify email. Please try again.');
     }
   };
 
@@ -125,6 +142,7 @@ const LiveEventForm = () => {
   return (
     <>
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
+        {/* Form Fields */}
         <Form.Item name="title" label="Event Title" rules={[{ required: true, message: 'Please enter the event title' }]}>
           <Input />
         </Form.Item>
@@ -163,11 +181,8 @@ const LiveEventForm = () => {
         </Form.Item>
       </Form>
 
-      <Modal
-        visible={modalVisible}
-        onCancel={() => setModalVisible(false)}
-        footer={null}
-      >
+      {/* Modal for Email */}
+      <Modal visible={modalVisible} onCancel={() => setModalVisible(false)} footer={null}>
         <Form form={emailForm} layout="vertical" onFinish={handleModalSubmit}>
           <h2>Access For Content Owner</h2>
           <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please enter your email' }, { type: 'email', message: 'Please enter a valid email address' }]}>
@@ -177,14 +192,13 @@ const LiveEventForm = () => {
             <Input.Password />
           </Form.Item>
           <Form.Item name="password_confirmation" label="Confirm Password" rules={[{ required: true, message: 'Please confirm your password' }, ({ getFieldValue }) => ({
-              validator(_, value) {
-                if (!value || getFieldValue('password') === value) {
-                  return Promise.resolve();
-                }
-                return Promise.reject('Passwords do not match!');
-              },
-            }),
-          ]}>
+            validator(_, value) {
+              if (!value || getFieldValue('password') === value) {
+                return Promise.resolve();
+              }
+              return Promise.reject('Passwords do not match!');
+            },
+          })]}>
             <Input.Password />
           </Form.Item>
           <Form.Item name="fullName" label="Full Name" rules={[{ required: true, message: 'Please enter your full name' }]}>
@@ -201,6 +215,7 @@ const LiveEventForm = () => {
         </Form>
       </Modal>
 
+      {/* Progress Modal */}
       <Modal
         visible={progressModalVisible}
         onCancel={() => setProgressModalVisible(false)}

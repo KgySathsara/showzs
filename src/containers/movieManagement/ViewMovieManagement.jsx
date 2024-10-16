@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './ViewMovieManagement.css';
 import { Form, Input, Button, Select, Upload, message, Modal, Spin, Progress } from 'antd';
-import { UploadOutlined, ExclamationCircleOutlined, LoadingOutlined} from '@ant-design/icons';
-// import moment from 'moment';
+import { UploadOutlined, ExclamationCircleOutlined, LoadingOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 const { confirm } = Modal;
@@ -130,40 +129,45 @@ const ViewMovieManagement = () => {
     }
   };
 
-  // Handle movie deletion
-  const handleDelete = async () => {
+  // Handle delete with confirmation
+  const showDeleteConfirm = () => {
     confirm({
       title: 'Are you sure you want to delete this movie?',
       icon: <ExclamationCircleOutlined />,
-      content: 'This action cannot be undone!',
-      onOk: async () => {
-        setModalAction('deleting');
-        setProgressModalVisible(true);
-        setProgress(0);
-
-        if (selectedMovie) {
-          try {
-            await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, {
-              data: {
-                picture: selectedMovie.picture,
-                trailer: selectedMovie.trailer,
-                movie: selectedMovie.movie,
-              },
-            });
-            message.success('Movie deleted successfully');
-            setMovies(movies.filter(movie => movie.id !== selectedMovie.id));
-            setSelectedMovie(null);
-            form.resetFields();
-            setTrailerUrl('');
-            setIsMovieSelected(false);
-          } catch (error) {
-            message.error('Failed to delete movie!');
-          } finally {
-            setProgressModalVisible(false);
-          }
-        }
-      },
+      content: 'This action cannot be undone.',
+      onOk: handleDelete,
+      okText: 'Yes, delete it',
+      cancelText: 'No',
     });
+  };
+
+  // Handle movie deletion
+  const handleDelete = async () => {
+    setModalAction('deleting');
+    setProgressModalVisible(true);
+    setProgress(0);
+
+    if (selectedMovie) {
+      try {
+        await axios.delete(`http://127.0.0.1:8000/api/movies/${selectedMovie.id}`, {
+          data: {
+            picture: selectedMovie.picture,
+            trailer: selectedMovie.trailer,
+            movie: selectedMovie.movie,
+          },
+        });
+        message.success('Movie deleted successfully');
+        setMovies(movies.filter((movie) => movie.id !== selectedMovie.id));
+        setSelectedMovie(null);
+        form.resetFields();
+        setTrailerUrl('');
+        setIsMovieSelected(false);
+      } catch (error) {
+        message.error('Failed to delete movie!');
+      } finally {
+        setProgressModalVisible(false);
+      }
+    }
   };
 
   const handleMovieChange = (value) => {
@@ -189,8 +193,10 @@ const ViewMovieManagement = () => {
         <div className="select-item-container">
           <Form.Item name="category" label="Film" rules={[{ required: true, message: 'Please select a film' }]}>
             <Select onChange={handleMovieChange} disabled={progressModalVisible}>
-              {movies.map(movie => (
-                <Option key={movie.id} value={movie.id}>{movie.title}</Option>
+              {movies.map((movie) => (
+                <Option key={movie.id} value={movie.id}>
+                  {movie.title}
+                </Option>
               ))}
             </Select>
           </Form.Item>
@@ -198,54 +204,57 @@ const ViewMovieManagement = () => {
         <div className="movie-management-container">
           <div className="video-container">
             <h3>Trailer</h3>
-            {trailerUrl && (
-              <video controls src={trailerUrl} alt="Movie Trailer" />
-            )}
+            {trailerUrl && <video controls src={trailerUrl} alt="Movie Trailer" />}
           </div>
           <div className='movie-management-details'>
             <Form form={form} layout="vertical" onFinish={handleSubmit} className="details-form">
-              <Form.Item name="title" label="Title" rules={[{ required: true, message: 'Please enter the movie title' }]}>
+              <Form.Item
+                name="title"
+                label="Title"
+                rules={[{ required: true, message: 'Please enter the movie title' }]}
+              >
                 <Input disabled={progressModalVisible} />
               </Form.Item>
-              <Form.Item name="genre" label="Genre" rules={[{ required: true, message: 'Please enter the movie genre' }]}>
+              <Form.Item
+                name="genre"
+                label="Genre"
+                rules={[{ required: true, message: 'Please enter the movie genre' }]}
+              >
                 <Input disabled={progressModalVisible} />
               </Form.Item>
-              <Form.Item name="director" label="Director" rules={[{ required: true, message: 'Please enter the movie director' }]}>
+              <Form.Item
+                name="director"
+                label="Director"
+                rules={[{ required: true, message: 'Please enter the movie director' }]}
+              >
                 <Input disabled={progressModalVisible} />
               </Form.Item>
-              <Form.Item name="duration" label="Duration (in minutes)" rules={[{ required: true, message: 'Please enter the movie duration' }]}>
+              <Form.Item
+                name="duration"
+                label="Duration (in minutes)"
+                rules={[{ required: true, message: 'Please enter the movie duration' }]}
+              >
                 <Input type="number" disabled={progressModalVisible} />
               </Form.Item>
-              <Form.Item name="price" label="Price" rules={[{ required: true, message: 'Please enter the movie price' }]}>
+              <Form.Item
+                name="price"
+                label="Price"
+                rules={[{ required: true, message: 'Please enter the movie price' }]}
+              >
                 <Input type="number" disabled={progressModalVisible} />
               </Form.Item>
               <Form.Item label="Upload Picture">
-                <Upload
-                  accept="image/*"
-                  beforeUpload={() => false}
-                  onChange={handleImageUpload}
-                  fileList={imageList}
-                >
+                <Upload accept="image/*" beforeUpload={() => false} onChange={handleImageUpload} fileList={imageList}>
                   <Button icon={<UploadOutlined />}>Upload Image</Button>
                 </Upload>
               </Form.Item>
               <Form.Item label="Upload Trailer">
-                <Upload
-                  accept="video/*"
-                  beforeUpload={() => false}
-                  onChange={handleTrailerUpload}
-                  fileList={trailerList}
-                >
+                <Upload accept="video/*" beforeUpload={() => false} onChange={handleTrailerUpload} fileList={trailerList}>
                   <Button icon={<UploadOutlined />}>Upload Trailer</Button>
                 </Upload>
               </Form.Item>
               <Form.Item label="Upload Movie">
-                <Upload
-                  accept="video/*"
-                  beforeUpload={() => false}
-                  onChange={handleMovieUpload}
-                  fileList={movieList}
-                >
+                <Upload accept="video/*" beforeUpload={() => false} onChange={handleMovieUpload} fileList={movieList}>
                   <Button icon={<UploadOutlined />}>Upload Movie</Button>
                 </Upload>
               </Form.Item>
@@ -253,27 +262,31 @@ const ViewMovieManagement = () => {
                 <Button type="primary" htmlType="submit" disabled={!isMovieSelected || progressModalVisible}>
                   Update Movie
                 </Button>
-                <Button type="primary" onClick={handleDelete} disabled={!isMovieSelected || progressModalVisible} style={{ marginTop: '10px' }}>
+                <Button type="primary" className='button-delete1' onClick={showDeleteConfirm} disabled={!isMovieSelected || progressModalVisible}>
                   Delete Movie
                 </Button>
               </Form.Item>
             </Form>
           </div>
         </div>
+        <Modal
+          title={modalAction === 'updating' ? 'Updating Movie' : 'Deleting Movie'}
+          visible={progressModalVisible}
+          footer={null}
+          centered
+        >
+          <Spin
+            indicator={
+              <LoadingOutlined
+                style={{ fontSize: 48, color: '#1890ff', marginBottom: '20px' }}
+                spin
+              />
+            }
+          />
+          <h3>Uploading files... Please wait</h3>
+          <Progress percent={progress} status="active" />
+        </Modal>
       </Spin>
-      <Modal visible={progressModalVisible} footer={null} closable={false}>
-        <Spin
-          indicator={
-            <LoadingOutlined
-              style={{ fontSize: 48, color: '#1890ff', marginBottom: '20px' }}
-              spin
-            />
-          }
-        />
-        {/* <h3>Uploading files... Please wait</h3> */}
-        <Progress percent={progress} />
-        {modalAction === 'updating' ? <p>Updating Movie...</p> : <p>Deleting Movie...</p>}
-      </Modal>
     </section>
   );
 };

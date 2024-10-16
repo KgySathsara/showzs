@@ -67,19 +67,19 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       Object.keys(newErrors).forEach(key => {
         notification.error({
           message: newErrors[key],
-          placement: 'topRight', // Set the position to top right
+          placement: 'topRight',
         });
       });
       return;
     }
-
+  
     try {
       await axios.post('http://127.0.0.1:8000/api/register', formData);
       notification.success({
@@ -88,12 +88,29 @@ const Register = () => {
       });
       navigate('/login');
     } catch (error) {
-      notification.error({
-        message: 'Registration failed!',
-        placement: 'topRight',
-      });
+      if (error.response && error.response.data && error.response.data.errors) {
+        const serverErrors = error.response.data.errors;
+        
+        // Check if the email is already taken
+        if (serverErrors.email) {
+          notification.error({
+            message: 'Email already taken',
+            placement: 'topRight',
+          });
+        } else {
+          notification.error({
+            message: 'Registration failed!',
+            placement: 'topRight',
+          });
+        }
+      } else {
+        notification.error({
+          message: 'Registration failed!',
+          placement: 'topRight',
+        });
+      }
     }
-  };
+  };  
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
