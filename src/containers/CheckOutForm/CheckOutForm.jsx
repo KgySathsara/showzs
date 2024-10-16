@@ -153,7 +153,7 @@ const CheckoutForm = () => {
                 <img src={DinersClubInternationalLogo} alt="Diners Club International" />
                 <img src={DiscoverLogo} alt="Discover" />
             </Card>
-            <Spin spinning={loading}> {/* Show loading spinner while submitting */}
+            <Spin spinning={loading}>
                 <Row gutter={24}>
                     <Col span={16}>
                         <Card
@@ -168,7 +168,6 @@ const CheckoutForm = () => {
                                 validateTrigger="onBlur"
                                 initialValues={{ remember: true }}
                             >
-                                {/* User Name Validation */}
                                 <Form.Item
                                     label="User Name"
                                     name="name"
@@ -182,7 +181,6 @@ const CheckoutForm = () => {
                                     <Input placeholder="Enter your user name" className="input-field" />
                                 </Form.Item>
 
-                                {/* Email Validation */}
                                 <Form.Item
                                     label="Email"
                                     name="email"
@@ -193,7 +191,6 @@ const CheckoutForm = () => {
                                     <Input placeholder="Enter your email" className="input-field" />
                                 </Form.Item>
 
-                                {/* Mobile Number Validation */}
                                 <Form.Item
                                     label="Mobile Number"
                                     name="mobileNumber"
@@ -204,7 +201,6 @@ const CheckoutForm = () => {
                                     <Input placeholder="Enter your mobile number" className="input-field" />
                                 </Form.Item>
 
-                                {/* Country Selector */}
                                 <Form.Item
                                     label="Country"
                                     name="country"
@@ -213,12 +209,10 @@ const CheckoutForm = () => {
                                     <CountrySelector />
                                 </Form.Item>
 
-                                {/* Terms Checkbox */}
                                 <Form.Item name="remember" valuePropName="checked" rules={[{ required: true }]}>
                                     <Checkbox>I agree to the terms and conditions</Checkbox>
                                 </Form.Item>
 
-                                {/* Submit Button */}
                                 <Button type="primary" htmlType="submit" className="submit-btn">
                                     Proceed to Payment
                                 </Button>
@@ -226,7 +220,6 @@ const CheckoutForm = () => {
                         </Card>
                     </Col>
 
-                    {/* Cart Details */}
                     <Col span={8}>
                         <Card
                             title={<span className="card-title">Your Cart</span>}
@@ -240,11 +233,11 @@ const CheckoutForm = () => {
                                         <p>Director: {cartDetails.director || 'N/A'}</p>
                                         <p>Description: {cartDetails.description || 'N/A'}</p>
                                         <p>Category: {cartDetails.genre || cartDetails.category || 'N/A'}</p>
-                                        <p>Ticket Price: Rs.{cartDetails.price || cartDetails.ticketPrice || 'N/A'}</p>
+                                        <p>Ticket Price: Rs.{cartDetails.price || cartDetails.ticketPrice || 0}</p>
                                     </div>
                                 </div>
                             ) : (
-                                <p>No item selected.</p>
+                                <p>No items in the cart</p>
                             )}
                         </Card>
                     </Col>
