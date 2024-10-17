@@ -21,7 +21,7 @@ const Register = () => {
 
   const validate = () => {
     const newErrors = {};
-    
+
     if (!formData.full_name) {
       newErrors.full_name = 'Full name is required';
     } else if (!/^[a-zA-Z\s]+$/.test(formData.full_name)) {
@@ -67,7 +67,7 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     const newErrors = validate();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
@@ -79,19 +79,18 @@ const Register = () => {
       });
       return;
     }
-  
+
     try {
       await axios.post('http://127.0.0.1:8000/api/register', formData);
       notification.success({
-        message: 'Registration successful!',
+        message: 'Registration successful! Please check your email to verify your account.',
         placement: 'topRight',
       });
       navigate('/login');
     } catch (error) {
       if (error.response && error.response.data && error.response.data.errors) {
         const serverErrors = error.response.data.errors;
-        
-        // Check if the email is already taken
+
         if (serverErrors.email) {
           notification.error({
             message: 'Email already taken',
@@ -110,7 +109,7 @@ const Register = () => {
         });
       }
     }
-  };  
+  };
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -163,66 +162,66 @@ const Register = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="form-row">
-            <input 
-              type="text" 
-              name="full_name" 
-              placeholder="Full name" 
-              className="input-field" 
-              value={formData.full_name} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="text"
+              name="full_name"
+              placeholder="Full name"
+              className="input-field"
+              value={formData.full_name}
+              onChange={handleChange}
+              required
             />
-            <input 
-              type="email" 
-              name="email" 
-              placeholder="Email address" 
-              className="input-field" 
-              value={formData.email} 
-              onChange={handleChange} 
-              required 
-            />
-          </div>
-          
-          <div className="form-row">
-            <input 
-              type="password" 
-              name="password" 
-              placeholder="Password" 
-              className="input-field" 
-              value={formData.password} 
-              onChange={handleChange} 
-              required 
-            />
-            <input 
-              type="password" 
-              name="password_confirmation" 
-              placeholder="Confirm password" 
-              className="input-field" 
-              value={formData.password_confirmation} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="email"
+              name="email"
+              placeholder="Email address"
+              className="input-field"
+              value={formData.email}
+              onChange={handleChange}
+              required
             />
           </div>
-          
+
           <div className="form-row">
-            <input 
-              type="tel" 
-              name="phone_number" 
-              placeholder="Phone number" 
-              className="input-field1" 
-              value={formData.phone_number} 
-              onChange={handleChange} 
-              required 
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              className="input-field"
+              value={formData.password}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="password"
+              name="password_confirmation"
+              placeholder="Confirm password"
+              className="input-field"
+              value={formData.password_confirmation}
+              onChange={handleChange}
+              required
+            />
+          </div>
+
+          <div className="form-row">
+            <input
+              type="tel"
+              name="phone_number"
+              placeholder="Phone number"
+              className="input-field1"
+              value={formData.phone_number}
+              onChange={handleChange}
+              required
             />
           </div>
 
           <div className="terms-container">
-            <input 
-              type="checkbox" 
-              id="terms" 
-              name="terms" 
-              checked={formData.terms} 
-              onChange={handleChange} 
+            <input
+              type="checkbox"
+              id="terms"
+              name="terms"
+              checked={formData.terms}
+              onChange={handleChange}
             />
             <label htmlFor="terms">
               I agree to the <a href="/TermsAndConditions">terms</a> of use and <a href="/PrivacyPolicy">privacy policy</a>
