@@ -7,11 +7,13 @@ import axios from 'axios';
 import { notification } from 'antd'; // Import Ant Design notification
 import 'antd/dist/reset.css'; // Ensure Ant Design CSS is imported/reset
 import { useGoogleLogin } from '@react-oauth/google';
+import ForgotPassword from '../../containers/ForgotPassword/ForgotPassword'; // Import the ForgotPassword component
 
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const [isForgotPasswordVisible, setForgotPasswordVisible] = useState(false); // State to control modal visibility
   const navigate = useNavigate();
 
   // Open notification helper function
@@ -106,7 +108,7 @@ const Login = () => {
         sessionStorage.setItem('user', JSON.stringify(user));
         sessionStorage.setItem('userRole', role);
   
-        openNotification('success','Google Sign-In successful!', 'Welcome back.');
+        openNotification('success', 'Google Sign-In', 'Google Sign-In successful!');
   
         if (role === 'admin' || role === 'contect_owner' || role === 'editor') {
           navigate('/admin');
@@ -123,55 +125,69 @@ const Login = () => {
     },
   });
 
+  // Functions to open and close the ForgotPassword modal
+  const showForgotPasswordModal = () => {
+    setForgotPasswordVisible(true);
+  };
+
+  const closeForgotPasswordModal = () => {
+    setForgotPasswordVisible(false);
+  };
+
   return (
-    <section className='login'>
-      <div className="overlay"></div>
-      <img src={background} alt="login-background" />
-      <div className="login-box">
-        <h2 style={{ textAlign: 'center' }} className="login-heading">Login</h2>
-        <div className="login-container">
-          <button className="google-login" onClick={googleLogin}>
-            <FcGoogle className="icon" /> Sign in with Google
-          </button>
-        </div>
-        <div className="separator">
-          <span>or</span>
-        </div>
-        <form onSubmit={handleSignin}>
-          <div className="form-details">
-            <input
-              type="email"
-              placeholder="Email address"
-              className="input-field-login"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            {errors.email && <span className="error">{errors.email}</span>}
-            <input
-              type="password"
-              placeholder="Password"
-              className="input-field-login"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            {errors.password && <span className="error">{errors.password}</span>}
-            {errors.general && <span className="error">{errors.general}</span>}
+    <>
+      <section className='login'>
+        <div className="overlay"></div>
+        <img src={background} alt="login-background" />
+        <div className="login-box">
+          <h2 style={{ textAlign: 'center' }} className="login-heading">Login</h2>
+          <div className="login-container">
+            <button className="google-login" onClick={googleLogin}>
+              <FcGoogle className="icon" /> Sign in with Google
+            </button>
           </div>
-          <div className="options">
-            <label className="checkbox">
-              <input type="checkbox" /> Remember me
-            </label>
-            <a href="/" className="forgot-password">Forgot password?</a>
+          <div className="separator">
+            <span>or</span>
           </div>
-          <button type="submit" className="signin-button">
-            SIGN IN
-          </button>
-        </form>
-        <div className="register-link">
-          Don't have an account? <button className="reg-btn" onClick={handleRegister}>Register</button>
+          <form onSubmit={handleSignin}>
+            <div className="form-details">
+              <input
+                type="email"
+                placeholder="Email address"
+                className="input-field-login"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              {errors.email && <span className="error">{errors.email}</span>}
+              <input
+                type="password"
+                placeholder="Password"
+                className="input-field-login"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              {errors.password && <span className="error">{errors.password}</span>}
+              {errors.general && <span className="error">{errors.general}</span>}
+            </div>
+            <div className="options">
+              <label className="checkbox">
+                <input type="checkbox" /> Remember me
+              </label>
+              <a href="#" onClick={showForgotPasswordModal} className="forgot-password">Forgot password?</a>
+            </div>
+            <button type="submit" className="signin-button">
+              SIGN IN
+            </button>
+          </form>
+          <div className="register-link">
+            Don't have an account? <button className="reg-btn" onClick={handleRegister}>Register</button>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      {/* ForgotPassword Modal */}
+      <ForgotPassword visible={isForgotPasswordVisible} onClose={closeForgotPasswordModal} />
+    </>
   );
 };
 
