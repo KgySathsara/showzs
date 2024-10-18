@@ -95,7 +95,7 @@ const CheckoutForm = () => {
             });
 
             if (response.data.status === 'success') {
-                message.success('Now redirecting to the payment gateway...', 1);
+                // message.success('Now redirecting to the payment gateway...', 1);
 
                 const checkoutId = response.data.data.id;
 

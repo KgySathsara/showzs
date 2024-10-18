@@ -38,15 +38,14 @@ hr {
 }
 
 .movie-container .movie img {
-  max-width: 800px;
-  min-height: 500px;
+  max-width: 100%;
+  min-height: 50%;
   border-radius: 10px;
 }
 
 .single-movie .movie img {
-  min-width: 700px;
-  max-width: 100%;
-  max-height: 500px;
+  max-width: 50%;
+  min-height: 50%;
 }
 
 .movie h2 {
