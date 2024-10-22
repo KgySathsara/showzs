@@ -33,7 +33,6 @@ const UpCommingMovies = () => {
                 <p>Duration: {movie.duration}</p>
                 <p>Category: {movie.category}</p>
                 <p>Ticket Price: {movie.price}</p>
-                <p><a href={movie.wikipediaLink}>Wikipedia</a></p>
               </div>
             </div>
           ))

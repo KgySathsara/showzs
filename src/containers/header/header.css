@@ -44,8 +44,10 @@
 
 .card {
   position: relative;
-  width: 470px; 
-  height: 290px; 
+  /* width: 470px; 
+  height: 290px; */
+  width: 650px; 
+  height: 370px;
   border-radius: 10px;
   overflow: hidden; 
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -96,12 +98,12 @@
 .additional-content {
   position: absolute;
   top: 75%; 
-  left: 50%;
+  left: 45%;
   transform: translate(-50%, -50%);
   margin-top: 20px;
   z-index: 10;
   display: flex;
-  gap: 50px;
+  gap: 30%;
 }
 
 .card-description {
