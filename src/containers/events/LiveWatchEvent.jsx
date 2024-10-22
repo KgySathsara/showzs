@@ -89,7 +89,7 @@ const LiveWatchEvent = () => {
             </div>
           </>
         ) : (
-          <p>No live events available. Please make sure you have completed the payment.</p>
+          <p>No live events available to watch. Please make sure you have completed the payment.</p>
         )
       )}
     </section>
